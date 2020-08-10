@@ -1,31 +1,32 @@
 import * as Sax from 'sax'
+import { QualifiedAttribute } from 'sax'
 
-// export function parse () {
-//   const parser = Sax.parser(true)
+export type Node = Text | Block
 
-//   let node = {}
+export interface Text {
+  type: 'text'
+  text: string
+}
 
-//   parser.onopentag = function({ name, attributes }) {
-//     node = { name }
-//   }
-
-//   parser.onend
-
-//   return node
-// }
+export interface Block {
+  type: 'node'
+  name: string
+  attributes?: { [key: string]: string | QualifiedAttribute }
+  children: Node[]
+}
 
 export function parse (xml: string) {
   return new Promise((resolve, reject) => {
     const parser = Sax.parser(true)
 
-    const root = { children: [] }
+    const root: Node = { type: 'node', name: 'root', children: [] }
     const stack = []
     let currentNode = root
 
     parser.onopentag = function ({ name, attributes }) {
       console.log('open (currentNode):', currentNode)
 
-      const newNode = {
+      const newNode: Node = {
         type: 'node',
         name,
         attributes,
@@ -46,7 +47,7 @@ export function parse (xml: string) {
     }
 
     parser.ontext = function (text) {
-      const newNode = {
+      const newNode: Node = {
         type: 'text',
         text
       }
