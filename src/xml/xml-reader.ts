@@ -1,29 +1,53 @@
 import * as Sax from 'sax'
 
+/*
+    We want to parse an XML document string into a monad containing the document
+    data and functions for retrieving and mapping over elements
+
+    # Methods
+
+    1. getFirstChild: returns first child element
+    2. getFirstChildByName: returns first child with supplied name
+    3. getText?: returns string containing text
+    4. getObjectValue: returns plain JS object value
+*/
+
+export class Element {
+  #value: object
+
+  constructor(value) {
+    this.#value = {}
+  }
+
+  static of(value) {
+    return new Element(value)
+  }
+}
+
 export interface Tag {
   name: string
   attributes: { [key: string]: string | Sax.QualifiedAttribute }
 }
 
-export type Element = Text | Node
+export type element = text | node
 
-export interface Text {
+export interface text {
   type: 'text'
   text: string
 }
 
 export interface RootNode {
-  children: Element[]
+  children: element[]
 }
 
-export interface Node extends RootNode {
+export interface node extends RootNode {
   type: 'node'
   name: string
   attributes: { [key: string]: string }
 }
 
-export function createElement (input: string): Text
-export function createElement (input: Tag): Node
+export function createElement (input: string): text
+export function createElement (input: Tag): node
 export function createElement (input: void): RootNode
 export function createElement (input: any): any {
   if (typeof input === 'undefined') {
@@ -56,7 +80,7 @@ export function parse (xml: string, options: XMLParserOptions = {}) {
 
     const rootNode = createElement()
     const stack = []
-    let currentNode: RootNode & Partial<Node> = rootNode
+    let currentNode: RootNode & Partial<node> = rootNode
 
     parser.onopentag = function ({ name, attributes }) {
       const newNode = createElement({

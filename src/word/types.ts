@@ -59,6 +59,22 @@
 }
 */
 
+export interface RCText {
+  type: 'text'
+  value: string
+}
+
+export interface RCBreak {
+  type: 'br'
+  value: boolean
+}
+
+export class RunContent {
+  value: RCText | RCBreak
+
+  constructor ()
+}
+
 export class Run {
   value: {
     properties: { [key: string]: any }

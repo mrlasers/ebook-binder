@@ -1,4 +1,4 @@
-import { Node } from '../xml/xml-reader'
+import { node } from '../xml/xml-reader'
 /*
 
 Goal for our document structure
@@ -17,6 +17,8 @@ Goal for our document structure
 }
 */
 
+export function getNamespaces (obj) {}
+
 export function addNewSection (doc) {
   return {
     ...doc,
@@ -24,7 +26,7 @@ export function addNewSection (doc) {
   }
 }
 
-export function parse (xml: Node) {
+export function parse (xml: node) {
   if (xml.name !== 'document') {
     throw new Error('Invalid Word XML object')
   }
