@@ -46,16 +46,23 @@ export function createElement (input: any): any {
   }
 }
 
-export function parse (xml: string) {
+interface XMLParserOptions {
+  ignoreNS?: boolean
+}
+
+export function parse (xml: string, options: XMLParserOptions = {}) {
   return new Promise((resolve, reject) => {
     const parser = Sax.parser(true)
 
-    const root = createElement()
+    const rootNode = createElement()
     const stack = []
-    let currentNode: RootNode & Partial<Node> = root
+    let currentNode: RootNode & Partial<Node> = rootNode
 
-    parser.onopentag = function (tag) {
-      const newNode = createElement(tag)
+    parser.onopentag = function ({ name, attributes }) {
+      const newNode = createElement({
+        name: options?.ignoreNS ? name.replace(/.+\:/, '') : name,
+        attributes
+      })
 
       currentNode.children.push(newNode)
       stack.push(currentNode)
@@ -67,13 +74,14 @@ export function parse (xml: string) {
     }
 
     parser.onend = function () {
-      resolve(root.children[0])
+      resolve(rootNode.children[0])
     }
 
     parser.ontext = function (text) {
-      const newNode = createElement(text)
-
-      currentNode.children.push(newNode)
+      if (currentNode !== rootNode) {
+        const newNode = createElement(text)
+        currentNode.children.push(newNode)
+      }
     }
 
     parser.onerror = function (e) {
