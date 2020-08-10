@@ -1,37 +1,61 @@
 import * as Sax from 'sax'
-import { QualifiedAttribute } from 'sax'
 
-export type Node = Text | Block
+export interface Tag {
+  name: string
+  attributes: { [key: string]: string | Sax.QualifiedAttribute }
+}
+
+export type Element = Text | Node
 
 export interface Text {
   type: 'text'
   text: string
 }
 
-export interface Block {
+export interface RootNode {
+  children: Element[]
+}
+
+export interface Node extends RootNode {
   type: 'node'
   name: string
-  attributes?: { [key: string]: string | QualifiedAttribute }
-  children: Node[]
+  attributes: { [key: string]: string }
+}
+
+export function createElement (input: string): Text
+export function createElement (input: Tag): Node
+export function createElement (input: void): RootNode
+export function createElement (input: any): any {
+  if (typeof input === 'undefined') {
+    return { children: [] }
+  }
+
+  if (typeof input === 'string') {
+    return {
+      type: 'text',
+      text: input
+    }
+  }
+
+  const { name, attributes = {} } = input
+  return {
+    type: 'node',
+    name,
+    attributes,
+    children: []
+  }
 }
 
 export function parse (xml: string) {
   return new Promise((resolve, reject) => {
     const parser = Sax.parser(true)
 
-    const root: Node = { type: 'node', name: 'root', children: [] }
+    const root = createElement()
     const stack = []
-    let currentNode = root
+    let currentNode: RootNode & Partial<Node> = root
 
-    parser.onopentag = function ({ name, attributes }) {
-      console.log('open (currentNode):', currentNode)
-
-      const newNode: Node = {
-        type: 'node',
-        name,
-        attributes,
-        children: []
-      }
+    parser.onopentag = function (tag) {
+      const newNode = createElement(tag)
 
       currentNode.children.push(newNode)
       stack.push(currentNode)
@@ -47,10 +71,7 @@ export function parse (xml: string) {
     }
 
     parser.ontext = function (text) {
-      const newNode: Node = {
-        type: 'text',
-        text
-      }
+      const newNode = createElement(text)
 
       currentNode.children.push(newNode)
     }
@@ -63,75 +84,3 @@ export function parse (xml: string) {
     parser.write(xml).close()
   })
 }
-
-// interface Text {
-//   type: 'text'
-//   text: string
-// }
-
-// interface Block {
-//   type: 'node'
-//   name: string
-//   attributes?: object
-//   children: (Block | Text)[]
-// }
-
-// type Node = Text | Block
-
-// interface CreateNodeParams {
-//   name?: string
-//   text?: string
-//   attributes: object
-//   children: (Block | Text)[]
-// }
-
-// export function createTextNode (text): Text {
-//   return {
-//     type: 'text',
-//     text
-//   }
-// }
-
-// export function createBlockNode ({
-//   name,
-//   attributes = {},
-//   children = []
-// }): Block {
-//   return {
-//     type: 'node',
-//     name,
-//     attributes,
-//     children
-//   }
-// }
-
-// export function createNode ({
-//   name,
-//   text,
-//   attributes,
-//   children
-// }: CreateNodeParams): Node {
-//   if (text) {
-//     return {
-//       type: 'text',
-//       text
-//     }
-//   }
-
-//   return {
-//     type: 'node',
-//     name,
-//     attributes: {},
-//     children: []
-//   }
-// }
-
-// export function xml (xml: string) {
-//   const parser = Sax.parser(true)
-
-//   const stack = []
-
-//   parser.onopentag = function (node) {}
-
-//   return {}
-// }
