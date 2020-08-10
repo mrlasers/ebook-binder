@@ -10,13 +10,17 @@ import * as Sax from 'sax'
     2. getFirstChildByName: returns first child with supplied name
     3. getText?: returns string containing text
     4. getObjectValue: returns plain JS object value
+
+    Element can either be a Text value or a Node value
+
+    A text value has a type of 'text' and 
 */
 
 export class Element {
   #value: object
 
   constructor(value) {
-    this.#value = {hello:'world'}
+    this.#value = {}
   }
 
   static of(value) {
