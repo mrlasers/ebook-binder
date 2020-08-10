@@ -1,4 +1,4 @@
-import * as Reader from './xml-reader'
+import * as Xml from './xml-reader'
 
 it('passes a test', () => expect(1).toBe(1))
 

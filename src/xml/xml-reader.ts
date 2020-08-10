@@ -16,7 +16,7 @@ export class Element {
   #value: object
 
   constructor(value) {
-    this.#value = {}
+    this.#value = {hello:'world'}
   }
 
   static of(value) {

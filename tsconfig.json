@@ -1,5 +1,15 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 12",
+
   "compilerOptions": {
-    "target": "ES2015"
+    "lib": ["es2019", "es2020.promise", "es2020.bigint", "es2020.string"],
+    "module": "commonjs",
+    "target": "es2019",
+
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
