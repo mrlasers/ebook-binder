@@ -24,7 +24,13 @@
 
     # cribbing from SlateJS
 
-    types of Nodes: Editor | Element | Text
+    ## Types of Nodes: 
+    
+    + Editor: this is the editor, need to read the source more
+    
+    + Element: 'block' and 'inline' nodes
+    
+    + Text: text with formatting properties
 */
 
 export interface styleProps {
