@@ -39,23 +39,24 @@ export interface styleProps {
   underline?: boolean
 }
 
-export interface TextValue {
+export interface text {
   type: 'text'
   properties: styleProps
   text: string
 }
 
-export class Text {
-  #value: {
-    type: 'text'
-    properties: styleProps
-    text: string
-  }
+export interface textProps {
+  text: string
+  attributes?: styleProps
+}
 
-  constructor(text: string, props: styleProps = {}) {
+export class Text {
+  #value: text
+
+  constructor(text: string, properties: styleProps = {}) {
     this.#value = {
       type: 'text',
-      properties: props,
+      properties: properties,
       text
     }
   }
@@ -119,7 +120,7 @@ export interface linebreak {
   properties: linebreakProps
 }
 
-export type content = TextValue | linebreak
+export type content = text | linebreak
 
 export interface run {
   type: 'run'
