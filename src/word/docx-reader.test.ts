@@ -42,5 +42,7 @@ describe('Docx helper functions', () => {
     const expected = {
       sections: [{ paragraphs: [] }]
     }
+
+    expect(Docx.addNewSection(doc)).toMatchObject(expected)
   })
 })

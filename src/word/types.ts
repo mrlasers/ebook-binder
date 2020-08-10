@@ -7,42 +7,151 @@
 
 */
 
-export interface R {
-  text: string
+// Run Content types
+// export type RunContent = T | Br
+
+// export interface T {
+//   text: string
+// }
+
+// export interface Br {
+//   attributes: {
+//     type?: 'column' | 'page' | 'textWrapping'
+//     clear?: 'all' | 'left' | 'right' | 'none'
+//   }
+// }
+
+// // Run type
+// export interface Run {
+//   properties: {
+//     bold?: boolean
+//     caps?: boolean
+//   }
+//   text: string
+// }
+
+/* run node structure
+{
+  type: 'node',
+  name: 'r',
+  attributes: {},
+  children: [
+    {
+      type: 'node',
+      name: 'rPr',
+      attributions: {},
+      children: []
+    }, 
+    {
+      type: 'text',
+      text: 'Hello, World!'
+    }
+  ]
 }
 
-export interface P {
-  attributes: {}
-  runs: R[]
+// document run node
+{
+  type: 'run',
+  properties: {},
+  content: [
+    'Hello, World!'
+  ]
 }
-
-function paragraphOf (runs = [], attributes = {}) {
-  return {
-    attributes,
-    runs,
-    addRun: (run: R) => paragraphOf([...runs, run], attributes)
-  }
-}
+*/
 
 export class Run {
-  value: R
+  value: {
+    properties: { [key: string]: any }
+    content: []
+  }
 
-  static of () {
-    return new Run()
+  constructor (value) {
+    this.value = value
+  }
+
+  getValue () {
+    return this.value
+  }
+
+  getText () {
+    return this.value.content
+      .map(c => (typeof c === 'string' ? c : ''))
+      .join('')
+  }
+
+  static of (node) {
+    const value = node.children.reduce(
+      (acc, child, idx) => {
+        switch (child.type) {
+          default:
+            return acc
+          case 'node':
+            console.log(`found node ${child.name} at index ${idx}`)
+            if (child.name === 'rPr') {
+              // ignore run properties if not first child
+              if (idx !== 0 || !child.children.length) {
+                return acc
+              }
+
+              // need to handle properties here
+              return acc
+            }
+          case 'text':
+            return {
+              ...acc,
+              content: [...acc.content, child.text]
+            }
+        }
+      },
+      {
+        type: 'run',
+        properties: {},
+        content: []
+      }
+    )
+
+    return new Run(value)
   }
 }
 
-export class Paragraph {
-  value: P
+function runOf (value) {
+  const { properties = {}, content = [] } = value
+  return {
+    getValue: () => value,
+    getText: () => content.map(c => (typeof c === 'string' ? c : '')).join('')
+  }
+}
 
-  constructor (runs = [], attributes = {}) {
-    this.value = {
-      attributes,
-      runs
+export function createRun (node) {
+  const value = node.children.reduce(
+    (acc, child, idx) => {
+      switch (child.type) {
+        default:
+          return acc
+        case 'node':
+          console.log(`found node ${child.name} at index ${idx}`)
+          if (child.name === 'rPr') {
+            // ignore run properties if not first child
+            if (idx !== 0 || !child.children.length) {
+              return acc
+            }
+
+            // need to handle properties here
+            return acc
+          }
+        case 'text':
+          return {
+            ...acc,
+            content: [...acc.content, child.text]
+          }
+      }
+    },
+    {
+      type: 'run',
+      properties: {},
+      content: []
     }
-  }
+  )
 
-  static of (runs?: R[], attributes?) {
-    return new Paragraph(runs, attributes)
-  }
+  return runOf(value)
 }
