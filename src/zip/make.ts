@@ -9,37 +9,6 @@ const path = 'C:/Users/timot/OneDrive/MrLasers/Projects/M/Mi Ae Lipe/Chris Patil
 
 const outpath = Path.join(process.cwd(), '_sandbox', 'data', 'testepub')
 
-// const map = (fun) => (obj) => obj.map(fun)
-
-// /*
-//     1. Get files in base dir
-//     2. Make list of files with path
-//     2. For each file
-//         a. Is directory?
-//             i. return to 2?
-//         b. Add to zip?
-// */
-
-/*
-[
-  'META-INF/container.xml',
-  'mimetype',
-  'OEBPS/ch1.xhtml',
-  'OEBPS/ch2.xhtml'
-]
-*/
-
-/*
-
-    1. Get all files in directory
-    2. For each file:
-      a. If file is not directory
-        i. return filename
-      b. If file is directory
-        ii. Get all files in directory
-
-*/
-
 // # gets the files in give basepath, recursively adding
 //   files found in subdirectories
 const getFilesInDir = async (basepath, relpath: string[]) => {

@@ -50,10 +50,10 @@ export interface node extends RootNode {
   attributes: { [key: string]: string }
 }
 
-export function createElement (input: string): text
-export function createElement (input: Tag): node
-export function createElement (input: void): RootNode
-export function createElement (input: any): any {
+export function createElement(input: string): text
+export function createElement(input: Tag): node
+export function createElement(input: void): RootNode
+export function createElement(input: any): any {
   if (typeof input === 'undefined') {
     return { children: [] }
   }
@@ -78,7 +78,7 @@ interface XMLParserOptions {
   ignoreNS?: boolean
 }
 
-export function parse (xml: string, options: XMLParserOptions = {}) {
+export function parse(xml: string, options: XMLParserOptions = {}) {
   return new Promise((resolve, reject) => {
     const parser = Sax.parser(true)
 
