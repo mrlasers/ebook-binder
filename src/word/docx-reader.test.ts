@@ -8,15 +8,15 @@ it('gets text from node children', () => {
   expect(nodeToText(input)).toBe('Hello, World!')
 })
 
-it('gets document body', () => {
-  const input = {
-    name: 'w:document',
-    attributes: {},
-    children: [{ name: 'w:body', attributes: {}, children: [] }]
-  }
-  const expected = { children: [] }
-  expect(xmlToDocument(input)).toEqual(expected)
-})
+// it('gets document body', () => {
+//   const input = {
+//     name: 'w:document',
+//     attributes: {},
+//     children: [{ name: 'w:body', attributes: {}, children: [] }]
+//   }
+//   const expected = { children: [] }
+//   expect(xmlToDocument(input)).toEqual(expected)
+// })
 
 // it('gets document body w/ paragraph', () => {
 //   const input = {
