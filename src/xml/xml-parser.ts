@@ -1,16 +1,8 @@
 import * as Sax from 'sax'
-import { Node, Element, Text } from './node'
+import { Node, Element, Text, isElement, isText } from './node'
 
 interface XMLParserOptions {
   ignoreNS?: boolean
-}
-
-export function isText(node: Node): node is Text {
-  return (node as Text).text !== undefined
-}
-
-export function isElement(node: Node): node is Element {
-  return (node as Element).children !== undefined
 }
 
 export function parse(xml: string, options: XMLParserOptions = {}) {

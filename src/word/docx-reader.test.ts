@@ -1,5 +1,5 @@
 import { xmlToDocument, nodeToText } from './docx-reader'
-import { Node } from '../xml/xml-parser'
+import { Node } from '../xml/node'
 
 it('gets text from node children', () => {
   const input: Node = {

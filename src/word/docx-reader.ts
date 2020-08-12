@@ -1,5 +1,6 @@
 import { isT, isNotT, defineIsT } from 'safe-type-predicate'
-import { parse, Node, Element, isText, isElement } from '../xml/xml-parser'
+import { parse } from '../xml/xml-parser'
+import { Node, Element, isText, isElement } from '../xml/node'
 
 // document.xml
 
