@@ -10,6 +10,44 @@ it('gets document body', () => {
   return expect(parseDocx(input)).toEqual(expected)
 })
 
+it('gets document body with paragraph', () => {
+  const input = {
+    name: 'w:document',
+    attributes: {},
+    children: [
+      {
+        name: 'w:body',
+        attributes: {},
+        children: [
+          {
+            name: 'w:p',
+            attributes: {},
+            children: [
+              {
+                name: 'w:pPr',
+                attributes: {},
+                children: [
+                  {
+                    name: 'w:pStyle',
+                    attributes: { 'w:val': 'Normal' },
+                    children: []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  const expected = {
+    children: [
+      { type: 'paragraph', properties: { style: 'Normal' }, children: [] }
+    ]
+  }
+  return expect(parseDocx(input)).toEqual(expected)
+})
+
 // it('gets document body w/ paragraph', () => {
 //   const input = {
 //     name: 'w:document',

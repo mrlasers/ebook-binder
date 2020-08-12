@@ -20,3 +20,29 @@ export function isText(node: Node): node is Text {
 export function isElement(node: Node): node is Element {
   return (node as Element).children !== undefined
 }
+
+export function getFirstChild(node: Node) {
+  if (!isElement(node) || !node.children.length) {
+    return null
+  }
+
+  return node.children[0]
+}
+
+export function getChildByProp(
+  node: Node,
+  prop: string,
+  value: string | number
+) {
+  if (!isElement(node) || !node.children.length) {
+    return null
+  }
+
+  for (const i in node.children) {
+    if (node.children[i][prop] === value) {
+      return node.children[i]
+    }
+  }
+
+  return null
+}
