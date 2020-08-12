@@ -1,17 +1,5 @@
 import * as Sax from 'sax'
-
-// node types based on SlateJS
-export type Node = Text | Element
-
-export interface Text {
-  text: string
-  [key: string]: unknown
-}
-
-export interface Element {
-  children: Node[]
-  [key: string]: unknown | string | Sax.QualifiedAttribute
-}
+import { Node, Element, Text } from './node'
 
 interface XMLParserOptions {
   ignoreNS?: boolean

@@ -1,4 +1,5 @@
-import { parse, Node } from './xml-parser'
+import { parse } from './xml-parser'
+import { Node } from './node'
 
 describe('XML parser', () => {
   it('parses an XML document', () => {
