@@ -17,6 +17,14 @@ interface XMLParserOptions {
   ignoreNS?: boolean
 }
 
+export function isText(node: Node): node is Text {
+  return (node as Text).text !== undefined
+}
+
+export function isElement(node: Node): node is Element {
+  return (node as Element).children !== undefined
+}
+
 export function parse(xml: string, options: XMLParserOptions = {}) {
   return new Promise((resolve, reject) => {
     const parser = Sax.parser(true)

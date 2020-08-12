@@ -34,6 +34,7 @@
     "jszip": "^3.5.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
+    "safe-type-predicate": "^1.0.1",
     "sax": "^1.2.4",
     "slate": ">=0.55.0",
     "slate-history": "^0.58.4",
