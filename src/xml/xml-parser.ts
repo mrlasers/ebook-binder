@@ -1,5 +1,6 @@
 import * as Sax from 'sax'
 
+// node types based on SlateJS
 export type Node = Text | Element
 
 export interface Text {
@@ -40,6 +41,7 @@ export function parse(xml: string, options: XMLParserOptions = {}) {
     parser.ontext = function (text) {
       if (currentNode !== rootNode) {
         const newNode: Text = { text }
+        currentNode.children.push(newNode)
       }
     }
 
