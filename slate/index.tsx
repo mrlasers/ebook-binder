@@ -1,16 +1,14 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 
-import Editor from './Editor/index'
-import { Toolbar } from './components'
+import { store } from './store'
 
-const App = () => {
-  return (
-    <div>
-      <Toolbar />
-      <Editor onChange={(_) => _} />
-    </div>
-  )
-}
+import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
