@@ -6,7 +6,7 @@ export const Toolbar = ({ ...props }) => {
       <button>Home</button>
       <button>New Book</button>
       <button>Add Document</button>
-      <input />
+      <input />d
     </nav>
   )
 }

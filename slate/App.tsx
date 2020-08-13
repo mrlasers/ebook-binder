@@ -27,12 +27,14 @@ const App = ({ count, dispatch }) => {
 
 const mapState = (state) => {
   return {
-    count: state + 1
+    count: state.count
   }
 }
 
 const connectedApp = connect(mapState)(App)
 
-export default hot(module)(connect(mapState)(App))
-
-// export default hot(module)(connectedApp)
+// declare const module: any
+// export default hot(module)(App)
+export default hot(module)(connectedApp)
+// export default connect(mapState)(hot(module)(App))
+// export default hot(module)(connect(mapState)(App))

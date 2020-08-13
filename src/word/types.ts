@@ -69,33 +69,27 @@ export interface RCBreak {
   value: boolean
 }
 
-export class RunContent {
-  value: RCText | RCBreak
-
-  constructor ()
-}
-
 export class Run {
   value: {
     properties: { [key: string]: any }
     content: []
   }
 
-  constructor (value) {
+  constructor(value) {
     this.value = value
   }
 
-  getValue () {
+  getValue() {
     return this.value
   }
 
-  getText () {
+  getText() {
     return this.value.content
-      .map(c => (typeof c === 'string' ? c : ''))
+      .map((c) => (typeof c === 'string' ? c : ''))
       .join('')
   }
 
-  static of (node) {
+  static of(node) {
     const value = node.children.reduce(
       (acc, child, idx) => {
         switch (child.type) {
@@ -130,15 +124,15 @@ export class Run {
   }
 }
 
-function runOf (value) {
+function runOf(value) {
   const { properties = {}, content = [] } = value
   return {
     getValue: () => value,
-    getText: () => content.map(c => (typeof c === 'string' ? c : '')).join('')
+    getText: () => content.map((c) => (typeof c === 'string' ? c : '')).join('')
   }
 }
 
-export function createRun (node) {
+export function createRun(node) {
   const value = node.children.reduce(
     (acc, child, idx) => {
       switch (child.type) {
