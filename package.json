@@ -21,6 +21,7 @@
     "@types/slate": "^0.47.7",
     "@types/slate-react": "^0.22.9",
     "@types/styled-components": "^5.1.2",
+    "@types/webpack-env": "^1.15.2",
     "babel-jest": "^26.2.2",
     "jest": "^26.2.2",
     "nodemon": "^2.0.4",
@@ -32,6 +33,7 @@
     "typescript": "^3.9.7",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
     "webpack-env": "^0.8.0"
   },
   "dependencies": {

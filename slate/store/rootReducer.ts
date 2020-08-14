@@ -5,7 +5,7 @@ export const { actions, reducer } = createSlice({
   name: 'counter',
   initialState: 0,
   reducers: {
-    increment: (state) => state + 100,
+    increment: (state) => state + 10,
     decrement: (state) => state - 100
   }
 })

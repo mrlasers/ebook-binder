@@ -6,27 +6,30 @@ import store from './store'
 
 import App from './App'
 
-// const render = () => {
-//   // const App = require('./App').default
+const render = () => {
+  const App = require('./App').default
 
-//   ReactDOM.render(
-//     <Provider store={store}>
-//       <App />
-//     </Provider>,
-//     document.getElementById('app')
-//   )
-// }
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('app')
+  )
+}
 
-// render()
+render()
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('app')
-)
+// ReactDOM.render(
+//   <Provider store={store}>
+//     <App />
+//   </Provider>,
+//   document.getElementById('app')
+// )
 
-module.hot.accept()
+if (process.env.NODE_NEV === 'development' && module.hot) {
+  console.log('hot reloading App.tsx')
+  module.hot.accept('./App', render)
+}
 
 // declare const module: any
 // if (module.hot) {

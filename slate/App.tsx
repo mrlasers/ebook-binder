@@ -35,6 +35,6 @@ const connectedApp = connect(mapState)(App)
 
 // declare const module: any
 // export default hot(module)(App)
-export default hot(module)(connectedApp)
-// export default connect(mapState)(hot(module)(App))
+// export default hot(module)(connectedApp)
+export default connect(mapState)(hot(module)(App))
 // export default hot(module)(connect(mapState)(App))
