@@ -1,5 +1,5 @@
 import React from 'react'
-import { hot, setConfig } from 'react-hot-loader'
+// import { hot, setConfig } from 'react-hot-loader'
 import { connect } from 'react-redux'
 
 import Editor from './Editor/index'
@@ -7,9 +7,9 @@ import { Toolbar } from './components'
 
 import { actions } from './store'
 
-setConfig({
-  showReactDomPatchNotification: false
-})
+// setConfig({
+//   showReactDomPatchNotification: false
+// })
 
 const App = ({ count, dispatch }) => {
   return (
@@ -33,8 +33,10 @@ const mapState = (state) => {
 
 const connectedApp = connect(mapState)(App)
 
+export default connectedApp
+
 // declare const module: any
 // export default hot(module)(App)
 // export default hot(module)(connectedApp)
-export default connect(mapState)(hot(module)(App))
+// export default connect(mapState)(hot(module)(App))
 // export default hot(module)(connect(mapState)(App))

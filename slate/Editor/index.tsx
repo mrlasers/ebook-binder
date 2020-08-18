@@ -175,7 +175,7 @@ export default (props: EditorProps) => {
   const [value, setValue] = useState<Node[]>([
     {
       type: 'paragraph',
-      children: [{ text: 'Hello, World!' }]
+      children: [{ text: 'Hello, World!1' }]
     }
   ])
 

@@ -26,10 +26,10 @@ render()
 //   document.getElementById('app')
 // )
 
-if (process.env.NODE_NEV === 'development' && module.hot) {
-  console.log('hot reloading App.tsx')
-  module.hot.accept('./App', render)
-}
+// if (process.env.NODE_NEV === 'development' && module.hot) {
+//   console.log('hot reloading App.tsx')
+//   module.hot.accept('./App', render)
+// }
 
 // declare const module: any
 // if (module.hot) {

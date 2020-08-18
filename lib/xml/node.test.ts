@@ -1,4 +1,4 @@
-import { isText, isElement, getFirstChild, getChildByProp } from '../xml/node'
+import { isText, isElement, getFirstChild, getChildByProp } from './node'
 
 it('tests that a text node is text', () => {
   return expect(isText({ text: 'Hello, World!' })).toBe(true)

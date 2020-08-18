@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon src/index.ts",
     "dev:web": "parcel ./slate/index.html",
     "test": "jest --watch"
   },
@@ -11,7 +12,9 @@
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-typescript": "^7.10.4",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.1",
     "@types/escape-html": "^1.0.0",
+    "@types/hapi__hapi": "^19.0.4",
     "@types/jest": "^26.0.9",
     "@types/jszip": "^3.4.1",
     "@types/node": "^14.0.27",
@@ -20,12 +23,17 @@
     "@types/sax": "^1.2.1",
     "@types/slate": "^0.47.7",
     "@types/slate-react": "^0.22.9",
+    "@types/store": "^2.0.2",
     "@types/styled-components": "^5.1.2",
+    "@types/uuid": "^8.3.0",
     "@types/webpack-env": "^1.15.2",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^26.2.2",
+    "babel-loader": "^8.1.0",
     "jest": "^26.2.2",
     "nodemon": "^2.0.4",
     "react-hot-loader": "^4.12.21",
+    "react-refresh": "^0.8.3",
     "ts-jest": "^26.1.4",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
@@ -37,6 +45,7 @@
     "webpack-env": "^0.8.0"
   },
   "dependencies": {
+    "@hapi/hapi": "^20.0.0",
     "@reduxjs/toolkit": "^1.4.0",
     "escape-html": "^1.0.3",
     "jszip": "^3.5.0",
@@ -44,12 +53,18 @@
     "react-dom": ">=16.8.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
+    "redux-first-router": "^2.1.5",
     "safe-type-predicate": "^1.0.1",
     "sax": "^1.2.4",
     "slate": ">=0.55.0",
     "slate-history": "^0.58.4",
     "slate-hyperscript": "^0.58.4",
     "slate-react": "^0.58.4",
-    "styled-components": "^5.1.1"
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^4.0.14",
+    "sqlite3": "^5.0.0",
+    "store": "^2.0.12",
+    "styled-components": "^5.1.1",
+    "uuid": "^8.3.0"
   }
 }

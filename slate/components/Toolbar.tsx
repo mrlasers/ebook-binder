@@ -1,12 +1,12 @@
 import React from 'react'
 
-export const Toolbar = ({ ...props }) => {
+export function Toolbar({ ...props }) {
   return (
     <nav>
       <button>Home</button>
       <button>New Book</button>
       <button>Add Document</button>
-      <input />
+      <input />s
     </nav>
   )
 }
