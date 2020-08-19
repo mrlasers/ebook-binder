@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Users\timot\scoop\apps\nvm\current\nodejs\nodejs\node.exe C:\Users\timot\scoop\apps\yarn\current\Yarn\bin\yarn.js add -D @types/sql-template-strings
+  C:\Users\timot\scoop\apps\nvm\current\nodejs\nodejs\node.exe C:\Users\timot\scoop\apps\yarn\current\Yarn\bin\yarn.js add -D @types/reworkcss
 
 PATH: 
   C:\Program Files\PowerShell\7-preview;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\PowerShell\7-preview\preview;C:\Program Files\PowerShell\7\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\timot\scoop\apps\yarn\current\Yarn\bin;C:\Users\timot\scoop\apps\yarn\current\global\node_modules\.bin;C:\Users\timot\scoop\apps\nvm\current\nodejs\nodejs;C:\Users\timot\scoop\shims;C:\Users\timot\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Java\jre1.8.0_261\bin;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fsql-template-strings: Not found
+  Error: https://registry.yarnpkg.com/@types%2freworkcss: Not found
       at Request.params.callback [as _callback] (C:\Users\timot\scoop\apps\yarn\1.22.4\Yarn\lib\cli.js:66096:18)
       at Request.self.callback (C:\Users\timot\scoop\apps\yarn\1.22.4\Yarn\lib\cli.js:140748:22)
       at Request.emit (events.js:310:20)
@@ -76,6 +76,7 @@ npm manifest:
     "dependencies": {
       "@hapi/hapi": "^20.0.0",
       "@reduxjs/toolkit": "^1.4.0",
+      "blipp": "^4.0.1",
       "escape-html": "^1.0.3",
       "jszip": "^3.5.0",
       "react": ">=16.8.0",
@@ -1015,6 +1016,11 @@ Lockfile:
       "@hapi/boom" "9.x.x"
       "@hapi/hoek" "9.x.x"
   
+  "@hapi/address@2.x.x":
+    version "2.1.4"
+    resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
+    integrity sha512-QD1PhQk+s31P1ixsX0H0Suoupp3VMXzIVMSwobR3F3MSUO2YCV0B7xqLcUw/Bh8yuvd3LhpyqLQWTNcRmp6IdQ==
+  
   "@hapi/ammo@^5.0.1":
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/@hapi/ammo/-/ammo-5.0.1.tgz#9d34560f5c214eda563d838c01297387efaab490"
@@ -1043,6 +1049,11 @@ Lockfile:
     dependencies:
       "@hapi/boom" "9.x.x"
       "@hapi/hoek" "9.x.x"
+  
+  "@hapi/bourne@1.x.x":
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/@hapi/bourne/-/bourne-1.3.2.tgz#0a7095adea067243ce3283e1b56b8a8f453b242a"
+    integrity sha512-1dVNHT76Uu5N3eJNTYcvxee+jzX4Z9lfciqRRHCU27ihbUcYi+iSc2iml5Ke1LXe1SyJCLA0+14Jh4tXJgOppA==
   
   "@hapi/bourne@2.x.x":
     version "2.0.0"
@@ -1127,6 +1138,11 @@ Lockfile:
       "@hapi/hoek" "9.x.x"
       "@hapi/validate" "1.x.x"
   
+  "@hapi/hoek@8.x.x", "@hapi/hoek@^8.3.0":
+    version "8.5.1"
+    resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-8.5.1.tgz#fde96064ca446dec8c55a8c2f130957b070c6e06"
+    integrity sha512-yN7kbciD87WzLGc5539Tn0sApjyiGHAJgKvG9W8C7O+6c7qmoQMfVs0W4bX17eqz6C78QJqqFrtgdK5EWf6Qow==
+  
   "@hapi/hoek@9.x.x", "@hapi/hoek@^9.0.0", "@hapi/hoek@^9.0.4":
     version "9.0.4"
     resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.0.4.tgz#e80ad4e8e8d2adc6c77d985f698447e8628b6010"
@@ -1142,6 +1158,16 @@ Lockfile:
       "@hapi/bourne" "2.x.x"
       "@hapi/cryptiles" "5.x.x"
       "@hapi/hoek" "9.x.x"
+  
+  "@hapi/joi@15.x.x":
+    version "15.1.1"
+    resolved "https://registry.yarnpkg.com/@hapi/joi/-/joi-15.1.1.tgz#c675b8a71296f02833f8d6d243b34c57b8ce19d7"
+    integrity sha512-entf8ZMOK8sc+8YfeOlM8pCfg3b5+WZIKBfUaaJT8UsjAAPjartzxIYm3TIbjvA4u+u++KbcXD38k682nVHDAQ==
+    dependencies:
+      "@hapi/address" "2.x.x"
+      "@hapi/bourne" "1.x.x"
+      "@hapi/hoek" "8.x.x"
+      "@hapi/topo" "3.x.x"
   
   "@hapi/mimos@5.x.x":
     version "5.0.0"
@@ -1225,6 +1251,13 @@ Lockfile:
     version "5.1.0"
     resolved "https://registry.yarnpkg.com/@hapi/teamwork/-/teamwork-5.1.0.tgz#7801a61fc727f702fd2196ef7625eb4e389f4124"
     integrity sha512-llqoQTrAJDTXxG3c4Kz/uzhBS1TsmSBa/XG5SPcVXgmffHE1nFtyLIK0hNJHCB3EuBKT84adzd1hZNY9GJLWtg==
+  
+  "@hapi/topo@3.x.x":
+    version "3.1.6"
+    resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-3.1.6.tgz#68d935fa3eae7fdd5ab0d7f953f3205d8b2bfc29"
+    integrity sha512-tAag0jEcjwH+P2quUfipd7liWCNX2F8NvYjQp2wtInsZxnMlypdw0FtAOLxtvvkO+GSRRbmNi8m/5y42PQJYCQ==
+    dependencies:
+      "@hapi/hoek" "^8.3.0"
   
   "@hapi/topo@5.x.x", "@hapi/topo@^5.0.0":
     version "5.0.0"
@@ -2451,6 +2484,16 @@ Lockfile:
     dependencies:
       file-uri-to-path "1.0.0"
   
+  blipp@^4.0.1:
+    version "4.0.1"
+    resolved "https://registry.yarnpkg.com/blipp/-/blipp-4.0.1.tgz#b9948b173f59a5f883116b7470fa20e7d7910142"
+    integrity sha512-nmtErzngVgJF6HlpnEymOil23m5U82oTYhbU8m619kQzj8yJ2q1ZFbL45i+dBcO92XTocyyj3QtC3GMxRujv8w==
+    dependencies:
+      "@hapi/hoek" "8.x.x"
+      "@hapi/joi" "15.x.x"
+      chalk "2.x.x"
+      easy-table "1.x.x"
+  
   block-stream@*:
     version "0.0.9"
     resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
@@ -2815,7 +2858,7 @@ Lockfile:
       align-text "^0.1.3"
       lazy-cache "^1.0.3"
   
-  chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
+  chalk@2.x.x, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
     version "2.4.2"
     resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
     integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -3415,6 +3458,13 @@ Lockfile:
       execa "^1.0.0"
       ip-regex "^2.1.0"
   
+  defaults@^1.0.3:
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/defaults/-/defaults-1.0.3.tgz#c656051e9817d9ff08ed881477f3fe4019f3ef7d"
+    integrity sha1-xlYFHpgX2f8I7YgUd/P+QBnz730=
+    dependencies:
+      clone "^1.0.2"
+  
   defer-to-connect@^1.0.1:
     version "1.1.3"
     resolved "https://registry.yarnpkg.com/defer-to-connect/-/defer-to-connect-1.1.3.tgz#331ae050c08dcf789f8c83a7b81f0ed94f4ac591"
@@ -3604,6 +3654,15 @@ Lockfile:
     integrity sha1-BuRMIj9eTpTXjvnbI6ZRXOL5YqE=
     dependencies:
       xtend "^4.0.0"
+  
+  easy-table@1.x.x:
+    version "1.1.1"
+    resolved "https://registry.yarnpkg.com/easy-table/-/easy-table-1.1.1.tgz#c1b9b9ad68a017091a1c235e4bcba277540e143f"
+    integrity sha512-C9Lvm0WFcn2RgxbMnTbXZenMIWcBtkzMr+dWqq/JsVoGFSVUVlPqeOa5LP5kM0I3zoOazFpckOEb2/0LDFfToQ==
+    dependencies:
+      ansi-regex "^3.0.0"
+    optionalDependencies:
+      wcwidth ">=1.0.1"
   
   ecc-jsbn@~0.1.1:
     version "0.1.2"
@@ -9300,6 +9359,13 @@ Lockfile:
     integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
     dependencies:
       minimalistic-assert "^1.0.0"
+  
+  wcwidth@>=1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/wcwidth/-/wcwidth-1.0.1.tgz#f0b0dcf915bc5ff1528afadb2c0e17b532da2fe8"
+    integrity sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=
+    dependencies:
+      defaults "^1.0.3"
   
   webidl-conversions@^5.0.0:
     version "5.0.0"

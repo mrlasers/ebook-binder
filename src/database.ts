@@ -9,6 +9,10 @@ export function insertBook(db, { title, author }) {
   )
 }
 
+export function getBookById(db, id) {
+  return db.get(SQL`SELECT * FROM Books WHERE id = ${id}`)
+}
+
 export function getBooks(db) {
   return db.all('SELECT * FROM Books')
 }
@@ -40,6 +44,6 @@ export default async (file = '/tmp/database.db') => {
     author: 'Timothy Pew'
   })
   db.all('SELECT * FROM Books').then((data) => console.log('Books:', data))
-  console.log('all books:', await getBooks(db))
-  return db.close()
+  // console.log('all books:', await getBooks(db))
+  return db
 }
