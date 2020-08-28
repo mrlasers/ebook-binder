@@ -87,16 +87,20 @@ export interface OPF {
 
 export interface Publication {
   metadata: {
-    identifier: {
+    identifier: null | {
       type: 'uuid' | 'isbn'
       id: string
     }
-    sourceIdentifier: {
+    sourceId: null | {
       type: 'isbn'
       id: string
     }
     dates: {
-      modified: Date
+      modified: null | Date
+    }
+    language: {
+      lang: 'en-US' | 'en-GB'
+      dir?: 'ltr' | 'rtl'
     }
   }
 }
