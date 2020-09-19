@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "dev:web": "parcel ./slate/index.html",
+    "dev:word": "nodemon ./cli/index.ts --extract .\\_sandbox\\hello-world.docx",
     "test": "jest --watch"
   },
   "devDependencies": {
@@ -66,7 +67,7 @@
     "safe-type-predicate": "^1.0.1",
     "sax": "^1.2.4",
     "sharp": "^0.25.4",
-    "slate": ">=0.55.0",
+    "slate": "^0.58.4",
     "slate-history": "^0.58.4",
     "slate-hyperscript": "^0.58.4",
     "slate-react": "^0.58.4",

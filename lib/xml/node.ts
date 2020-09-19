@@ -8,9 +8,12 @@ export interface Text {
   [key: string]: unknown
 }
 
-export interface Element {
+export type Element = {
+  name?: string
+  attributes?: { [key: string]: string }
   children: Node[]
-  [key: string]: unknown | string | Sax.QualifiedAttribute
+  // [key: string]: //| unknown
+  // Node[] | string | { [key: string]: string }
 }
 
 export function isText(node: Node): node is Text {
