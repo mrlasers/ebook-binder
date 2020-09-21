@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "dev:web": "parcel ./slate/index.html",
-    "dev:word": "nodemon ./cli/index.ts --extract .\\_sandbox\\hello-world.docx",
+    "dev:word": "nodemon .\\cli\\index.ts --extract .\\_sandbox\\SavingMeFirst-working1.docx",
     "test": "jest --watch"
   },
   "devDependencies": {
@@ -22,6 +22,7 @@
     "@types/jszip": "^3.4.1",
     "@types/mime": "^2.0.3",
     "@types/node": "^14.0.27",
+    "@types/ramda": "^0.27.17",
     "@types/react": "^16.9.46",
     "@types/react-dom": "^16.9.8",
     "@types/sax": "^1.2.1",
@@ -59,6 +60,7 @@
     "immer": "^7.0.7",
     "jszip": "^3.5.0",
     "mime": "^2.4.6",
+    "ramda": "^0.27.1",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "react-redux": "^7.2.1",

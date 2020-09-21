@@ -54,7 +54,8 @@ export const read = (filename: string) => {
 
       const document = DocumentXML.convert(doc, StylesXML.convertStyles(styles))
 
-      console.log(JSON.stringify(document, null, 2))
+      // console.log(JSON.stringify(document, null, 2))
+      console.log(JSON.stringify(document.children[0], null, 2))
 
       // const document = DocumentXML.convert(getDocumentFromZip(zip), styles)
 

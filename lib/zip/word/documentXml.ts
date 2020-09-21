@@ -8,6 +8,8 @@ import {
 } from '../../xml'
 import Slate from 'slate'
 import { Style, Styles } from './stylesXml'
+import { accessSync } from 'fs'
+import produce from 'immer'
 
 const addProp = (parent, key, value) => ({ ...parent, [key]: value })
 const addChild = (parent, child) => ({
@@ -92,33 +94,80 @@ export function mapRunToChild(
   }, parent)
 }
 
-export function mapPropsToParagraph(
-  para: Slate.Element,
-  props: Element,
-  styles?: Styles
-): Slate.Element {
-  return props.children.reduce<Slate.Element>((acc, n) => {
-    if (!isElement(n)) {
-      return acc
-    }
-
-    switch (n.name) {
-      default:
-        return acc
-      case 'pStyle':
-        console.log('pStyle!!!')
-        if (styles[n.attributes.val]?.outlineLvl < 9) {
-          return {
-            ...acc,
-            type: 'heading',
-            level: styles[n.attributes.val]?.outlineLvl
-          }
-        }
-
-        return acc
-    }
-  }, para)
+export interface ReduceChild {
+  (parent: Slate.Element, child: Element, config?: any): Slate.Element
 }
+
+const applyRunPr: ReduceChild = (parent, child) => {
+  switch (child.name) {
+    default:
+      return parent
+    case 'i':
+      return {
+        ...parent,
+        italic: true
+      }
+    case 'b':
+      return {
+        ...parent,
+        bold: true
+      }
+  }
+}
+
+export const applyRun: ReduceChild = (parent, child) => {
+  switch (child.name) {
+    default:
+      return parent
+    case 'rPr':
+      return applyRrunPrToParent(parent, child)
+    case 't':
+      if (isText(child.children[0])) {
+        return {
+          ...parent,
+          children: [...parent.children, child.children[0]]
+        }
+      }
+    case 'br':
+      return {
+        ...parent,
+        children: [...parent.children, { type: 'br', children: [] }]
+      }
+    case 'drawing':
+      return
+  }
+}
+
+export const applyParaPr: ReduceChild = (parent, child, config) => {
+  switch (child.name) {
+    default:
+      return parent
+    case 'pStyle':
+      const level = config[child.attributes?.val]?.outlineLvl
+      return {
+        ...parent,
+        type: level < 9 ? 'heading' : parent.type,
+        level: level,
+        style: child.attributes?.val
+      }
+  }
+}
+
+export function applyToParent(func: ReduceChild) {
+  return function (
+    parent: Slate.Element,
+    child: Element,
+    config?: any
+  ): Slate.Element {
+    return child.children.reduce((acc, n) => {
+      return isElement(n) ? func(acc, n, config) : acc
+    }, parent)
+  }
+}
+
+const applyParaPrToParent = applyToParent(applyParaPr)
+const applyRunToParent = applyToParent(applyRun)
+const applyRrunPrToParent = applyToParent(applyRunPr)
 
 // convertParagraph :: Element -> Slate.Element
 export function convertParagraph(el: Element, styles?: Styles): Slate.Element {
@@ -135,9 +184,15 @@ export function convertParagraph(el: Element, styles?: Styles): Slate.Element {
         default:
           return acc
         case 'pPr':
-          return mapPropsToParagraph(acc, n, styles)
+          return applyParaPrToParent(acc, n, styles)
         case 'r':
-          return mapRunToChild(acc, n)
+          return {
+            ...acc,
+            children: [
+              ...acc.children,
+              applyRunToParent({ type: 'run', children: [] }, n)
+            ]
+          }
       }
     },
     {
@@ -164,8 +219,8 @@ export function convert(body: Element, styles?: Styles): Slate.Element {
 
   // return { children: [] }
 
-  return {
-    children: body.children.reduce<Slate.Element[]>((acc, node) => {
+  const sections = body.children.reduce<Slate.Element[]>(
+    produce((acc, node) => {
       if (!isElement(node)) {
         return acc
       }
@@ -174,9 +229,34 @@ export function convert(body: Element, styles?: Styles): Slate.Element {
         default:
           return acc
         case 'p':
-          return [...acc, convertParagraph(node, styles)]
+          acc[acc.length - 1].children.push(convertParagraph(node, styles))
+          break
+        case 'sectPr':
+          acc[acc.length - 1].properties = {}
+          acc.push({ type: 'section', children: [] })
+          break
+        // return [...acc, convertParagraph(node, styles)]
       }
-    }, [])
+    }),
+    [{ type: 'section', children: [] }]
+  )
+
+  const combineChildren = (prev, next) => {
+    const { children: prevChildren, ...prevRest } = prev
+    const { children: nextChildren, ...nextRest } = next
+
+    if (JSON.stringify(prevRest) === JSON.stringify(nextRest)) {
+      return {
+        ...prevRest,
+        children: [...prevChildren, ...nextChildren]
+      }
+    }
+
+    return [prev, next]
+  }
+
+  return {
+    children: sections.slice(0, sections.length - 1)
   }
 
   // return {
