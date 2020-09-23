@@ -23,6 +23,7 @@ export type WordElement = {
 }
 
 type WordProps = { [key: string]: boolean | number | string }
+
 interface PropsElement extends XML.Element {
   attributes: {
     val?: string
@@ -30,11 +31,12 @@ interface PropsElement extends XML.Element {
 }
 
 export function isWordText(node: WordNode): node is WordText {
-  return (node as WordText)?.text !== undefined
+  return node && (node as WordText)?.text !== undefined
 }
 
 export function isWordError(node: WordNode): node is WordError {
   return (
+    node &&
     (node as WordError).type === 'error' &&
     (node as WordError).msg !== undefined
   )
@@ -42,6 +44,7 @@ export function isWordError(node: WordNode): node is WordError {
 
 export function isWordElement(node: WordNode): node is WordElement {
   return (
+    node &&
     (node as WordElement).children !== undefined &&
     (node as WordElement).type !== undefined
   )
@@ -86,7 +89,27 @@ const wordElement = (node?: Partial<WordElement>): WordElement => {
   }
 }
 
-export const convertNode = (node) => {}
+export const addChild = (parent: WordElement, child: WordNode): WordNode => {
+  return isWordElement(parent)
+    ? {
+        ...parent,
+        children: [...parent.children, child]
+      }
+    : child
+}
+
+export const addProperties = (
+  parent: WordElement,
+  properties: WordProps
+): WordNode => {
+  return {
+    ...parent,
+    properties: {
+      ...parent.properties,
+      ...properties
+    }
+  }
+}
 
 export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
   const parent = acc || wordElement()
@@ -95,20 +118,13 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
     // kinda a hack, maybe
     // if parent has properties, we assume that we want to keep the parent
     // ; otherwise, we want to lift the Text node
+    const newText = { text: el.text }
     return Object.keys(parent.properties).length
-      ? {
-          ...parent,
-          children: [...parent.children, { text: el.text }]
-        }
-      : { text: el.text }
+      ? addChild(parent, newText)
+      : newText
   }
 
-  // if (!isWordElement(acc)) {
-  //   return acc
-  // }
-
-  // const children = parent.children.reduce(convert, parent)
-
+  // console.log(el.name)
   switch (el.name) {
     default:
       return el.children.reduce(convert, parent)
@@ -119,13 +135,7 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         type: 'span'
       })
 
-      // return {
-      //   ...parent,
-      //   children: [...parent.children, newRun]
-      // }
-      return acc
-        ? { ...parent, children: [...parent.children, newRun] }
-        : newRun
+      return addChild(acc, newRun)
     }
     case 'p': {
       const newParagraph = el.children.reduce(convert, {
@@ -133,6 +143,20 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         type: 'paragraph'
       })
 
+      if (!isWordElement(newParagraph)) {
+        return
+      }
+
+      const firstChild = newParagraph.children[0]
+
+      if (isWordElement(firstChild)) {
+        switch (firstChild.type) {
+          case 'break':
+            return firstChild
+        }
+      }
+
+      return addChild(acc, newParagraph)
       return acc
         ? { ...parent, children: [...parent.children, newParagraph] }
         : newParagraph
@@ -144,38 +168,14 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         children: el.children.map((n) => convert(null, n))
       }
     case 'rStyle': {
-      return {
-        ...parent,
-        properties: {
-          ...parent.properties,
-          style: el.attributes.val
-        }
-      }
+      return addProperties(parent, { style: el.attributes.val })
     }
     case 'b':
-      return {
-        ...parent,
-        properties: {
-          ...parent.properties,
-          bold: true
-        }
-      }
+      return addProperties(parent, { bold: true })
     case 'i':
-      return {
-        ...parent,
-        properties: {
-          ...parent.properties,
-          italic: true
-        }
-      }
+      return addProperties(parent, { italic: true })
     case 'u':
-      return {
-        ...parent,
-        properties: {
-          ...parent.properties,
-          underline: true
-        }
-      }
+      return addProperties(parent, { underline: true })
     // table
     case 'tbl':
       return el.children.reduce(convert, {
@@ -189,10 +189,7 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         children: []
       })
 
-      return {
-        ...parent,
-        children: [...parent.children, newRow]
-      }
+      return addChild(parent, newRow)
     }
     case 'tc': {
       const newCell = el.children.reduce(
@@ -202,10 +199,7 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         })
       )
 
-      return {
-        ...parent,
-        children: [...parent.children, newCell]
-      }
+      return addChild(parent, newCell)
     }
     // drawing / image
     case 'drawing':
@@ -214,188 +208,31 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         type: 'image'
       })
     case 'inline':
-      return el.children.reduce(convert, {
-        ...parent,
-        properties: {
-          ...parent.properties,
-          inline: true
-        }
-      })
+      return el.children.reduce(
+        convert,
+        addProperties(parent, { inline: true })
+      )
     case 'blip':
-      return {
-        ...parent,
-        properties: { ...parent.properties, id: el.attributes.embed }
-      }
+      return addProperties(parent, { id: el.attributes.embed })
     case 'cNvPr': // non-visual image properties
-      return {
-        ...parent,
+      return addProperties(parent, {
+        name: el.attributes.name,
+        description: el.attributes.descr
+      })
+
+    // breaks
+    case 'type': {
+      return addProperties(parent, { sectionType: el.attributes.val })
+    }
+    case 'sectPr':
+    case 'br':
+      return el.children.reduce(convert, {
+        type: 'break',
         properties: {
-          ...parent.properties,
-          name: el.attributes.name,
-          description: el.attributes.descr
-        }
-      }
+          type:
+            el.attributes.type || (el.name === 'sectPr' ? 'section' : 'page')
+        },
+        children: []
+      })
   }
-
-  // return el.children.reduce<WordElement>(
-  //   produce((acc, child: XML.Node) => {
-  //     if (!XML.isElement(child)) {
-  //       child
-  //     }
-
-  //     switch (child.name) {
-  //       default:
-  //         return acc
-  //       case 't':
-  //         if (XML.isText(child.children[0])) {
-  //           return { text: child.children[0].text }
-  //         }
-  //     }
-  //   }),
-  //   {
-  //     type: undefined,
-  //     properties: undefined,
-  //     children: undefined
-  //   }
-  // )
 }
-
-// export const mergeChildren = (nodes: WordNode[]): WordNode[] => {
-//   // console.log('mergeChildren:', nodes)
-//   return nodes.reduce(
-//     produce((acc, child) => {
-//       if (!isWordElement) {
-//         acc.push(child)
-//       }
-
-//       switch (child.type) {
-//         default:
-//           acc.push(child)
-//           return
-//         case 'list':
-//           const prev = acc[acc.length - 1]
-
-//           const listitem = {
-//             type: 'listitem',
-//             properties: {},
-//             children: child.children
-//           }
-
-//           if (!prev || prev.properties.listId !== child.properties.listId) {
-//             acc.push({
-//               type: 'list',
-//               properties: child.properties,
-//               children: [listitem]
-//             })
-
-//             return
-//           }
-
-//           prev.children.push(listitem)
-
-//         // const prev = acc[acc.length - 1]
-//         // if (prev.name !== 'list' || prev?.properties?.numId) {
-//         //   acc.push({
-//         //     type: 'list',
-//         //     properties: child.properties,
-//         //     children: [
-//         //       {
-//         //         type: 'listItem',
-//         //         properties: {},
-//         //         children: child.children
-//         //       }
-//         //     ]
-//         //   })
-//         //   return
-//         // }
-
-//         // prev.children.push({
-//         //   type: 'listitem',
-//         //   properties: {},
-//         //   children: child.children
-//         // })
-//         // return
-//       }
-//     }),
-//     []
-//   )
-// }
-
-// export const doChildren = (el: Node): WordNode => {
-//   if (isText(el)) {
-//     return {
-//       text: el.text
-//     }
-//   }
-
-//   const { type, properties, children } = el.children.reduce<WordElement>(
-//     produce((acc, child) => {
-//       if (!child.children) {
-//         return acc
-//       }
-
-//       switch (child.name) {
-//         default:
-//           return acc
-//         case 't':
-//           acc.children.push({
-//             text: isText(child.children[0]) ? child.children[0].text : ''
-//           })
-//           return
-//         case 'r': {
-//           const { type, properties, children } = doChildren(
-//             child
-//           ) as WordElement
-//           if (!properties && children.length === 1 && isWordText(children[0])) {
-//             return children[0]
-//           }
-
-//           acc.children = [...acc.children, ...children]
-//           return
-//         }
-//         case 'p': {
-//           console.log('p', child)
-//           const { type, properties, children } = doChildren(
-//             child
-//           ) as WordElement
-
-//           return {
-//             type: 'paragraph',
-//             properties: properties,
-//             children: children
-//           }
-//         }
-//         case 'pPr':
-//           return {
-//             ...acc,
-//             ...doChildren(child)
-//           }
-//         case 'pStyle':
-//           acc.properties = { ...acc.properties, style: child.attributes.val }
-//           return
-//         case 'numPr':
-//           return {
-//             ...doChildren(child),
-//             type: 'list'
-//           }
-//         case 'ilvl':
-//           acc.properties.listLevel = parseInt(child.attributes.val)
-//           return
-//         case 'numId':
-//           acc.properties.listId = parseInt(child.attributes.val)
-//           return
-//       }
-//     }),
-//     {
-//       type: null,
-//       properties: {},
-//       children: []
-//     }
-//   )
-
-//   return {
-//     type,
-//     properties,
-//     children: children ? mergeChildren(children) : []
-//   }
-// }

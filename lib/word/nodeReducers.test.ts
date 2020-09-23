@@ -3,6 +3,54 @@ import * as XML from '../xml'
 
 const convert = (test: XML.Node) => Word.convert(null, test)
 
+describe('helper functions', () => {
+  test('addChild to parent', () => {
+    expect(
+      Word.addChild(
+        {
+          type: '',
+          properties: {},
+          children: []
+        },
+        { text: 'Hello, World!' }
+      )
+    ).toMatchObject({
+      type: '',
+      properties: {},
+      children: [{ text: 'Hello, World!' }]
+    })
+  })
+
+  test('returns child if parent is not element', () => {
+    expect(Word.addChild(null, { text: 'Hello, World!' })).toMatchObject({
+      text: 'Hello, World!'
+    })
+  })
+
+  test('addProperties to parent', () => {
+    expect(
+      Word.addProperties(
+        {
+          type: '',
+          properties: {},
+          children: []
+        },
+        {
+          name: 'Hello',
+          style: 'World'
+        }
+      )
+    ).toMatchObject({
+      type: '',
+      properties: {
+        name: 'Hello',
+        style: 'World'
+      },
+      children: []
+    })
+  })
+})
+
 test('converts text node', () => {
   expect(convert({ text: 'Hello, World!' })).toMatchObject({
     text: 'Hello, World!'
@@ -305,6 +353,117 @@ describe('body', () => {
           children: [{ text: 'Goodnight, Moon.' }]
         }
       ]
+    })
+  })
+})
+
+describe('breaks', () => {
+  test('page break', () => {
+    expect(
+      convert({
+        name: 'br',
+        attributes: {},
+        children: []
+      })
+    ).toMatchObject({
+      type: 'break',
+      properties: {},
+      children: []
+    })
+  })
+
+  test('page break inside paragraph', () => {
+    expect(
+      convert({
+        name: 'p',
+        attributes: {},
+        children: [
+          {
+            name: 'r',
+            attributes: {},
+            children: [
+              {
+                name: 'br',
+                attributes: { type: 'page' },
+                children: []
+              }
+            ]
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'break',
+      properties: { type: 'page' },
+      children: []
+    })
+  })
+
+  test('section break', () => {
+    expect(
+      convert({
+        name: 'sectPr',
+        attributes: {},
+        children: []
+      })
+    ).toMatchObject({
+      type: 'break',
+      properties: {
+        type: 'section'
+      },
+      children: []
+    })
+  })
+
+  test('section break w/ type', () => {
+    expect(
+      convert({
+        name: 'sectPr',
+        attributes: {},
+        children: [
+          {
+            name: 'type',
+            attributes: {
+              val: 'continuous'
+            },
+            children: []
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'break',
+      properties: {
+        type: 'section',
+        sectionType: 'continuous'
+      },
+      children: []
+    })
+  })
+
+  test('section break in paragraph', () => {
+    expect(
+      convert({
+        name: 'p',
+        attributes: {},
+        children: [
+          {
+            name: 'pPr',
+            attributes: {},
+            children: [
+              {
+                name: 'sectPr',
+                attributes: {},
+                children: []
+              }
+            ]
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'break',
+      properties: {
+        type: 'section'
+      },
+      children: []
     })
   })
 })
