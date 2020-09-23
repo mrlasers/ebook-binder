@@ -468,6 +468,173 @@ describe('breaks', () => {
   })
 })
 
+describe('list', () => {
+  test('makes a list', () => {
+    expect(
+      convert({
+        name: 'p',
+        attributes: {},
+        children: [
+          {
+            name: 'pPr',
+            attributes: {},
+            children: [
+              {
+                name: 'numPr',
+                attributes: {},
+                children: [
+                  {
+                    name: 'ilvl',
+                    attributes: { val: '0' },
+                    children: []
+                  },
+                  {
+                    name: 'numId',
+                    attributes: { val: '1' },
+                    children: []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            name: 'r',
+            attributes: {},
+            children: [
+              {
+                name: 't',
+                attributes: {},
+                children: [{ text: 'Hello, World!' }]
+              }
+            ]
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'list',
+      properties: { level: 0, numId: 1 },
+      children: [
+        {
+          type: 'list-item',
+          properties: {},
+          children: [{ text: 'Hello, World!' }]
+        }
+      ]
+    })
+  })
+
+  // # this test did work, but we're moving it to post processing
+  // test('makes a list in a body', () => {
+  //   expect(
+  //     convert({
+  //       name: 'body',
+  //       attributes: {},
+  //       children: [
+  //         {
+  //           name: 'p',
+  //           attributes: {},
+  //           children: [
+  //             {
+  //               name: 'pPr',
+  //               attributes: {},
+  //               children: [
+  //                 {
+  //                   name: 'numPr',
+  //                   attributes: {},
+  //                   children: [
+  //                     {
+  //                       name: 'ilvl',
+  //                       attributes: { val: '0' },
+  //                       children: []
+  //                     },
+  //                     {
+  //                       name: 'numId',
+  //                       attributes: { val: '1' },
+  //                       children: []
+  //                     }
+  //                   ]
+  //                 }
+  //               ]
+  //             },
+  //             {
+  //               name: 'r',
+  //               attributes: {},
+  //               children: [
+  //                 {
+  //                   name: 't',
+  //                   attributes: {},
+  //                   children: [{ text: 'Hello, World!' }]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         },
+  //         {
+  //           name: 'p',
+  //           attributes: {},
+  //           children: [
+  //             {
+  //               name: 'pPr',
+  //               attributes: {},
+  //               children: [
+  //                 {
+  //                   name: 'numPr',
+  //                   attributes: {},
+  //                   children: [
+  //                     {
+  //                       name: 'ilvl',
+  //                       attributes: { val: '0' },
+  //                       children: []
+  //                     },
+  //                     {
+  //                       name: 'numId',
+  //                       attributes: { val: '1' },
+  //                       children: []
+  //                     }
+  //                   ]
+  //                 }
+  //               ]
+  //             },
+  //             {
+  //               name: 'r',
+  //               attributes: {},
+  //               children: [
+  //                 {
+  //                   name: 't',
+  //                   attributes: {},
+  //                   children: [{ text: 'Goodnight, Moon.' }]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //     })
+  //   ).toMatchObject({
+  //     type: 'body',
+  //     properties: {},
+  //     children: [
+  //       {
+  //         type: 'list',
+  //         properties: { level: 0, numId: 1 },
+  //         children: [
+  //           {
+  //             type: 'list-item',
+  //             properties: {},
+  //             children: [{ text: 'Hello, World!' }]
+  //           },
+  //           {
+  //             type: 'list-item',
+  //             properties: {},
+  //             children: [{ text: 'Goodnight, Moon.' }]
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   })
+  // })
+})
+
 describe('drawing/image', () => {
   test('does a drawing with inline embedded id', () => {
     expect(

@@ -22,7 +22,7 @@ export type WordElement = {
   children: WordNode[]
 }
 
-type WordProps = { [key: string]: boolean | number | string }
+export type WordProps = { [key: string]: boolean | number | string }
 
 interface PropsElement extends XML.Element {
   attributes: {
@@ -128,6 +128,37 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
   switch (el.name) {
     default:
       return el.children.reduce(convert, parent)
+
+    // body
+    case 'body':
+      return {
+        type: 'body',
+        properties: {},
+        children: el.children.map((n) => convert(null, n))
+        // # this reduce combines sequential list items of the same
+        // # type, but I think we're going to move that to the
+        // # post processing step for the moment
+        // .reduce((acc, child) => {
+        //   if (isWordElement(child) && child.type === 'list') {
+        //     const rest = acc.slice(0, acc.length - 1)
+        //     const last = acc.slice(acc.length - 1)[0]
+        //     if (
+        //       isWordElement(last) &&
+        //       last.type === 'list' &&
+        //       last.properties.numId === child.properties.numId
+        //     ) {
+        //       return [
+        //         ...rest,
+        //         {
+        //           ...last,
+        //           children: [...last.children, ...child.children]
+        //         }
+        //       ]
+        //     }
+        //   }
+        //   return [...acc, child]
+        // }, [])
+      }
     case 'r': {
       // is this kinda a hack?
       const newRun = el.children.reduce(convert, {
@@ -137,6 +168,24 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
 
       return addChild(acc, newRun)
     }
+
+    // list
+    case 'numPr': {
+      return el.children.reduce(convert, {
+        ...parent,
+        type: 'list'
+      })
+    }
+
+    case 'ilvl': {
+      return addProperties(parent, { level: parseInt(el.attributes.val) })
+    }
+
+    case 'numId': {
+      return addProperties(parent, { numId: parseInt(el.attributes.val) })
+    }
+
+    // paragraph
     case 'p': {
       const newParagraph = el.children.reduce(convert, {
         ...parent,
@@ -156,17 +205,41 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         }
       }
 
+      if (isWordElement(newParagraph) && newParagraph.type === 'list') {
+        return {
+          ...newParagraph,
+          properties: {
+            ...newParagraph.properties,
+            test: '123'
+          },
+
+          children: newParagraph.children.map((child) => {
+            if (isWordError(child)) {
+              return null
+            }
+
+            if (isWordText(child)) {
+              return {
+                type: 'list-item',
+                properties: {},
+                children: [{ text: child.text }]
+              }
+            }
+
+            return {
+              type: 'list-item',
+              properties: {},
+              children: child.children
+            }
+          })
+        }
+      }
+
       return addChild(acc, newParagraph)
       return acc
         ? { ...parent, children: [...parent.children, newParagraph] }
         : newParagraph
     }
-    case 'body':
-      return {
-        type: 'body',
-        properties: {},
-        children: el.children.map((n) => convert(null, n))
-      }
     case 'rStyle': {
       return addProperties(parent, { style: el.attributes.val })
     }
