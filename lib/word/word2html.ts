@@ -57,6 +57,11 @@ export const toHtml = (node: Word.WordNode): string => {
             node.properties.style ? ` class="${node.properties.style}"` : ''
           }>${node.children.map(toHtml).join('')}</p>`
         : ''
+    case 'image':
+      // todo: make source path configurable (2020-09-23)
+      return `<img src="Images/${node.properties.file}" alt="${
+        node.properties.description || ''
+      }"/>`
   }
 }
 

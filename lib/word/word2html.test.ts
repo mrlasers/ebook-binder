@@ -118,3 +118,22 @@ describe('toHtml', () => {
     })
   })
 })
+
+describe('MVP tests', () => {
+  test('image', () => {
+    expect(
+      H.toHtml({
+        type: 'image',
+        properties: {
+          inline: true,
+          name: 'Picture 1',
+          description: 'Coral',
+          id: 'rId5',
+          type: 'image',
+          file: 'image1.jpg'
+        },
+        children: []
+      })
+    ).toBe('<img src="Images/image1.jpg" alt="Coral"/>')
+  })
+})

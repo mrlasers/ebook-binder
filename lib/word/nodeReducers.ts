@@ -2,6 +2,7 @@ import { produce } from 'immer'
 import { Children } from 'react'
 import * as XML from '../xml'
 import { isText } from '../xml'
+export * from './document'
 
 export type WordNode = WordElement | WordText | WordError
 
@@ -28,6 +29,14 @@ interface PropsElement extends XML.Element {
   attributes: {
     val?: string
   }
+}
+
+export const firstChild = (node: WordNode): WordNode | null => {
+  if (!isWordElement(node)) {
+    return null
+  }
+
+  return node.children[0] || null
 }
 
 export function isWordText(node: WordNode): node is WordText {
@@ -162,9 +171,22 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
     case 'r': {
       // is this kinda a hack?
       const newRun = el.children.reduce(convert, {
-        ...parent,
-        type: 'span'
+        // ...parent,
+        type: 'span',
+        properties: {},
+        children: []
       })
+
+      // if (!isWordElement(newRun)) {
+      //   return addChild(acc, newRun)
+      // }
+
+      // if (
+      //   !Object.keys(newRun.properties).length &&
+      //   newRun.children.length === 1
+      // ) {
+      //   return addChild(acc, newRun.children[0])
+      // }
 
       return addChild(acc, newRun)
     }
@@ -240,6 +262,7 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         ? { ...parent, children: [...parent.children, newParagraph] }
         : newParagraph
     }
+    case 'pStyle':
     case 'rStyle': {
       return addProperties(parent, { style: el.attributes.val })
     }
@@ -304,6 +327,18 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         properties: {
           type:
             el.attributes.type || (el.name === 'sectPr' ? 'section' : 'page')
+        },
+        children: []
+      })
+
+    // #### document.xml.rels ####
+    case 'Relationship':
+      return addChild(parent, {
+        type: 'relationship',
+        properties: {
+          id: el.attributes.Id,
+          type: el.attributes.Type,
+          target: el.attributes.Target
         },
         children: []
       })

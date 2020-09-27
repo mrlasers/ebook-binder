@@ -255,6 +255,34 @@ describe('paragraph', () => {
       children: []
     })
   })
+
+  test('w/ style and text', () => {
+    expect(
+      convert({
+        name: 'p',
+        attributes: {},
+        children: [
+          {
+            name: 'pPr',
+            attributes: {},
+            children: [
+              {
+                name: 'pStyle',
+                attributes: { val: 'Quote' },
+                children: []
+              }
+            ]
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'paragraph',
+      properties: {
+        style: 'Quote'
+      },
+      children: []
+    })
+  })
 })
 
 describe('body', () => {
@@ -750,6 +778,45 @@ describe('table', () => {
           ]
         }
       ]
+    })
+  })
+})
+
+describe('MVP tests', () => {
+  test('heading paragraph', () => {
+    expect(
+      convert({
+        name: 'p',
+        attributes: {
+          paraId: '0EE10240',
+          textId: '1FBC3CCE',
+          rsidR: '00801B73',
+          rsidRDefault: '00D75488',
+          rsidP: '00D75488'
+        },
+        children: [
+          {
+            name: 'pPr',
+            attributes: {},
+            children: [
+              { name: 'pStyle', attributes: { val: 'Heading1' }, children: [] }
+            ]
+          },
+          {
+            name: 'r',
+            attributes: {},
+            children: [
+              { name: 't', attributes: {}, children: [{ text: 'Heading One' }] }
+            ]
+          }
+        ]
+      })
+    ).toMatchObject({
+      type: 'paragraph',
+      properties: {
+        style: 'Heading1'
+      },
+      children: [{ text: 'Heading One' }]
     })
   })
 })

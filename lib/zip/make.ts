@@ -3,6 +3,7 @@ import * as Path from 'path'
 import { promises as Fs } from 'fs'
 import * as FS from 'fs'
 import { spawn } from 'child_process'
+import clipboardy from 'clipboardy'
 
 const zip = new JSZip()
 
@@ -64,8 +65,25 @@ export async function zipEpubFromDir({ outputPath, sourcePath }) {
     pFilesInDir.map((file) => getFileData(sourcePath, file))
   )
 
+  const jpgs = []
+
   // map :: string -> [string, buffer?]
-  filesAndData.forEach(([file, data]) => zip.file(file, data))
+  filesAndData.forEach(([file, data]) => {
+    const excludeTypes = ['styles.min.css', 'styles.scss']
+    const name = Path.basename(file)
+    const ext = Path.extname(file)
+
+    if (!excludeTypes.includes(name)) {
+      console.log('zipping:', file, ext)
+
+      if (ext === '.jpg') {
+        jpgs.push(file)
+      }
+      zip.file(file, data)
+    }
+  })
+
+  // clipboardy.write(jpgs.join('\n'))
 
   return zip
     .generateNodeStream({
