@@ -1,5 +1,7 @@
 import * as Word from './nodeReducers'
 
+// test
+
 type Config = {
   relationships: object
   [key: string]: any
