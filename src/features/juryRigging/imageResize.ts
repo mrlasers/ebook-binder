@@ -28,24 +28,49 @@ function formatImageAndSave(
   filename: string,
   indir: string,
   outdir: string
-): Promise<OutputInfo> {
+): Promise<OutputInfo> | any {
+  console.log('formatImageAndSave:', filename, indir, outdir)
   const image = sharp(path.join(indir, filename))
   return image.metadata().then((meta) => {
+    // console.log(meta)
+    const maxwidth = 800
+    // if (meta.width <= maxwidth && meta.height <= maxwidth && meta) {
+    //   return image
+    //     .flatten({ background: 'white' })
+    //     .toColorspace('srgb')
+    //     .jpeg({ quality: 80 })
+    //     .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
+    // }
+
+    const quality = (meta.width + meta.height) / 2
+
     return image
+      .flatten({ background: 'white' })
+      .trim(25)
+      .resize({
+        width: maxwidth,
+        height: maxwidth,
+        fit: 'inside',
+        withoutEnlargement: true
+      })
       .rotate(exifOrientationDegrees[meta.orientation] ?? 0)
-      .resize({ width: 900, fit: 'inside', withoutEnlargement: true })
-      .jpeg({ quality: 70 })
+      .toColorspace('srgb')
+      .jpeg({ quality: 65 })
       .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
+      .then((info) => {
+        console.log(info)
+        return
+      })
   })
 }
 
-function convertImages(dir: string) {
+export function convertImages(dir: string) {
   return getFilesInDir(dir).then(([dir, files]) =>
     files.map((file) => formatImageAndSave(file, dir, path.join(dir, 'out')))
   )
 }
 
-convertImages(dir).then(console.log)
+// convertImages(dir).then(console.log)
 
 // fs.readFile(file)
 //   .then((buff) => sharp(buff))

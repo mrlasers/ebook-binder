@@ -36,7 +36,13 @@ const getStylesFromZip = (zip) => {
     .then((data) => parse(data, { ignoreNS: true }))
 }
 
-export const read = (filename: string) => {
+export const read = (filename: string): Promise<JSZip> => {
+  return fs.readFile(filename).then((file) => {
+    return new JSZip().loadAsync(file)
+  })
+}
+
+export const _read = (filename: string) => {
   console.log('reading word docx')
   fs.readFile(filename)
     .then((file) => {
