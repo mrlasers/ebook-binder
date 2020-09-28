@@ -61,6 +61,16 @@ export function isWordElement(node: WordNode): node is WordElement {
 
 // Text(t) -> Text(t.children[0])
 
+const allowedChildren = {
+  body: ['p'],
+  p: ['pPr', 'r'],
+  pPr: ['pStyle', 'numPr', 'sectPr'],
+  sectPr: [],
+  numPr: ['ilvl', 'numId'],
+  r: ['rPr', 't', 'br'],
+  rPr: ['b', 'i', 'u', 'rStyle']
+}
+
 export const t = (el: XML.Node): WordText | XML.Node => {
   return XML.isText(el) ? { text: el.text } : el
 }
@@ -144,29 +154,6 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         type: 'body',
         properties: {},
         children: el.children.map((n) => convert(null, n))
-        // # this reduce combines sequential list items of the same
-        // # type, but I think we're going to move that to the
-        // # post processing step for the moment
-        // .reduce((acc, child) => {
-        //   if (isWordElement(child) && child.type === 'list') {
-        //     const rest = acc.slice(0, acc.length - 1)
-        //     const last = acc.slice(acc.length - 1)[0]
-        //     if (
-        //       isWordElement(last) &&
-        //       last.type === 'list' &&
-        //       last.properties.numId === child.properties.numId
-        //     ) {
-        //       return [
-        //         ...rest,
-        //         {
-        //           ...last,
-        //           children: [...last.children, ...child.children]
-        //         }
-        //       ]
-        //     }
-        //   }
-        //   return [...acc, child]
-        // }, [])
       }
     case 'r': {
       // is this kinda a hack?
@@ -176,17 +163,6 @@ export const convert = (acc: WordElement | null, el: XML.Node): WordNode => {
         properties: {},
         children: []
       })
-
-      // if (!isWordElement(newRun)) {
-      //   return addChild(acc, newRun)
-      // }
-
-      // if (
-      //   !Object.keys(newRun.properties).length &&
-      //   newRun.children.length === 1
-      // ) {
-      //   return addChild(acc, newRun.children[0])
-      // }
 
       return addChild(acc, newRun)
     }
