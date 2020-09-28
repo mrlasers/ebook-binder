@@ -1,4 +1,4 @@
-import * as Sax from 'sax'
+// import * as Sax from 'sax'
 
 // node types based on SlateJS
 export type Node = Text | Element

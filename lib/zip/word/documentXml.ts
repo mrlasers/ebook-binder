@@ -8,7 +8,6 @@ import {
 } from '../../xml'
 import Slate from 'slate'
 import { Style, Styles } from './stylesXml'
-import { accessSync } from 'fs'
 import produce from 'immer'
 
 const addProp = (parent, key, value) => ({ ...parent, [key]: value })
