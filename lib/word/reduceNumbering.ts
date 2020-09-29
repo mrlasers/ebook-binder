@@ -1,21 +1,19 @@
 import * as XML from '../xml'
 
-type AbstractNumber = {
-  [key: string]: any
-  level?: {
-    [key: number]: {
-      level: number
+type Numbering = {
+  abstractNumbers?: {
+    [key: string]: any
+    level?: {
+      [key: number]: any
     }
+  }
+  numbers?: {
+    [key: string]: any
   }
 }
 
 type Number = {
   [key: string]: any
-}
-
-type Numbering = {
-  abstractNumbers?: AbstractNumber
-  numbers?: Number
 }
 
 export const convert = (acc: Numbering | null, node: XML.Node) => {
