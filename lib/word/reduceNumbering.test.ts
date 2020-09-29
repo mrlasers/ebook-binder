@@ -3,6 +3,23 @@ import * as XML from '../xml'
 
 const convert = (node: XML.Node) => Numbering.convert(null, node)
 
+// test('adds level for abstractNum', () => {
+//   expect(
+//     Numbering.convert(
+//       {},
+//       {
+//         name: 'lvl',
+//         attributes: { ilvl: '0' },
+//         children: []
+//       }
+//     )
+//   ).toMatchObject({
+//     level: {
+//       0: {}
+//     }
+//   })
+// })
+
 test('mvp numbering.xml (2020-09-23)', () => {
   expect(
     convert({
@@ -643,6 +660,7 @@ test('mvp numbering.xml (2020-09-23)', () => {
       ]
     })
   ).toMatchObject({
+    abstractNumbers: {},
     numbers: {
       '1': { abstractNumId: 0 },
       '2': { abstractNumId: 1 }

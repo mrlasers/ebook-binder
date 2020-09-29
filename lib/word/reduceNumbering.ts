@@ -3,7 +3,9 @@ import * as XML from '../xml'
 type Numbering = {
   abstractNumbers?: {
     [key: string]: any
-    level?: any
+    level?: {
+      [key: number]: any
+    }
   }
   numbers?: {
     [key: string]: any
