@@ -643,6 +643,14 @@ test('mvp numbering.xml (2020-09-23)', () => {
       ]
     })
   ).toMatchObject({
+    abstractNumbers: {
+      0: {
+        level: {
+          0: {},
+          1: {}
+        }
+      }
+    },
     numbers: {
       '1': { abstractNumId: 0 },
       '2': { abstractNumId: 1 }

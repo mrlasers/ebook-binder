@@ -1,13 +1,21 @@
 import * as XML from '../xml'
 
+type AbstractNumber = {
+  [key: string]: any
+  level?: {
+    [key: number]: {
+      level: number
+    }
+  }
+}
+
+type Number = {
+  [key: string]: any
+}
+
 type Numbering = {
-  abstractNumbers?: {
-    [key: string]: any
-    level?: any
-  }
-  numbers?: {
-    [key: string]: any
-  }
+  abstractNumbers?: AbstractNumber
+  numbers?: Number
 }
 
 export const convert = (acc: Numbering | null, node: XML.Node) => {
@@ -40,7 +48,11 @@ export const convert = (acc: Numbering | null, node: XML.Node) => {
     case 'lvl':
       return {
         ...parent,
-        level: parseInt(node.attributes.ilvl)
+        level: {
+          [node.attributes.ilvl]: {
+            level: node.attributes.ilvl
+          }
+        }
       }
     case 'numFmt':
       return {
