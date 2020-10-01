@@ -38,5 +38,10 @@ export const convert = (parent, node: XML.Node) => {
           hanging: node.attributes.hanging
         }
       }
+    case 'rFonts':
+      return {
+        ...parent,
+        font: node.attributes.ascii
+      }
   }
 }

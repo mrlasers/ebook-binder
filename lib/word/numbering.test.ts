@@ -33,6 +33,19 @@ test('adds level for abstractNum', () => {
                 children: []
               }
             ]
+          },
+          {
+            name: 'rPr',
+            attributes: {},
+            children: [
+              {
+                name: 'rFonts',
+                attributes: {
+                  ascii: 'Courier New'
+                },
+                children: []
+              }
+            ]
           }
         ]
       }
@@ -43,7 +56,8 @@ test('adds level for abstractNum', () => {
         format: 'decimal',
         text: '%1.',
         alignment: 'left',
-        indent: { left: '720', hanging: '360' }
+        indent: { left: '720', hanging: '360' },
+        font: 'Courier New'
       }
     }
   })
