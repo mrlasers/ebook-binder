@@ -1,6 +1,8 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import sharp, { Sharp, OutputInfo } from 'sharp'
+import * as R from 'ramda'
+import * as Fsharp from './functionalSharp'
 
 const dir = path.join(process.cwd(), '_sandbox/data/images')
 
@@ -24,67 +26,130 @@ function getFilesInDir(dir: string): Promise<[string, string[]]> {
     .then((files) => [dir, files])
 }
 
-function formatImageAndSave(
-  filename: string,
-  indir: string,
-  outdir: string
-): Promise<OutputInfo> | any {
-  console.log('formatImageAndSave:', filename, indir, outdir)
-  const image = sharp(path.join(indir, filename))
-  return image.metadata().then((meta) => {
-    // console.log(meta)
-    const maxwidth = 800
-    // if (meta.width <= maxwidth && meta.height <= maxwidth && meta) {
-    //   return image
-    //     .flatten({ background: 'white' })
-    //     .toColorspace('srgb')
-    //     .jpeg({ quality: 80 })
-    //     .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
-    // }
+type Process = (image: Sharp, meta: sharp.Metadata) => Sharp
+type Processor<Options = {}> = (options?: Options) => Process
 
-    const quality = (meta.width + meta.height) / 2
+const resizeSquare: Processor<{ width: number; padding?: number }> = (
+  options
+) => (image, meta) => {
+  const padding = (options?.padding ?? 0) * 2
 
-    return image
+  return (
+    image
       .flatten({ background: 'white' })
       .trim(25)
       .resize({
-        width: maxwidth,
-        height: maxwidth,
-        fit: 'inside',
-        withoutEnlargement: true
+        width: options.width - padding,
+        height: options.width - padding,
+        fit: 'contain',
+        background: 'white'
+        // withoutEnlargement: false
       })
-      .rotate(exifOrientationDegrees[meta.orientation] ?? 0)
+      .extend({
+        top: padding,
+        right: padding,
+        bottom: padding,
+        left: padding,
+        background: 'white'
+      })
+      // .extend(padding)
       .toColorspace('srgb')
-      .jpeg({ quality: 65 })
-      .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
-      .then((info) => {
-        console.log(info)
-        return
-      })
-  })
-}
-
-export function convertImages(dir: string) {
-  return getFilesInDir(dir).then(([dir, files]) =>
-    files.map((file) => formatImageAndSave(file, dir, path.join(dir, 'out')))
+      .jpeg({ quality: 85 })
   )
 }
 
-// convertImages(dir).then(console.log)
+const resizeForEbook: Processor<{}> = (options) => (image, meta) => {
+  const maxsize = 900
 
-// fs.readFile(file)
-//   .then((buff) => sharp(buff))
-//   .then((image) =>
-//     image.metadata().then((meta) =>
-//       image
-//         .rotate(exifOrientationDegrees[meta.orientation] ?? 0)
-//         .resize({ width: 900, fit: 'inside', withoutEnlargement: true })
-//         .jpeg({ quality: 70 })
-//         // .toBuffer()
-//         .toFile(path.join(outpath, 'image1.jpg'))
-//     )
-//   )
-//   // .then((imgData) => {
-//   //   return fs.writeFile(ofile, imgData, { encoding: 'binary' })
-//   // })
-//   .then(() => console.log('Done!'))
+  return image
+    .flatten({ background: 'white' })
+    .trim(25)
+    .resize({
+      width: maxsize,
+      height: maxsize,
+      fit: 'inside',
+      withoutEnlargement: true
+    })
+    .rotate(exifOrientationDegrees[meta.orientation] ?? 0)
+    .toColorspace('srgb')
+    .jpeg({ quality: 65 })
+}
+
+const processImageAndSave = (process: Process) => async (
+  file: string,
+  outFile: string
+): Promise<OutputInfo> => {
+  const image = sharp(file)
+  const meta = await image.metadata()
+
+  return process(image, meta).toFile(outFile)
+}
+
+const processResizeForEbook = processImageAndSave(resizeForEbook())
+const processResizeSquare = processImageAndSave(
+  resizeSquare({ width: 200, padding: 5 })
+)
+
+// function formatImageAndSave(
+//   filename: string,
+//   indir: string,
+//   outdir: string
+// ): Promise<OutputInfo> | any {
+//   console.log('formatImageAndSave:', filename, indir, outdir)
+//   const image = sharp(path.join(indir, filename))
+//   return image.metadata().then((meta) => {
+//     // console.log(meta)
+//     const maxwidth = 800
+//     // if (meta.width <= maxwidth && meta.height <= maxwidth && meta) {
+//     //   return image
+//     //     .flatten({ background: 'white' })
+//     //     .toColorspace('srgb')
+//     //     .jpeg({ quality: 80 })
+//     //     .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
+//     // }
+
+//     const quality = (meta.width + meta.height) / 2
+
+//     return resizeMaxForEbook(image, meta.orientation)
+//       .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
+//       .then((info) => {
+//         console.log(info)
+//         return
+//       })
+
+//     return image
+//       .flatten({ background: 'white' })
+//       .trim(25)
+//       .resize({
+//         width: maxwidth,
+//         height: maxwidth,
+//         fit: 'inside',
+//         withoutEnlargement: true
+//       })
+//       .rotate(exifOrientationDegrees[meta.orientation] ?? 0)
+//       .toColorspace('srgb')
+//       .jpeg({ quality: 65 })
+//       .toFile(path.join(outdir, filename.replace(/\.([a-z]+)$/, '.jpg')))
+//       .then((info) => {
+//         console.log(info)
+//         return
+//       })
+//   })
+// }
+
+type ImageConversionType = 'maxSize' | 'square'
+
+export function convertImages(dir: string, type?: ImageConversionType) {
+  // return Promise.resolve('nothing')
+  return getFilesInDir(dir).then(([dir, files]) =>
+    files.map((filename) => {
+      const file = path.join(dir, filename)
+      const outFile = path.join(dir, 'out', filename)
+      switch (type) {
+        default:
+          return processResizeSquare(file, outFile)
+      }
+      // // formatImageAndSave(file, dir, path.join(dir, 'out'))
+    })
+  )
+}
