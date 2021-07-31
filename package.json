@@ -10,7 +10,7 @@
     "test:manual": "nodemon ./lib/word/manual.ts",
     "test": "jest --watch",
     "test:word": "jest ./cli/word2slate --watch",
-    "cli": "nodemon --ignore ./_dogfood ./cli/index.ts",
+    "cli": "nodemon --ignore ./_dogfood --ignore ./example-docs ./cli/index.ts",
     "x": "nodemon ./cli/x.ts"
   },
   "devDependencies": {
@@ -78,6 +78,8 @@
     "js-beautify": "^1.10.1-rc2",
     "jszip": "^3.5.0",
     "mime": "^2.4.6",
+    "monocle-ts": "^2.3.10",
+    "nanoid": "^3.1.22",
     "ramda": "^0.27.1",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
@@ -87,6 +89,7 @@
     "safe-type-predicate": "^1.0.1",
     "sax": "^1.2.4",
     "sharp": "^0.25.4",
+    "shortid": "^2.2.16",
     "slate": "^0.58.4",
     "slate-history": "^0.58.4",
     "slate-hyperscript": "^0.58.4",

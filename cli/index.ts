@@ -47,6 +47,10 @@ program
 
 program.addCommand(Commands.init)
 program.addCommand(Commands.nav)
+program.addCommand(Commands.build)
+program.addCommand(Commands.testio)
+program.addCommand(Commands.rename)
+program.addCommand(Commands.docx)
 
 // program
 //   .command('serve', { isDefault: true })
@@ -127,22 +131,4 @@ if (program.opts().process) {
 if (program.opts().extract) {
   const srcPath = path.resolve(process.cwd(), program.opts().extract)
   Wordtract.read(srcPath)
-}
-
-if (program.opts().build) {
-  const sourcePath = program.opts().build || process.cwd()
-  const filename =
-    path.basename(program.opts().filename || 'output', '.epub') + '.epub'
-  const outputPath = path.resolve(
-    program.opts().output_dir || path.parse(program.opts().build).dir,
-    filename
-  )
-
-  // console.log('sourcePath:', sourcePath)
-  // console.log('output_dir:', outputPath)
-  // console.log('filename:', filename)
-
-  zipEpubFromDir({ outputPath, sourcePath }).then((x) =>
-    console.log('epub written')
-  )
 }

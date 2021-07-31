@@ -7,7 +7,6 @@ import { flow, pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/Array'
 import * as _A from 'fp-ts-std/Array'
-import Prettify from 'html-format'
 import { html as Beautify, HTMLBeautifyOptions } from 'js-beautify'
 
 const beautify = (options: HTMLBeautifyOptions) => (html: string) =>
@@ -15,7 +14,7 @@ const beautify = (options: HTMLBeautifyOptions) => (html: string) =>
 
 import { levelsToTree } from './levelToTree'
 
-type FileData = {
+export type FileData = {
   file: string
   fragment: string
   level: number
@@ -25,7 +24,13 @@ type FileData = {
   children: FileData[]
 }
 
-type FinalData = [manifest: string, spine: string, ncx: string, navdoc: string]
+export type FinalData = [
+  manifest: string,
+  spine: string,
+  ncx: string,
+  navdoc: string,
+  toc: string
+]
 
 const textToData = flow(
   (s: string) => s.split(/[\r\n]+/).filter((x) => !!x.trim().length),
@@ -38,7 +43,7 @@ const textToData = flow(
         fragment,
         level: parseInt(level, 0),
         title: title.trim(),
-        order: idx + 2,
+        order: idx + 1,
         children: []
       })
     )
@@ -69,6 +74,10 @@ const itemsToManifestSpine = (acc, file) => {
 }
 
 const makeManifest = compose(
+  ({ manifest, spine }) => ({
+    manifest: manifest.join('\r\n'),
+    spine: spine.join('\r\n')
+  }),
   reduce(itemsToManifestSpine, { manifest: [], spine: [] }),
   (items) =>
     Object.keys(items).map((key) => ({
@@ -79,35 +88,77 @@ const makeManifest = compose(
   reduce(reduceItems, { count: 1, items: {} })
 )
 
-const makeNcx = (data: FileData[]) =>
+const _makeNcx = flow(
+  A.map<FileData, string>(
+    (file) =>
+      `<navPoint id="sec${file.order}" playOrder="${file.order}"><navLabel><text>${file.title}</text></navLabel><content src="../Content/${file.file}"/></navPoint>`
+  ),
+  _A.join(''),
+  beautify({ indent_size: 2 })
+)
+
+const nodeToNcx = (node: FileData) =>
   pipe(
-    data,
-    A.map(
-      (file) =>
-        `<navPoint id="sec${file.order}" playOrder="${file.order}"><navLabel><text>${file.title}</text></navLabel><content src="../Content/${file.file}"/></navPoint>`
-    ),
-    _A.join('\n'),
+    node.children,
+    flow(A.map(nodeToNcx), _A.join('')),
+    (children) =>
+      `<navPoint id="sec${node.order}" playOrder="${
+        node.order
+      }"><navLabel><text>${
+        node.title
+      }</text></navLabel><content src="../Content/${node.file}${
+        node.fragment ? `#${node.fragment}` : ''
+      }"/>${children ?? ''}</navPoint>`
+  )
+
+const makeNcx = flow(
+  A.reduce<FileData, FileData[]>([], levelsToTree),
+  A.map<FileData, string>(nodeToNcx),
+  _A.join(''),
+  (s) => `<navMap>${s}</navMap>`,
+  beautify({ indent_size: 2, indent_level: 1 })
+)
+
+const nodeToNavDoc = (node: FileData) =>
+  pipe(
+    node.children,
+    flow(A.map(nodeToNavDoc), _A.join('')),
+    (children) =>
+      `<li><a href="../Content/${node.file}${
+        node.fragment ? `#${node.fragment}` : ''
+      }">${node.title}</a>${children ? `<ol>${children}</ol>` : ``}</li>`
+  )
+
+const makeNavDoc = flow(
+  A.reduce<FileData, FileData[]>([], levelsToTree),
+  A.map<FileData, string>(nodeToNavDoc),
+  _A.join(''),
+  (s) => `<nav epub:type="toc"><h1>Table of Contents</h1><ol>${s}</ol></nav>`,
+  beautify({ indent_size: 2 })
+)
+
+const makeNav = (
+  processor: (node: FileData) => string,
+  header?: string,
+  footer?: string
+) =>
+  flow(
+    A.reduce<FileData, FileData[]>([], levelsToTree),
+    A.map(processor),
+    _A.join(''),
+    (s) => `${header ?? ''}${s}${footer ?? ''}`,
     beautify({ indent_size: 2 })
   )
 
-const nodeToNavDoc = () => (node: FileData) => {
-  const children = node.children.map(nodeToNavDoc()).join('')
-
-  return `<li><a href="../Content/${node.file}${
-    node.fragment ? `#${node.fragment}` : ''
-  }">${node.title}</a>${children ? `<ol>${children}</ol>` : ``}</li>`
-}
-
-const makeNavDoc = flow(
-  (data: FileData[]): string =>
-    `<nav epub:type="toc"><h1>Table of Contents</h1><ol>` +
-    data.reduce(levelsToTree, []).map(nodeToNavDoc()).join('') +
-    `</ol></nav>`,
-  beautify({
-    indent_size: 2,
-    indent_inner_html: false,
-    indent_body_inner_html: false
-  })
+const makeToc = flow(
+  A.map<FileData, string>(
+    (file) =>
+      `<p class="toc${file.level}"><a href="${file.file}${
+        file.fragment ? `#${file.fragment}` : ``
+      }">${file.title}</a></p>`
+  ),
+  _A.join(''),
+  beautify({ indent_size: 2 })
 )
 
 export const nav = createCommand('nav')
@@ -119,15 +170,14 @@ export const nav = createCommand('nav')
   .action((headings, options) => {
     IO.readFile(Path.resolve(process.cwd(), headings))
       .then(textToData)
-      .then(
-        (data): FinalData => {
-          // we have the data here and need to fork into opf (manifest/spine), ncx, and navdoc
-          const { manifest, spine } = makeManifest(data)
-          const ncx = makeNcx(data)
-          const navdoc = makeNavDoc(data)
-          return [manifest, spine, ncx, navdoc]
-        }
-      )
+      .then((data): FinalData => {
+        // we have the data here and need to fork into opf (manifest/spine), ncx, and navdoc
+        const { manifest, spine } = makeManifest(data)
+        const ncx = makeNcx(data)
+        const navdoc = makeNavDoc(data)
+        const toc = makeToc(data)
+        return [manifest, spine, ncx, navdoc, toc]
+      })
       // .then(({ manifest, spine }) => {
       //   const manifestFile = Path.resolve(
       //     Path.dirname(headings),
@@ -143,13 +193,18 @@ export const nav = createCommand('nav')
       //     )
       //   ])
       // })
-      .then(([manifest, spine, ncx, navdoc]) => {
+      .then(([manifest, spine, ncx, navdoc, toc]) => {
         Promise.all([
+          IO.writeFile(
+            Path.resolve(Path.dirname(headings), 'opf.xml'),
+            manifest + '\r\n\r\n' + spine
+          ),
           IO.writeFile(Path.resolve(Path.dirname(headings), 'ncx.xml'), ncx),
           IO.writeFile(
             Path.resolve(Path.dirname(headings), 'navdoc.xml'),
             navdoc
-          )
+          ),
+          IO.writeFile(Path.resolve(Path.dirname(headings), 'toc.xml'), toc)
         ])
       })
       .catch((err) => {

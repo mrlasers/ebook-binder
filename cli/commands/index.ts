@@ -1,2 +1,6 @@
 export * from './init'
 export * from './navdoc'
+export * from './build'
+export * from './testio'
+export * from './rename'
+export * from './docx'

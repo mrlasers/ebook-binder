@@ -1,6 +1,7 @@
 <nav epub:type="toc">
   <h1>Table of Contents</h1>
   <ol>
+    <li><a href="../Content/cover.xhtml">Cover</a></li>
     <li><a href="../Content/Section01.xhtml">Title Page</a></li>
     <li><a href="../Content/Section02.xhtml">Copyright Page</a></li>
     <li><a href="../Content/Section03.xhtml">Contents</a></li>

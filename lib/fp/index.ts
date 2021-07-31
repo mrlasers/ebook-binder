@@ -1,22 +1,27 @@
-export const compose = (...fns) => (...args) =>
-  fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0]
+export const compose =
+  (...fns) =>
+  (...args) =>
+    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0]
 
 export const trace = (x: any): any => {
   console.log(x)
   return x
 }
 
-export const head = (xs: any[]): any => {
+export const head = <A>(xs: A[]): A => {
   return xs.length ? xs[0] : null
 }
 
-export const last = (xs: any[]): any => {
+export const last = <A>(xs: A[]): A => {
   return xs.length ? xs.slice(-1)[0] : null
 }
-export const dropLast = (xs: any[]): any[] => {
+export const dropLast = <A>(xs: A[]): A[] => {
   return xs.slice(0, xs.length - 1)
 }
 export const headsTail = (xs: any[]): any[] => {
+  const heads = dropLast(xs) || undefined
+  const tail = last(xs) || undefined
+
   return [dropLast(xs), last(xs)]
 }
 
@@ -31,6 +36,8 @@ function curry(fn) {
     return fn.call(null, ...args)
   }
 }
+
+export const filter = curry((fn, f) => f.filter(fn))
 
 export const map = curry((fn, f) => f.map(fn))
 

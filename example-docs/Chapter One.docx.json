@@ -1,0 +1,118 @@
+{
+  "name": "w:body",
+  "attributes": {},
+  "children": [
+    {
+      "name": "w:p",
+      "attributes": {
+        "w14:paraId": "468D4435",
+        "w14:textId": "3FE50CC3",
+        "w:rsidR": "00361825",
+        "w:rsidRDefault": "00361825",
+        "w:rsidP": "00361825"
+      },
+      "children": [
+        {
+          "name": "w:pPr",
+          "attributes": {},
+          "children": [
+            {
+              "name": "w:pStyle",
+              "attributes": {
+                "w:val": "Heading1"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "w:r",
+          "attributes": {},
+          "children": [
+            {
+              "name": "w:t",
+              "attributes": {},
+              "children": [
+                {
+                  "text": "Chapter One"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "w:p",
+      "attributes": {
+        "w14:paraId": "412E8340",
+        "w14:textId": "708F0208",
+        "w:rsidR": "00361825",
+        "w:rsidRPr": "00361825",
+        "w:rsidRDefault": "00361825",
+        "w:rsidP": "00361825"
+      },
+      "children": [
+        {
+          "name": "w:r",
+          "attributes": {},
+          "children": [
+            {
+              "name": "w:t",
+              "attributes": {},
+              "children": [
+                {
+                  "text": "He was a dark and stormy knight…"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "w:sectPr",
+      "attributes": {
+        "w:rsidR": "00361825",
+        "w:rsidRPr": "00361825"
+      },
+      "children": [
+        {
+          "name": "w:pgSz",
+          "attributes": {
+            "w:w": "12240",
+            "w:h": "15840"
+          },
+          "children": []
+        },
+        {
+          "name": "w:pgMar",
+          "attributes": {
+            "w:top": "1440",
+            "w:right": "1440",
+            "w:bottom": "1440",
+            "w:left": "1440",
+            "w:header": "720",
+            "w:footer": "720",
+            "w:gutter": "0"
+          },
+          "children": []
+        },
+        {
+          "name": "w:cols",
+          "attributes": {
+            "w:space": "720"
+          },
+          "children": []
+        },
+        {
+          "name": "w:docGrid",
+          "attributes": {
+            "w:linePitch": "360"
+          },
+          "children": []
+        }
+      ]
+    }
+  ]
+}

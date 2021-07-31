@@ -1,0 +1,266 @@
+  <navMap>
+    <navPoint id="sec1" playOrder="1">
+      <navLabel><text>Title page</text></navLabel>
+      <content src="../Content/Section01.xhtml#start" />
+    </navPoint>
+    <navPoint id="sec2" playOrder="2">
+      <navLabel><text>Copyright page</text></navLabel>
+      <content src="../Content/Section02.xhtml" />
+    </navPoint>
+    <navPoint id="sec3" playOrder="3">
+      <navLabel><text>Contents</text></navLabel>
+      <content src="../Content/Section03.xhtml" />
+    </navPoint>
+    <navPoint id="sec4" playOrder="4">
+      <navLabel><text>Dedication</text></navLabel>
+      <content src="../Content/Section04.xhtml" />
+    </navPoint>
+    <navPoint id="sec5" playOrder="5">
+      <navLabel><text>Kickstart</text></navLabel>
+      <content src="../Content/Section05.xhtml" />
+      <navPoint id="sec6" playOrder="6">
+        <navLabel><text>The North</text></navLabel>
+        <content src="../Content/Section05.xhtml#r1" />
+      </navPoint>
+      <navPoint id="sec7" playOrder="7">
+        <navLabel><text>Africa</text></navLabel>
+        <content src="../Content/Section05.xhtml#r2" />
+      </navPoint>
+      <navPoint id="sec8" playOrder="8">
+        <navLabel><text>Back North</text></navLabel>
+        <content src="../Content/Section05.xhtml#r3" />
+      </navPoint>
+      <navPoint id="sec9" playOrder="9">
+        <navLabel><text>International Volunteering</text></navLabel>
+        <content src="../Content/Section05.xhtml#r4" />
+      </navPoint>
+      <navPoint id="sec10" playOrder="10">
+        <navLabel><text>I Get Serious about Adventure Biking</text></navLabel>
+        <content src="../Content/Section05.xhtml#r5" />
+      </navPoint>
+      <navPoint id="sec11" playOrder="11">
+        <navLabel><text>A Bit about this Book</text></navLabel>
+        <content src="../Content/Section05.xhtml#r6" />
+      </navPoint>
+      <navPoint id="sec12" playOrder="12">
+        <navLabel><text>What is it about Bikes and Adventure Motorcycling?</text></navLabel>
+        <content src="../Content/Section05.xhtml#r7" />
+      </navPoint>
+      <navPoint id="sec13" playOrder="13">
+        <navLabel><text>Mind or Matter?</text></navLabel>
+        <content src="../Content/Section05.xhtml#r8" />
+      </navPoint>
+    </navPoint>
+    <navPoint id="sec14" playOrder="14">
+      <navLabel><text>A Taste of Southeast Asia</text></navLabel>
+      <content src="../Content/Section06.xhtml" />
+      <navPoint id="sec15" playOrder="15">
+        <navLabel><text>A Little Trip to Hanoi for Tet</text></navLabel>
+        <content src="../Content/Section06.xhtml#r1" />
+      </navPoint>
+      <navPoint id="sec16" playOrder="16">
+        <navLabel><text>I Bought a Minsk</text></navLabel>
+        <content src="../Content/Section06.xhtml#r2" />
+      </navPoint>
+      <navPoint id="sec17" playOrder="17">
+        <navLabel><text>A Journey into Laos</text></navLabel>
+        <content src="../Content/Section06.xhtml#r3" />
+      </navPoint>
+      <navPoint id="sec18" playOrder="18">
+        <navLabel><text>Hail the Mighty Minsk</text></navLabel>
+        <content src="../Content/Section06.xhtml#r4" />
+      </navPoint>
+      <navPoint id="sec19" playOrder="19">
+        <navLabel><text>Riding Vietnam's Northern Frontier</text></navLabel>
+        <content src="../Content/Section06.xhtml#r5" />
+      </navPoint>
+      <navPoint id="sec20" playOrder="20">
+        <navLabel><text>A Little Side-Tale from Thanh Hoa, Vietnam</text></navLabel>
+        <content src="../Content/Section06.xhtml#r6" />
+      </navPoint>
+    </navPoint>
+    <navPoint id="sec21" playOrder="21">
+      <navLabel><text>Down the Road to South America</text></navLabel>
+      <content src="../Content/Section07.xhtml" />
+      <navPoint id="sec22" playOrder="22">
+        <navLabel><text>Mexico</text></navLabel>
+        <content src="../Content/Section07.xhtml#r1" />
+      </navPoint>
+      <navPoint id="sec23" playOrder="23">
+        <navLabel><text>Guatemala</text></navLabel>
+        <content src="../Content/Section07.xhtml#r2" />
+      </navPoint>
+      <navPoint id="sec24" playOrder="24">
+        <navLabel><text>El Salvador</text></navLabel>
+        <content src="../Content/Section07.xhtml#r3" />
+      </navPoint>
+      <navPoint id="sec25" playOrder="25">
+        <navLabel><text>Costa Rica</text></navLabel>
+        <content src="../Content/Section07.xhtml#r4" />
+      </navPoint>
+      <navPoint id="sec26" playOrder="26">
+        <navLabel><text>Nicaragua</text></navLabel>
+        <content src="../Content/Section07.xhtml#r5" />
+      </navPoint>
+      <navPoint id="sec27" playOrder="27">
+        <navLabel><text>Panama</text></navLabel>
+        <content src="../Content/Section07.xhtml#r6" />
+      </navPoint>
+      <navPoint id="sec28" playOrder="28">
+        <navLabel><text>Colombia</text></navLabel>
+        <content src="../Content/Section07.xhtml#r7" />
+      </navPoint>
+      <navPoint id="sec29" playOrder="29">
+        <navLabel><text>Daylight Robbery</text></navLabel>
+        <content src="../Content/Section07.xhtml#r8" />
+      </navPoint>
+      <navPoint id="sec30" playOrder="30">
+        <navLabel><text>Ecuador</text></navLabel>
+        <content src="../Content/Section07.xhtml#r9" />
+      </navPoint>
+      <navPoint id="sec31" playOrder="31">
+        <navLabel><text>Peru</text></navLabel>
+        <content src="../Content/Section07.xhtml#r10" />
+      </navPoint>
+      <navPoint id="sec32" playOrder="32">
+        <navLabel><text>Bolivia</text></navLabel>
+        <content src="../Content/Section07.xhtml#r11" />
+      </navPoint>
+      <navPoint id="sec33" playOrder="33">
+        <navLabel><text>Argentina</text></navLabel>
+        <content src="../Content/Section07.xhtml#r12" />
+      </navPoint>
+      <navPoint id="sec34" playOrder="34">
+        <navLabel><text>Uruguay</text></navLabel>
+        <content src="../Content/Section07.xhtml#r13" />
+      </navPoint>
+      <navPoint id="sec35" playOrder="35">
+        <navLabel><text>Brazil</text></navLabel>
+        <content src="../Content/Section07.xhtml#r14" />
+      </navPoint>
+      <navPoint id="sec36" playOrder="36">
+        <navLabel><text>Venezuela</text></navLabel>
+        <content src="../Content/Section07.xhtml#r15" />
+      </navPoint>
+      <navPoint id="sec37" playOrder="37">
+        <navLabel><text>Colombia Again</text></navLabel>
+        <content src="../Content/Section07.xhtml#r16" />
+      </navPoint>
+    </navPoint>
+    <navPoint id="sec38" playOrder="38">
+      <navLabel><text>Africa</text></navLabel>
+      <content src="../Content/Section08.xhtml" />
+      <navPoint id="sec39" playOrder="39">
+        <navLabel><text>South Africa</text></navLabel>
+        <content src="../Content/Section08.xhtml#r1" />
+      </navPoint>
+      <navPoint id="sec40" playOrder="40">
+        <navLabel><text>Lesotho</text></navLabel>
+        <content src="../Content/Section08.xhtml#r2" />
+      </navPoint>
+      <navPoint id="sec41" playOrder="41">
+        <navLabel><text>Zimbabwe</text></navLabel>
+        <content src="../Content/Section08.xhtml#r3" />
+      </navPoint>
+      <navPoint id="sec42" playOrder="42">
+        <navLabel><text>Malawi</text></navLabel>
+        <content src="../Content/Section08.xhtml#r4" />
+      </navPoint>
+      <navPoint id="sec43" playOrder="43">
+        <navLabel><text>Tanzania</text></navLabel>
+        <content src="../Content/Section08.xhtml#r5" />
+      </navPoint>
+      <navPoint id="sec44" playOrder="44">
+        <navLabel><text>Kenya</text></navLabel>
+        <content src="../Content/Section08.xhtml#r6" />
+      </navPoint>
+      <navPoint id="sec45" playOrder="45">
+        <navLabel><text>Riding the Omo River Valley in Ethiopia</text></navLabel>
+        <content src="../Content/Section08.xhtml#r7" />
+      </navPoint>
+      <navPoint id="sec46" playOrder="46">
+        <navLabel><text>North in Ethiopia</text></navLabel>
+        <content src="../Content/Section08.xhtml#r8" />
+      </navPoint>
+      <navPoint id="sec47" playOrder="47">
+        <navLabel><text>Uganda</text></navLabel>
+        <content src="../Content/Section08.xhtml#r9" />
+      </navPoint>
+      <navPoint id="sec48" playOrder="48">
+        <navLabel><text>Rwanda</text></navLabel>
+        <content src="../Content/Section08.xhtml#r10" />
+      </navPoint>
+      <navPoint id="sec49" playOrder="49">
+        <navLabel><text>Back in Tanzania</text></navLabel>
+        <content src="../Content/Section08.xhtml#r11" />
+      </navPoint>
+      <navPoint id="sec50" playOrder="50">
+        <navLabel><text>Zambia</text></navLabel>
+        <content src="../Content/Section08.xhtml#r12" />
+      </navPoint>
+      <navPoint id="sec51" playOrder="51">
+        <navLabel><text>Namibia</text></navLabel>
+        <content src="../Content/Section08.xhtml#r13" />
+      </navPoint>
+      <navPoint id="sec52" playOrder="52">
+        <navLabel><text>South Africa</text></navLabel>
+        <content src="../Content/Section08.xhtml#r14" />
+      </navPoint>
+    </navPoint>
+    <navPoint id="sec53" playOrder="53">
+      <navLabel><text>Cuba</text></navLabel>
+      <content src="../Content/Section09.xhtml" />
+    </navPoint>
+    <navPoint id="sec54" playOrder="54">
+      <navLabel><text>North America</text></navLabel>
+      <content src="../Content/Section10.xhtml" />
+      <navPoint id="sec55" playOrder="55">
+        <navLabel><text>Riding in the United States</text></navLabel>
+        <content src="../Content/Section10.xhtml#r1" />
+      </navPoint>
+      <navPoint id="sec56" playOrder="56">
+        <navLabel><text>Canada to Arizona</text></navLabel>
+        <content src="../Content/Section10.xhtml#r2" />
+      </navPoint>
+      <navPoint id="sec57" playOrder="57">
+        <navLabel><text>Riding in Canada</text></navLabel>
+        <content src="../Content/Section10.xhtml#r3" />
+      </navPoint>
+      <navPoint id="sec58" playOrder="58">
+        <navLabel><text>My First Ride up to Yellowknife, NWT</text></navLabel>
+        <content src="../Content/Section10.xhtml#r4" />
+      </navPoint>
+      <navPoint id="sec59" playOrder="59">
+        <navLabel><text>Riding to the Northwest Territories, Yukon, and Alaska</text></navLabel>
+        <content src="../Content/Section10.xhtml#r5" />
+      </navPoint>
+      <navPoint id="sec60" playOrder="60">
+        <navLabel><text>Tuktoyaktuk or Bust (I was back!)</text></navLabel>
+        <content src="../Content/Section10.xhtml#r6" />
+      </navPoint>
+      <navPoint id="sec61" playOrder="61">
+        <navLabel><text>Atlantic Canada</text></navLabel>
+        <content src="../Content/Section10.xhtml#r7" />
+      </navPoint>
+      <navPoint id="sec62" playOrder="62">
+        <navLabel><text>A Little Trip to Prince Edward Island</text></navLabel>
+        <content src="../Content/Section10.xhtml#r8" />
+      </navPoint>
+      <navPoint id="sec63" playOrder="63">
+        <navLabel><text>To Cape Breton and Newfoundland (aka the Rock)</text></navLabel>
+        <content src="../Content/Section10.xhtml#r9" />
+      </navPoint>
+    </navPoint>
+    <navPoint id="sec64" playOrder="64">
+      <navLabel><text>Epilogue</text></navLabel>
+      <content src="../Content/Section11.xhtml" />
+    </navPoint>
+    <navPoint id="sec65" playOrder="65">
+      <navLabel><text>Postscript: My Covid-Era Dash to Florida to Recover My Bike</text></navLabel>
+      <content src="../Content/Section12.xhtml" />
+    </navPoint>
+    <navPoint id="sec66" playOrder="66">
+      <navLabel><text>Acknowledgements</text></navLabel>
+      <content src="../Content/Section13.xhtml" />
+    </navPoint>
+  </navMap>

@@ -1,0 +1,66 @@
+Section01.xhtml	1	_	Title page	
+Section02.xhtml	1	_	Copyright page
+Section03.xhtml	1		Contents
+Section04.xhtml	1	_	Dedication
+Section05.xhtml	1		Kickstart
+Section05.xhtml	2	r1	The North
+Section05.xhtml	2	r2	Africa
+Section05.xhtml	2	r3	Back North
+Section05.xhtml	2	r4	International Volunteering
+Section05.xhtml	2	r5	I Get Serious about Adventure Biking
+Section05.xhtml	2	r6	A Bit about this Book
+Section05.xhtml	2	r7	What is it about Bikes and Adventure Motorcycling?
+Section05.xhtml	2	r8	Mind or Matter?
+Section06.xhtml	1		A Taste of Southeast Asia
+Section06.xhtml	2	r1	A Little Trip to Hanoi for Tet
+Section06.xhtml	2	r2	I Bought a Minsk
+Section06.xhtml	2	r3	A Journey into Laos
+Section06.xhtml	2	r4	Hail the Mighty Minsk
+Section06.xhtml	2	r5	Riding Vietnam's Northern Frontier
+Section06.xhtml	2	r6	A Little Side-Tale from Thanh Hoa, Vietnam
+Section07.xhtml	1		Down the Road to South America
+Section07.xhtml	2	r1	Mexico
+Section07.xhtml	2	r2	Guatemala
+Section07.xhtml	2	r3	El Salvador
+Section07.xhtml	2	r4	Costa Rica
+Section07.xhtml	2	r5	Nicaragua
+Section07.xhtml	2	r6	Panama
+Section07.xhtml	2	r7	Colombia
+Section07.xhtml	2	r8	Daylight Robbery
+Section07.xhtml	2	r9	Ecuador
+Section07.xhtml	2	r10	Peru
+Section07.xhtml	2	r11	Bolivia
+Section07.xhtml	2	r12	Argentina
+Section07.xhtml	2	r13	Uruguay
+Section07.xhtml	2	r14	Brazil
+Section07.xhtml	2	r15	Venezuela
+Section07.xhtml	2	r16	Colombia Again
+Section08.xhtml	1		Africa
+Section08.xhtml	2	r1	South Africa
+Section08.xhtml	2	r2	Lesotho
+Section08.xhtml	2	r3	Zimbabwe
+Section08.xhtml	2	r4	Malawi
+Section08.xhtml	2	r5	Tanzania
+Section08.xhtml	2	r6	Kenya
+Section08.xhtml	2	r7	Riding the Omo River Valley in Ethiopia
+Section08.xhtml	2	r8	North in Ethiopia
+Section08.xhtml	2	r9	Uganda
+Section08.xhtml	2	r10	Rwanda
+Section08.xhtml	2	r11	Back in Tanzania
+Section08.xhtml	2	r12	Zambia
+Section08.xhtml	2	r13	Namibia
+Section08.xhtml	2	r14	South Africa
+Section09.xhtml	1		Cuba
+Section10.xhtml	1		North America
+Section10.xhtml	2	r1	Riding in the United States
+Section10.xhtml	2	r2	Canada to Arizona
+Section10.xhtml	2	r3	Riding in Canada
+Section10.xhtml	2	r4	My First Ride up to Yellowknife, NWT
+Section10.xhtml	2	r5	Riding to the Northwest Territories, Yukon, and Alaska
+Section10.xhtml	2	r6	Tuktoyaktuk or Bust (I was back!)
+Section10.xhtml	2	r7	Atlantic Canada
+Section10.xhtml	2	r8	A Little Trip to Prince Edward Island
+Section10.xhtml	2	r9	To Cape Breton and Newfoundland (aka the Rock)
+Section11.xhtml	1		Epilogue
+Section12.xhtml	1		Postscript: My Covid-Era Dash to Florida to Recover My Bike
+Section13.xhtml	1		Acknowledgements

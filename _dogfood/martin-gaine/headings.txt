@@ -1,3 +1,4 @@
+cover.xhtml	1		Cover
 Section01.xhtml	1		Title Page
 Section02.xhtml	1		Copyright Page             
 Section03.xhtml	1		Contents
