@@ -8,6 +8,7 @@ import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/Array'
 import * as _A from 'fp-ts-std/Array'
 import { html as Beautify, HTMLBeautifyOptions } from 'js-beautify'
+import { format } from 'date-fns'
 
 const beautify = (options: HTMLBeautifyOptions) => (html: string) =>
   Beautify(html, options)
@@ -194,7 +195,7 @@ export const nav = createCommand('nav')
       //   ])
       // })
       .then(([manifest, spine, ncx, navdoc, toc]) => {
-        Promise.all([
+        return Promise.all([
           IO.writeFile(
             Path.resolve(Path.dirname(headings), 'opf.xml'),
             manifest + '\r\n\r\n' + spine
@@ -206,6 +207,9 @@ export const nav = createCommand('nav')
           ),
           IO.writeFile(Path.resolve(Path.dirname(headings), 'toc.xml'), toc)
         ])
+      })
+      .then(() => {
+        console.log(`やった！ (${format(new Date(), `H:m:ss`)})`)
       })
       .catch((err) => {
         console.error(Chalk.red('ERROR:', err))

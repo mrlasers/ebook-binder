@@ -1,0 +1,71 @@
+{
+  "$schema": "./manifest.schema.json",
+  "metadata": {
+    "someId": "dasfsaf",
+    "pubId": "urn:isbn:978-0-9825143-5-1",
+    "srcId": "urn:isbn:978-0-9825143-4-4",
+    "title": "A Practical Reference for Transgender and Gender-Nonconforming Adults",
+    "author": {
+      "firstName": "Linda",
+      "lastName": "Gromko"
+    },
+    "publisher": "Bainbridge Books",
+    "language": "en-US"
+  },
+  "files": [
+    {
+      "filename": "cover",
+      "type": "cover"
+    },
+    {
+      "filename": "HalfTitle",
+      "type": null,
+      "headings": []
+    },
+    {
+      "filename": "Frontispiece",
+      "headings": []
+    },
+    {
+      "filename": "TitlePage",
+      "type": "titlepage",
+      "headings": []
+    },
+    {
+      "filename": "Copyright",
+      "type": "copyright-page"
+    },
+    {
+      "filename": "Dedication",
+      "type": "dedication"
+    },
+    {
+      "filename": "Section1",
+      "headings": [
+        {
+          "level": 1,
+          "title": "SECTION 1 | GENDER, SEXUAL ORIENTATION, PUBERTY, AND GENDER DYSPHORIA"
+        }
+      ],
+      "pages": []
+    },
+    {
+      "filename": "Chapter1",
+      "headings": [
+        {
+          "level": 2,
+          "title": "CHAPTER 1 | The Critical 911 Message"
+        },
+        {
+          "level": 3,
+          "title": "What to Do If You Are Having Thoughts about Wanting to Die"
+        },
+        {
+          "level": 4,
+          "title": "“Anything Else!”"
+        }
+      ],
+      "pages": [{ "id": null, "pageNumber": 3 }]
+    }
+  ]
+}
