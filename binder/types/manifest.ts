@@ -2,10 +2,30 @@ import { TaskEither } from 'fp-ts/TaskEither'
 import { Key } from './'
 import { EpubLandmark } from '../epub'
 
+export interface Item {
+  filename: string
+}
+
+export function isItem(item: any): item is Item {
+  return (
+    (item as Item).filename !== undefined &&
+    typeof (item as Item).filename === 'string'
+  )
+}
+
 export type FileItem = {
-  html: string
-  headings?: any[]
+  html?: string
+  filename?: string
+  headings?: FileItemHeading[]
   pages?: any[]
+  footnotes?: any[]
+}
+
+export type FileItemHeading = {
+  id: string
+  level: number
+  text: string
+  html: string
 }
 
 export type ManifestFileItem = {
@@ -66,5 +86,5 @@ export type ManifestMetaData = {
 
 export type Manifest = {
   metadata: ManifestMetaData
-  files: ManifestItem
+  files: ManifestItem[]
 }

@@ -1,14 +1,16 @@
 import * as TE from 'fp-ts/TaskEither'
+import * as E from 'fp-ts/Either'
+import * as O from 'fp-ts/Option'
 import { pipe, flow } from 'fp-ts/function'
 import { Lens } from 'monocle-ts'
 
 import Fs from 'fs/promises'
 import Path from 'path'
 
-import { readFile, writeFile } from '../lib'
-import { prettyPrint, processHtml } from '../processing'
-import { FileError } from '../lib/fileIoTypes'
-import { FileItem } from '../types'
+import { readFile, readJson, writeFile } from '../lib'
+import { prettyPrint, processHtml, ProcessOptions } from '../processing'
+import { FileError, JsonReadError } from '../lib/fileIoTypes'
+import { FileItem, FootnoteItems } from '../types'
 
 export type HTML = string
 
@@ -25,9 +27,9 @@ const bookMeta = {
 }
 
 // 2. get filename and path for current segment
-const htmlfilename = 'Chapter2.xhtml'
+const htmlfilename = 'Chapter4.xhtml'
 const filename = Path.join(buildPath, 'source', 'xhtml', htmlfilename)
-const outfilename = Path.join(buildPath, 'output', htmlfilename)
+const outfilename = Path.join(buildPath, 'output', 'Content', htmlfilename)
 
 export type Item = {
   filename: string
@@ -37,43 +39,76 @@ export type Item = {
 }
 
 // 3. load html content for current segment
-const pipeline = pipe(
-  readFile(filename),
-  TE.map(processHtml({ footnotes: { '7': ['Hello, World!', 'The. End.'] } })),
-  TE.chain((item) => {
-    const { headings, pages, html } = item
+// const pipeline = pipe(
+//   readFile(filename),
+//   TE.map(processHtml({ footnotes: { '7': ['Hello, World!', 'The. End.'] } })),
+//   TE.chain((item) => {
+//     const { headings, pages, html } = item
 
-    console.log('headings:', headings)
-    console.log('pages:', pages)
+//     // console.log('headings:', headings)
+//     // console.log('pages:', pages)
 
-    return pipe(
-      writeFile(outfilename, prettyPrint(html)),
-      TE.map((): Item => ({ filename: htmlfilename, headings, pages }))
-    )
-  })
-)
+//     return pipe(
+//       writeFile(outfilename, prettyPrint(html)),
+//       TE.map((): Item => ({ filename: htmlfilename, headings, pages }))
+//     )
+//   })
+// )
 
 // 4. make a function of the above
 export function prepFilePipeline(
-  inpath: string,
-  outpath: string
-): TE.TaskEither<FileError, Item> {
+  infile: string,
+  outfile: string,
+  options?: ProcessOptions
+): TE.TaskEither<Error, Item> {
   return pipe(
-    readFile(filename),
-    TE.map(processHtml()),
+    readFile(infile),
+    TE.map(processHtml(options)),
     TE.chain((item) => {
-      const { headings, pages, html } = item
+      const { html, ...rest } = item
 
       // console.log('headings:', headings)
       // console.log('pages:', pages)
 
       return pipe(
         writeFile(outfilename, prettyPrint(html)),
-        TE.map((): Item => ({ filename: htmlfilename, headings, pages }))
+        TE.map((): Item => ({ ...rest, filename: htmlfilename }))
       )
     })
   )
 }
 
+function isFootnotes(obj: any): obj is FootnoteItems {
+  return Object.keys(obj as FootnoteItems).reduce<boolean>((acc, key) => {
+    if (Array.isArray((obj as FootnoteItems)[key])) {
+      return true
+    }
+
+    return acc
+  }, true)
+}
+
+function ifFootnotes(json: any) {
+  return isFootnotes(json)
+    ? TE.of(json)
+    : TE.left(JsonReadError.of('was not footnotes'))
+}
+
+const result = pipe(
+  readJson(Path.join(buildPath, 'footnotes.json')),
+  TE.chain(ifFootnotes),
+  TE.chain((footnotes: FootnoteItems) => {
+    const infile = filename
+    const outfile = outfilename
+    return prepFilePipeline(infile, outfile, { footnotes })
+  })
+)().then((x) => console.log(JSON.stringify(x, null, 2)))
+
+// TE.map((footnotes: FootnoteItems) => {
+//   const infile = filename
+//   const outfile = outfilename
+//   return prepFilePipeline(infile,outfile,{footnotes})
+// }))
+
 // result
-const result = pipeline().then(console.log) //.then((x) => console.log(JSON.stringify(x, null, 2)))
+// const result = pipeline().then(console.log) //.then((x) => console.log(JSON.stringify(x, null, 2)))

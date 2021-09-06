@@ -1,4 +1,4 @@
-import { Cheerio } from '../lib'
+import { cheerio } from '../lib'
 
 const html = `
 
@@ -11,7 +11,7 @@ const html = `
 
 `
 
-const $ = Cheerio.load(html)
+const $ = cheerio.load(html)
 
 // $('p').children().map(function (i,el) {
 //   if (el.type === 'text')

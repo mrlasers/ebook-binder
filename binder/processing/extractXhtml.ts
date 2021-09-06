@@ -1,9 +1,13 @@
-import { Cheerio } from '../lib'
+import { ProcessOptions } from '.'
+import { cheerio } from '../lib'
 import { FileItem, FootnoteItems } from '../types'
 
-export function addDocumentWrap(title?: string) {
+export function addDocumentWrap(options?: ProcessOptions) {
   return ($html: FileItem | string): FileItem => {
     const item = typeof $html === 'string' ? { html: $html } : $html
+
+    const title = item?.headings?.[0]?.text || options?.title || ''
+
     const html = `
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
@@ -28,10 +32,11 @@ export function addDocumentWrap(title?: string) {
 export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
   return ($html: FileItem | string): FileItem => {
     const item = typeof $html === 'string' ? { html: $html } : $html
-    const $ = Cheerio.load(item.html)
+    const $ = cheerio.load(item.html)
+
+    // console.log('footnotes:', footnotes)
 
     if (!footnotes) {
-      console.log('no footnotes, aborting')
       return item
     }
 
@@ -53,12 +58,13 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
       .filter((n) => footnotes[n])
       .map((ref) => {
         return `
-        <table>
+        <table epub:type="footnote" class="footnotes">
           <tbody>
             <tr>
               <td><a href="#fnref${ref}">${ref}.</a></td>
               <td><div id="fn${ref}">
               ${footnotes?.[ref]
+                .filter((t) => !!t.trim())
                 .map((text) => {
                   return `<p>${text}</p>`
                 })
@@ -80,18 +86,35 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
         // `</aside>`
       })
 
-    return { ...item, html: $.html() + '\n' + fns.join('\n') }
+    return {
+      ...item,
+      html: $.html() + '\n' + fns.join('\n'),
+      footnotes: [...(item.footnotes || []), fnrefs]
+    }
   }
 }
 
 export function addAndExtractHeadings($html: FileItem | string): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = Cheerio.load(item.html)
+  const $ = cheerio.load(item.html)
 
   let nextHeadingNumber = 0
 
-  const headings = $('h1, h2, h3, h4, h5, h6')
+  const headings = $('h1, h2, h3, h4, h5, h6, h7')
     .map(function (i, el) {
+      const level = Number(el.name.slice(1))
+      const prevLevel = Number($(this).prev().get(0)?.tagName.slice(1))
+
+      if (level === prevLevel) {
+        return {
+          append: {
+            level,
+            text: $(this).text(),
+            html: $(this).html()
+          }
+        }
+      }
+
       const attrId = el?.attribs?.id
       const id = attrId?.match(/^p[0-9ivxmcIVXMC]+/)
         ? attrId
@@ -99,14 +122,39 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
 
       $(this).attr('id', id)
 
+      if (level > 6) {
+        $(this).replaceWith(
+          $('<h6>')
+            .attr($(this).attr())
+            .addClass(`h${level}`)
+            .html($(this).html())
+        )
+      }
+
       return {
         id,
-        level: parseInt(el.name.slice(1), 0),
-        text: $(this).text(),
-        html: $(this).html()
+        level,
+        text: $(this).text().trim(),
+        html: $(this).html().trim()
       }
     })
     .toArray()
+    .reduce((headings, heading) => {
+      if (!headings.length && !heading?.append) {
+        return [heading]
+      }
+
+      if (!heading?.append) {
+        return [...headings, heading]
+      }
+
+      let last = headings[headings.length - 1]
+
+      last.text = `${last.text} | ${heading.append.text}`
+      last.html = `${last.html} | ${heading.append.html}`
+
+      return headings
+    }, [])
 
   const pages = $('[id^="p"]')
     .map(function (i, el) {
@@ -116,6 +164,7 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
     .toArray()
 
   return {
+    ...item,
     html: $.html(),
     headings,
     pages

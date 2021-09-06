@@ -1,12 +1,12 @@
 // import { Cheerio } from '../lib'
 import { processHtml } from '../processing'
-import { Cheerio } from '../lib'
+import { cheerio } from '../lib'
 import { guard } from 'fp-ts-std/Function'
 
 const html =
   '<ul>      <li>         Hello, <!-- secret --><em>World</em>!</li><li><p>The end.</p></li><li>Last <p>Night</p></li><li>      SPACE   BALLS <p>in</p>   BLACK   </li><li>     <p></p>      </li></ul>'
 
-const $ = Cheerio.load(html)
+const $ = cheerio.load(html)
 
 $('*')
   .contents()

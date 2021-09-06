@@ -16,7 +16,7 @@ import {
   JsonReadError
 } from './fileIoTypes'
 
-export const Cheerio = {
+export const cheerio = {
   load: (content: string | _Cheerio.Node | _Cheerio.Node[] | Buffer) =>
     _Cheerio.load(content, { xmlMode: true, decodeEntities: false })
 }
@@ -49,4 +49,7 @@ export function readFile(filename: string): TE.TaskEither<FileError, string> {
   )
 }
 
-export const readJson = flow(readFile, TE.map(parse(identity)))
+export const readJson = flow(
+  readFile,
+  TE.chain(flow(parse(JsonReadError.of), TE.fromEither))
+)

@@ -1,5 +1,5 @@
 export class FileOpenError extends Error {
-  public _tag: 'FileOpenError'
+  public _tag: string
 
   private constructor(filename: string) {
     super(`${filename} could not be opened`)
@@ -12,7 +12,7 @@ export class FileOpenError extends Error {
 }
 
 export class FileWriteError extends Error {
-  public _tag: 'FileWriteError'
+  public _tag: string
 
   private constructor(filename: string) {
     super(`${filename} could not be written`)
@@ -25,15 +25,19 @@ export class FileWriteError extends Error {
 }
 
 export class JsonReadError extends Error {
-  public _tag: 'JsonError'
+  public _tag: string
 
   private constructor(err: string) {
     super(err)
     this._tag = 'JsonError'
   }
-  public static of(err: string): JsonReadError {
-    return new JsonReadError(err)
+  public static of(err: any): JsonReadError {
+    return new JsonReadError(`${err}`)
   }
 }
 
 export type FileError = FileOpenError | JsonReadError | FileWriteError
+
+let jsonError: FileError = JsonReadError.of('oops')
+let fileError = FileWriteError.of('nope')
+jsonError = fileError
