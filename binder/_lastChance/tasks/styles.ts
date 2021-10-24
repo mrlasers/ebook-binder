@@ -16,21 +16,39 @@ import {
 } from '../exporter'
 import * as Paths from '../paths'
 import { readFile } from '../readWrite'
-import { Err, InputStyles } from '../types'
+import { Err, FilePaths, InputStyles } from '../types'
 import { Styles as InputType } from '../types/manifest'
 import { basename, FileOutput, Heading, Image, isHtmlFilename } from './'
 
+export type Options = {
+  internalPath?: string
+  sourcePath?: string
+  paths?: {
+    source?: FilePaths
+    epub?: FilePaths
+  }
+}
+
 export function of(
   input: InputStyles,
-  options?: CleanHtmlOptions & { path?: string }
+  options?: CleanHtmlOptions & Options
 ): TE.TaskEither<Err.MyError, FileOutput> {
+  const filename =
+    Paths.safeJoinPath(options?.internalPath, input.filename) || input.filename
+
+  console.log(`Styles.of(): ${filename}`)
+
   return pipe(
-    readFile(Path.resolve(Paths.sourceStylesPath, input.filename)),
+    readFile(
+      Path.resolve(
+        options?.sourcePath ?? Paths.sourceStylesPath,
+        input.filename
+      )
+    ),
     TE.map((css): FileOutput => {
       return {
         _tag: 'STYLES',
-        filename:
-          Paths.safeJoinPath(options?.path, input.filename) || input.filename,
+        filename: filename,
         headings: [],
         html: css,
         images: [],

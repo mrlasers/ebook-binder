@@ -52,6 +52,7 @@ export interface OutputPaths {
   epubPath?: string;
   explodedEpubPath?: string;
   combinedHtmlPath?: string;
+  combinedPathToStyles?: string;
 }
 export interface Section {
   _tag: "SECTION";

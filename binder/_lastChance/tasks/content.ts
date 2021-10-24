@@ -56,7 +56,7 @@ export function of(
   input: InputContent,
   options?: CleanHtmlOptions & Options
 ): TE.TaskEither<Err.MyError, FileOutput> {
-  console.log('Content.of()', input.filename)
+  // console.log('Content.of()', input.filename)
 
   return pipe(
     readFile(
@@ -68,7 +68,7 @@ export function of(
         Paths.safeJoinPath(options?.internalPath, input.filename) ||
         input.filename
 
-      console.log(`Content.of(): ${filename}`)
+      // console.log(`Content.of(): ${filename}`)
 
       return {
         _tag: 'HTML',

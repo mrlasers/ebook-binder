@@ -25,6 +25,8 @@ export const safeJoinPath = (...segments: string[]) =>
 export const buildPath = `C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\_\\evock\\test1\\BadSpot`
 // 'C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\A Practical Reference\\build'
 
+const VERY_BAD_NO_GOOD = `VERY_BAD_NO_GOOD`
+
 export const htmlPath = 'Content'
 export const imagePath = 'Images'
 export const navPath = 'Navigation'

@@ -26,8 +26,9 @@ export function isInput(value: any): value is InputType {
     typeof image.filename !== 'string' ||
     !image.filename.length ||
     !isImageFilename(image.filename)
-  )
+  ) {
     return false
+  }
   if (typeof image.caption !== 'string') return false
   if (image.page && !(isNumber(image.page) || isString(image.page)))
     return false
@@ -53,18 +54,32 @@ export const fullpageImageHtmlCaption = (filename: string, caption: string) =>
         <div><img id="cover" src="${filename}" alt="${caption}"/></div>
       </div>`
 
+export type Options = {
+  internalPath?: string
+  sourcePath?: string
+  htmlPath?: string
+}
+
 export function of(
   input: InputImage,
-  options?: { path?: string }
+  options?: Options
 ): TE.TaskEither<never, FileOutput> {
+  const imageObj = srcFilenameToImage(
+    Path.resolve(options.sourcePath, input.filename),
+    options.internalPath
+  )
+
   return TE.of({
     _tag: 'IMAGE',
     filename:
-      Paths.safeJoinPath(options?.path, basename(input.filename) + '.xhtml') ||
-      basename(input.filename) + '.xhtml',
+      Paths.safeJoinPath(
+        options?.htmlPath,
+        basename(input.filename) + '.xhtml'
+      ) || basename(input.filename) + '.xhtml',
     headings: [],
     pages: !!input.pageNumber ? [{ id: null, num: input.pageNumber }] : [],
-    images: [srcFilenameToImage(input.filename)],
+    images: [],
+    //images: [imageObj],
     html: fullpageImageHtmlCaption(input.filename, input.caption || ''),
     // html: `<div class="cover"><img src="${input.filename}" alt="${(
     //   input.caption || ''

@@ -20,12 +20,17 @@ import { Err, InputFont } from '../types'
 import { Styles as InputType } from '../types/manifest'
 import { basename, FileOutput, Heading, Image, isHtmlFilename } from './'
 
+type Options = {
+  path?: string
+  sourcePath: string
+}
+
 export function of(
   input: InputFont,
-  options?: CleanHtmlOptions & { path?: string }
+  options?: CleanHtmlOptions & Options
 ): TE.TaskEither<Err.MyError, FileOutput> {
   return pipe(
-    readFile(Path.resolve(Paths.sourceFontPath, input.filename)),
+    readFile(Path.resolve(options.sourcePath, input.filename)),
     TE.map((css): FileOutput => {
       return {
         _tag: 'FONT',

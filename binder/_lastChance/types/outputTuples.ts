@@ -26,5 +26,7 @@ export function isOutputTuple(ot: any): ot is OutputTuple {
 }
 
 export type OutputTupleOptions = {
+  sourceImagePath: string
+  sourceFontPath: string
   epub?: boolean
 }

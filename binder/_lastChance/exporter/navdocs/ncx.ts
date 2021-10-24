@@ -128,7 +128,7 @@ export function ncxDocument(data: NcxData) {
 ${data.navPoints}
 </navMap>
 ${pipe(
-  O.fromNullable(data.pageTargets),
+  data.pageTargets.length ? O.of(data.pageTargets) : O.none,
   O.map((targets) => `<pageList>${targets}</pageList>`),
   O.fold(
     () => '',

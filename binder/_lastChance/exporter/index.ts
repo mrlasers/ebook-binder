@@ -139,11 +139,14 @@ export function getPagesFromHtml(html: string): Page[] {
   return pages
 }
 
-export function srcFilenameToImage(source: string): Image {
+export function srcFilenameToImage(
+  source: string,
+  destinationPath: string = 'Images'
+): Image {
   return {
-    source: Path.basename(source),
+    source: source, //Path.basename(source),
     destination: Paths.joinPath(
-      Paths.imagePath,
+      destinationPath,
       Path.basename(source, Path.extname(source)) + '.jpg'
     )
   }

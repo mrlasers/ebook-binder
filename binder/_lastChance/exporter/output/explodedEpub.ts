@@ -51,11 +51,11 @@ export function outputExplodedEpub(options?: EpubOutputOptions) {
           A.map(([type, filename, data]) => {
             const path = Path.resolve(options.explodedEpubBasePath, filename)
 
-            console.log(`## filename:: ${filename}`)
-            console.log(
-              `outputExplodedEpub(explodedEpubBasePath) :: ${options.explodedEpubBasePath}`
-            )
-            console.log(`outputExplodedEpub(A.map) :: ${path}`)
+            // console.log(`## filename:: ${filename}`)
+            // console.log(
+            //   `outputExplodedEpub(explodedEpubBasePath) :: ${options.explodedEpubBasePath}`
+            // )
+            // console.log(`outputExplodedEpub(A.map) :: ${path}`)
 
             switch (type) {
               default:
@@ -67,8 +67,13 @@ export function outputExplodedEpub(options?: EpubOutputOptions) {
               case 'style':
               case 'xml':
               case 'content':
+                // if (type === 'style') {
+                //   console.log(`outputExplodedEpub(style): ${path}`)
+                // }
                 return writeFile(path, data)
+              case 'style':
               case 'image':
+                // console.log(`outputExplodedEpub(style): ${path}`)
                 return copyFile(data, path)
               case 'font':
                 console.log(`::: Skipping fonts for exploded epub output :::`)

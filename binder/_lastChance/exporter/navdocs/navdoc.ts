@@ -34,12 +34,10 @@ export function guideFromHeadings(ignoreLandmarks?: string[]) {
   return (headings: Heading[]): string => {
     return pipe(
       headings,
+      A.filter((h) => !!h.landmark && !ignoreLandmarks.includes(h.landmark)),
       O.fromPredicate((x) => !!x.length),
       O.map(
         flow(
-          A.filter(
-            (h) => !!h.landmark && !ignoreLandmarks.includes(h.landmark)
-          ),
           A.map(
             (h) =>
               `<li><a epub:type="${h.landmark}" href="${Paths.relativePath(
@@ -184,20 +182,24 @@ export function headingsToNavDoc(ignoreLandmarks?: string[]) {
   }): GeneratedOutput => {
     // stop closing this gap, you bitch!
 
-    const guide = `
-<nav epub:type="landmarks">
-<h1>Guide</h1>
-<ol>
-${pipe(
-  input.headings,
-  A.filter((h) => !!h?.landmark),
-  A.map(guidePoint),
-  A.filter(Boolean),
-  join('\n')
-)}
-</ol>
-</nav>
-`
+    const guide = (headings: Heading[]) => {
+      console.log(`=========guide():: ${headings}`)
+      return pipe(
+        headings,
+        A.filter((h) => !!h?.landmark),
+        (hs) => {
+          console.log(`--------headingsToNavDoc(hs):: ${hs}`)
+          return hs
+        },
+        (hs) => (hs.length ? O.of(hs) : O.none),
+        O.map(flow(A.map(guidePoint), A.filter(Boolean), join('\n'))),
+        O.fold(
+          () => '',
+          (landmarks) =>
+            `<nav epub:type="landmarks"><h1>Guide</h1><ol>${landmarks}</ol></nav>`.trim()
+        )
+      )
+    }
 
     const toc = `
 <nav epub:type="toc">
@@ -213,7 +215,9 @@ ${pipe(
 </ol></nav>
 `.trim()
 
-    const pageList = `
+    const pageList = !input.pages.length
+      ? ''
+      : `
 <nav epub:type="page-list" hidden="">
 <ol>
 ${pipe(
@@ -233,33 +237,9 @@ ${pipe(
 <head>
 <meta http-equiv="default-style" content="text/html;charset=utf-8"/>
 <title>${input.metadata.title}</title>
-<style>
-  li:before { padding: 0 0.5em; font-weight: bold; }
-  ol { border-left: 2px solid red; }
-  ol > li:before { content: 'L1'; color: red; }
-
-  /* chapters */
-  ol ol { border-left: 2px solid green; }
-  ol ol > li:before { content: 'L2'; color: green; }
-
-  ol ol ol { border-left: 2px solid blue; padding-left: 2em; margin-top: 0; }
-  ol ol ol > li:before { content: 'L3'; color: blue; }
-
-  ol ol ol ol { border-left: 1px solid hotpink; }
-  ol ol ol ol > li:before { content: 'L4'; color: hotpink; }
-
-  ol ol ol ol ol { border-left: 1px solid orange; }
-  ol ol ol ol ol > li:before { content: 'L5'; color: orange; }
-
-  ol ol ol ol ol ol { border-left: 1px solid purple; }
-  ol ol ol ol ol ol > li:before { content: 'L6'; color: purple; }
-
-  ol ol ol ol ol ol ol { border-left: 1px solid limegreen; }
-  ol ol ol ol ol ol ol > li:before { content: 'L7'; color: limegreen; }
-</style>
 </head>
 <body>
-${guide}
+${guide(input.headings)}
 ${toc}
 ${pageList}
 </body></html>`.trim()

@@ -47,11 +47,10 @@ export function collectedToOutputTuples(options: OutputTupleOptions) {
           case 'OPF':
             return ['xml', file.filename, prettyPrint(file.html)]
           case 'FONT':
-            console.log(`collectedToOutputTuples(FONT): ${file.filename}`)
             return [
               'font',
               file.filename,
-              Path.resolve(Paths.sourceFontPath, Path.basename(file.filename))
+              Path.resolve(options.sourceFontPath, Path.basename(file.filename))
             ]
         }
       }),
@@ -59,13 +58,13 @@ export function collectedToOutputTuples(options: OutputTupleOptions) {
       A.concat(
         pipe(
           collected.images,
-          A.map(
-            (img): OutputTuple => [
+          A.map((img): OutputTuple => {
+            return [
               'image',
               img.destination,
-              Path.resolve(Paths.sourceImagePath, img.source)
+              Path.resolve(options.sourceImagePath, img.source)
             ]
-          )
+          })
         )
       )
     )

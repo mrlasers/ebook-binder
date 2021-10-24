@@ -53,7 +53,8 @@
       "properties": {
         "epubPath": { "type": "string" },
         "explodedEpubPath": { "type": "string" },
-        "combinedHtmlPath": { "type": "string" }
+        "combinedHtmlPath": { "type": "string" },
+        "combinedPathToStyles": { "type": "string" }
       },
       "additionalProperties": false
     },

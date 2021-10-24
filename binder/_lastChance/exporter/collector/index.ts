@@ -33,19 +33,23 @@ export const collectOutput =
       resolveFactories
     )
 
+const emptyCollector = (metadata: Metadata) => {
+  return {
+    metadata: metadata,
+    headings: [],
+    pages: [],
+    files: [],
+    missingFootnotes: [],
+    images: [],
+    figures: [],
+    tables: []
+  }
+}
+
 export function collectFileOutput(metadata: Metadata) {
   return flow(
     A.reduce<FileOutput, Collector>(
-      {
-        metadata: metadata,
-        headings: [],
-        pages: [],
-        files: [],
-        missingFootnotes: [],
-        images: [],
-        figures: [],
-        tables: []
-      },
+      emptyCollector(metadata),
       (collector: Collector, file: FileOutput): Collector => {
         const headings = file.headings.map(
           (heading): Heading => ({

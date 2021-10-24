@@ -25,7 +25,7 @@ import { collectedToOutputTuples } from './exporter/output'
 import * as Paths from './paths'
 import { readAndCompressImage, readFootnotes, writeZip } from './readWrite'
 import { assignToFileTaskEither, Image } from './tasks'
-import { FilePaths, OutputTuple } from './types'
+import { Err, FilePaths, OutputTuple, OutputTupleTypes } from './types'
 import { loadManifest } from './types/manifestValidate'
 
 export function reduceFilterImages(images: Image[], image: Image) {
@@ -74,16 +74,26 @@ const writeEpubFromTuples =
         pipe(
           tuples,
           A.map((f) => {
-            if (f[0] === 'font') {
-              console.log(`writeEpubFromTuples(FONT): ${f}`)
-            }
             return pipe(
-              // f[0] === 'image' ? FsP.readFile(f[2]) : f[2],
               f[0] === 'image' ? readAndCompressImage(f[2]) : f[2],
-              (data: Promise<Buffer> | string) =>
+              (data: string | Promise<Buffer>) =>
                 zip.file(Paths.joinPath('OEBPS', f[1]), data)
             )
+
+            // =========== this is a little broken below so commented out
+
+            // return pipe(
+            //   f[0] === 'image'
+            //     ? readAndCompressImage(f[2])
+            //     : TE.left(Err.MyError.of(f[2])),
+            //   TE.map((result) => {
+            //     console.log(`===epub writer shit===:: ${result}`)
+            //     return result
+            //   }),
+            //   TE.map((data) => zip.file(Paths.joinPath('OEBPS', f[1]), data))
+            // )
           })
+          // A.sequence(TE.Monad)
         )
 
         return zip
@@ -93,7 +103,6 @@ const writeEpubFromTuples =
         compressionOptions: { level: 9 }
       })
     )
-
 export function epubFilenameFromTitle(title?: string) {
   if (typeof title !== 'string') return 'ebook.epub'
 
@@ -103,9 +112,9 @@ export function epubFilenameFromTitle(title?: string) {
     .map((x) => x.toString().padStart(2, '0'))
     .join('.')
 
-  console.log(
-    `epubFilenameFromTitle() :: ${d.getHours()} ; ${d.getHours().toString()}`
-  )
+  // console.log(
+  //   `epubFilenameFromTitle() :: ${d.getHours()} ; ${d.getHours().toString()}`
+  // )
 
   return (
     title
@@ -124,7 +133,7 @@ export function epubFilenameFromTitle(title?: string) {
   )
 }
 
-console.log(`process.args: ${process.argv.slice(-1)}`)
+// console.log(`process.args: ${process.argv.slice(-1)}`)
 
 const manifestArgument = process.argv.slice(-1)[0]
 
@@ -162,7 +171,7 @@ const loadManifestAndFootnotes = (manifestPath: string) =>
     // )
     .bind('manifest', loadManifest(manifestPath))
     .bindL('footnotes', (context) => {
-      console.log(`bindL(footnotes): ${context.manifest.paths.footnotes}`)
+      // console.log(`bindL(footnotes): ${context.manifest.paths.footnotes}`)
       if (context.manifest.paths?.footnotes) {
         return readFootnotes(
           Path.resolve(
@@ -192,11 +201,18 @@ const loadManifestAndFootnotes = (manifestPath: string) =>
 // hardcoded variables that should be replaced with configuration in manifest.json
 const classesToRemove = ['gender']
 
-export const writeExplodedTE = (path: string) =>
+export type WriteExplodedTEOptions = {
+  path: string
+  exclude?: OutputTupleTypes[]
+}
+export const writeExplodedTE = ({
+  path,
+  exclude = []
+}: WriteExplodedTEOptions) =>
   flow(
     outputExploded({
       explodedEpubBasePath: path,
-      exclude: ['style'] // ['xml', 'style']
+      exclude: exclude // ['style'] // ['xml', 'style']
     }),
     TE.map(() => `Exploded files written to ${path}`)
   )
@@ -240,7 +256,11 @@ const program = pipe(
               files: [collectedToOpf(collected), ...collected.files]
             }
           },
-          collectedToOutputTuples({ epub: false })
+          collectedToOutputTuples({
+            sourceImagePath: paths.source.imagePath,
+            sourceFontPath: paths.source.fontPath,
+            epub: false
+          })
         )
       ),
       // this is where the output happens
@@ -251,13 +271,14 @@ const program = pipe(
             // write exploded
             pipe(
               tuples,
-              (x) => {
-                console.log(`tuples:: ${x.map((y) => y[1])}`)
-                return x
-              },
-              writeExplodedTE(
-                Path.join(buildPath, paths.output.explodedEpubPath)
-              )
+              // (x) => {
+              //   console.log(`tuples:: ${x.map((y) => y[1])}`)
+              //   return x
+              // },
+              writeExplodedTE({
+                path: Path.join(buildPath, paths.output.explodedEpubPath),
+                exclude: []
+              })
             ),
             // write epub
             pipe(

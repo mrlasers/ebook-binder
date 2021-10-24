@@ -302,6 +302,22 @@ export function temporary_manifestFonts(files: FileOutput[]): string {
   )
 }
 
+export const makeGuideXml = (files: FileOutput[]) => {
+  const cover = temporary_getGuideCover(files)
+  const toc = temporary_getGuideToc(files)
+
+  if (!cover && !toc) {
+    return ''
+  }
+
+  return `
+<guide>
+${cover}
+${toc}
+</guide>
+  `
+}
+
 export function constructOpfDocument(c: Collector): string {
   return `
 <?xml version="1.0" encoding="utf-8"?>
@@ -333,10 +349,7 @@ export function constructOpfDocument(c: Collector): string {
 </manifest>
 
 ${temporary_getSpine(c.files)}
-<guide>
-  ${temporary_getGuideCover(c.files)}
-  ${temporary_getGuideToc(c.files)}
-</guide>
+${makeGuideXml(c.files)}
 </package>
 `.trim()
 }

@@ -113,9 +113,9 @@ export const assignToFileTaskEither =
           )
         )
       case 'CONTENT':
-        console.log(
-          `assignToFileTaskEither() :: ${options?.paths?.epub?.htmlPath}`
-        )
+        // console.log(
+        //   `assignToFileTaskEither() :: ${options?.paths?.source?.stylePath}`
+        // )
         return Content.of(file, {
           internalPath: options?.paths?.epub?.htmlPath,
           sourcePath: Path.resolve(
@@ -125,14 +125,36 @@ export const assignToFileTaskEither =
           footnotes: options?.footnotes
         })
       case 'IMAGE':
-        return ImageSection.of(file, { path: options?.paths?.epub?.imagePath })
+        return ImageSection.of(file, {
+          internalPath: options?.paths?.epub?.imagePath,
+          sourcePath: Path.resolve(
+            options.paths.buildPath,
+            options?.paths?.source?.imagePath
+          ),
+          htmlPath: Paths.joinPath(options?.paths?.epub?.htmlPath)
+        })
       case 'SECTION':
         return Section.of(file, { path: options?.paths?.epub?.htmlPath })
       case 'FACTORY':
         return Factory.of(file, { path: options?.paths?.epub?.htmlPath })
       case 'STYLES':
-        return Styles.of(file, { path: options?.paths?.epub?.stylePath })
+        return Styles.of(file, {
+          internalPath: options?.paths?.epub?.stylePath,
+          sourcePath: Path.resolve(
+            options.paths.buildPath,
+            options?.paths?.source?.stylePath
+          )
+        })
       case 'FONT':
-        return Font.of(file, { path: options?.paths?.epub?.fontPath })
+        console.log(
+          `assignToFileTaskEither(fontPath):: ${options?.paths?.source?.fontPath}`
+        )
+        return Font.of(file, {
+          path: options?.paths?.epub?.fontPath,
+          sourcePath: Path.resolve(
+            options.paths.buildPath,
+            options?.paths?.source?.fontPath
+          )
+        })
     }
   }
