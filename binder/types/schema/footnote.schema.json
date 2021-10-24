@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./",
+  "title": "Footnotes",
+  "description": "Footnotes items for ebook shit",
+  "type": "array",
+  "items": {
+    "type": "array",
+    "items": {
+      "type": "string"
+    }
+  }
+}

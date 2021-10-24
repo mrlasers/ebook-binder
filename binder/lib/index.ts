@@ -16,6 +16,8 @@ import {
   JsonReadError
 } from './fileIoTypes'
 
+export * from './fileIoTypes'
+
 export const cheerio = {
   load: (content: string | _Cheerio.Node | _Cheerio.Node[] | Buffer) =>
     _Cheerio.load(content, { xmlMode: true, decodeEntities: false })

@@ -17,7 +17,7 @@ export function markupQA($html: string | FileItem): FileItem {
   $('div.pullquote.qa p').each(function (i, el) {
     const html = $(this)
       .html()
-      .replace(/^\s*([QA]) /g, (matched) => `<span>${matched}</span>`)
+      .replace(/^\s*([QA])(?=\s)/g, (matched) => `<span>${matched}</span>`)
     $(this).html(html)
   })
 

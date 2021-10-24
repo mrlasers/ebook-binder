@@ -6,7 +6,8 @@ import {
   removeClasses,
   wrapListItemContentInParagraph,
   replaceIllustrationPlaceholders,
-  mergePullquotes
+  mergePullquotes,
+  prettyPrint
 } from './cleanXhtml'
 import {
   addAndExtractHeadings,
@@ -26,6 +27,7 @@ export type ProcessOptions = {
   title?: string
   footnotes?: FootnoteItems
   pretty?: boolean
+  bodyClass?: string
 }
 
 export function processHtml(options?: ProcessOptions) {
@@ -43,11 +45,55 @@ export function processHtml(options?: ProcessOptions) {
       removeEmptyParagraphs,
       unwrapStrongHeading,
       mergeLists,
+      addAndExtractHeadings, // split adding ids and extracting
+      removeClasses('gender'),
+      markupQA,
+      addAndExtractFootnoteRefs(options?.footnotes), // split these
+
+      addDocumentWrap(options)
+    )
+  }
+}
+
+type anythingWithHtml = {
+  html: string
+  [key: string]: any
+}
+
+export function processHtmlHACK(options?: ProcessOptions) {
+  return (item: anythingWithHtml): any => {
+    // const $ = Cheerio.load(html)
+
+    // const xhtml = $('body').html() || html
+
+    // console.log(item)
+
+    return pipe(
+      cheerio.load(item.html)('body').html() || item.html,
+      mergePullquotes,
+      replaceIllustrationPlaceholders,
+      replaceBreak,
+      wrapListItemContentInParagraph,
+      removeEmptyParagraphs,
+      unwrapStrongHeading,
+      mergeLists,
       addAndExtractHeadings,
       removeClasses('gender'),
       markupQA,
-      addAndExtractFootnoteRefs(options.footnotes),
-      addDocumentWrap(options)
+      addAndExtractFootnoteRefs(options?.footnotes),
+      addDocumentWrap(options),
+      (item) => {
+        return !options.pretty
+          ? item
+          : { ...item, html: prettyPrint(item.html) }
+      },
+      (html) => {
+        // const $html = html?.html || html
+        return {
+          ...item,
+          ...html
+        }
+      }
     )
   }
 }

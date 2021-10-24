@@ -10,9 +10,16 @@ import Fs from 'fs/promises'
 import Path from 'path'
 
 import { readFile, readJson, writeFile } from '../lib'
-import { prettyPrint, processHtml, ProcessOptions } from '../processing'
+import { prettyPrint, processHtmlHACK, ProcessOptions } from '../processing'
 import { FileError, FileOpenError, JsonReadError } from '../lib/fileIoTypes'
-import { FileItem, FootnoteItems, Manifest } from '../types'
+import {
+  FileItem,
+  FootnoteItems,
+  Manifest,
+  Item,
+  ImageItem,
+  isImageItem
+} from '../types'
 import { prepFilePipeline } from './onefile'
 
 export type HTML = string
@@ -72,7 +79,7 @@ export const loadManifest = flow(readJson, TE.chain(ifManifest))
 
 const manifestPath = Path.join(buildPath, 'manifest.json')
 
-export function liftToFileItem(item: string | FileItem): FileItem {
+export function liftToItem(item: string | Item): Item {
   return typeof item === 'string' ? { filename: item } : item
 }
 
@@ -85,7 +92,7 @@ export function loadConfiguration(path: string) {
       footnotes,
       manifest: {
         ...manifest,
-        files: manifest.files.map(liftToFileItem)
+        files: manifest.files.map(liftToItem)
       }
     }))
 }
@@ -96,16 +103,25 @@ const result = pipe(
     const infile = Path.join(root, 'source', 'xhtml')
     const outfile = Path.join(root, 'output', 'Content')
     return pipe(
-      manifest.files.map((item) =>
-        !item.filename.match(/\.xhtml$/)
+      manifest.files.map((item) => {
+        if (!item?.filename) {
+          return TE.left(new Error('file item is missing filename'))
+        }
+
+        return !item.filename.match(/\.xhtml$/)
           ? TE.of(item)
           : fileProcessTask(
               Path.join(infile, item.filename),
               Path.join(outfile, item.filename),
               { footnotes, pretty: true, title: item.filename }
             )
-      ),
+      }),
       A.sequence(TE.Monad)
+      // TE.map(items => {
+      //   items.reduce((headings, item) => {
+      //     return [...headings, ...(item.headings as any[])]
+      //   }, [])
+      // })
       // going to grab the headings together now
       // TE.map((items) => {
       //   return items.reduce((headings, item) => {
@@ -118,7 +134,9 @@ const result = pipe(
       // }),
     )
   })
-)().then(console.log)
+)
+
+result().then(console.log) // this one does the files
 
 export function fileProcessTask(
   input: string,
@@ -127,9 +145,13 @@ export function fileProcessTask(
 ): TE.TaskEither<Error, FileItem> {
   return pipe(
     readFile(input),
-    TE.map(processHtml(options)),
+    TE.map(processHtmlHACK(options)),
     TE.chain((item) => {
       const { html, ...rest } = item
+      if (!html || typeof html !== 'string') {
+        return TE.left(new Error('no HTML provided'))
+      }
+
       return pipe(
         writeFile(output, options?.pretty ? prettyPrint(html) : html),
         TE.map((): FileItem => ({ ...rest, filename: Path.basename(output) }))

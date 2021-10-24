@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "Manifest",
+  "properties": {
+    "metadata": { "$ref": "#/$defs/Metadata" },
+    "files": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          { "$ref": "#/$defs/htmlFilename" },
+          { "$ref": "#/$defs/imageFilename" },
+          { "$ref": "#/$defs/Section" },
+          { "$ref": "#/$defs/Image" },
+          { "$ref": "#/$defs/Content" },
+          { "$ref": "#/$defs/Factory" }
+        ]
+      }
+    }
+  },
+  "required": ["files"],
+  "$defs": {
+    "title": { "type": "string" },
+    "htmlFilename": {
+      "type": "string",
+      "pattern": "\\.(xhtml|html|htm)\\s*$"
+    },
+    "imageFilename": {
+      "type": "string",
+      "pattern": "\\.(jpg|jpeg|gif|png)\\s*$"
+    },
+    "Section": {
+      "type": "object",
+      "properties": {
+        "_tag": { "type": "string", "enum": ["SECTION"] },
+        "filename": { "$ref": "#/$defs/imageFilename" },
+        "title": { "type": "string" },
+        "level": { "type": "integer" },
+        "landmark": { "type": "string" },
+        "toc": { "type": "boolean" },
+        "pageNumber": { "$ref": "#/$defs/PageNumber" }
+      },
+      "required": ["_tag", "title", "filename"],
+      "additionalProperties": false
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "_tag": { "type": "string", "enum": ["IMAGE"] },
+        "caption": { "type": "string" },
+        "filename": { "$ref": "#/$defs/imageFilename" },
+        "level": { "type": "integer" },
+        "landmark": { "type": "string" },
+        "illustration": { "type": "boolean" },
+        "toc": { "type": "boolean" },
+        "pageNumber": { "$ref": "#/$defs/PageNumber" }
+      },
+      "required": ["_tag", "caption", "filename"],
+      "additionalProperties": false
+    },
+    "Content": {
+      "type": "object",
+      "properties": {
+        "_tag": { "type": "string", "enum": ["CONTENT"] },
+        "title": { "type": "string" },
+        "filename": { "$ref": "#/$defs/htmlFilename" },
+        "landmark": { "type": "string" },
+        "toc": { "type": "boolean" },
+        "bodyClass": { "type": "string" }
+      },
+      "required": ["_tag", "filename"],
+      "additionalProperties": false
+    },
+    "Factory": {
+      "type": "object",
+      "properties": {
+        "_tag": { "type": "string", "enum": ["FACTORY"] },
+        "title": { "type": "string" },
+        "filename": { "$ref": "#/$defs/htmlFilename" },
+        "landmark": { "type": "string" },
+        "toc": { "type": "boolean" },
+        "factory": { "type": "string" },
+        "bodyClass": { "type": "string" },
+        "pageNumber": { "$ref": "#/$defs/PageNumber" }
+      },
+      "required": ["_tag", "factory", "filename"],
+      "additionalProperties": false
+    },
+    "UUID": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+    },
+    "PageNumber": { "type": "string", "pattern": "([0-9]+|[ivxmcIVXMC]+)" },
+    "Metadata": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "pubId": { "$ref": "#/$defs/UUID" },
+        "author": { "type": "string" },
+        "publisher": { "type": "string" }
+      }
+    }
+  }
+}

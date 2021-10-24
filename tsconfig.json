@@ -15,6 +15,7 @@
     "target": "es2019",
 
     "strict": false,
+    "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -22,6 +23,8 @@
 
     "jsx": "react",
 
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+
+    "resolveJsonModule": true
   }
 }

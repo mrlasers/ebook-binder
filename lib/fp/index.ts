@@ -18,7 +18,7 @@ export const last = <A>(xs: A[]): A => {
 export const dropLast = <A>(xs: A[]): A[] => {
   return xs.slice(0, xs.length - 1)
 }
-export const headsTail = (xs: any[]): any[] => {
+export const headsTail = <A>(xs: A[]): [A[], A] => {
   const heads = dropLast(xs) || undefined
   const tail = last(xs) || undefined
 

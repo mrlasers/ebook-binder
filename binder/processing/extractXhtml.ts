@@ -16,7 +16,7 @@ export function addDocumentWrap(options?: ProcessOptions) {
     <title>${title}</title>
     <link rel="stylesheet" type="text/css" href="../Styles/styles.css"/>
     </head>
-    <body>
+    <body${options.bodyClass ? ` class="${options.bodyClass}"` : ''}>
     ${item.html}
     </body>
     </html>
@@ -34,15 +34,9 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
     const item = typeof $html === 'string' ? { html: $html } : $html
     const $ = cheerio.load(item.html)
 
-    // console.log('footnotes:', footnotes)
-
-    if (!footnotes) {
-      return item
-    }
-
     const fnrefs = $('sup')
       .map(function (i, el) {
-        const ref = Number($(this).text())
+        const ref = Number($(this).text().trim())
         if (isNaN(ref) || !footnotes[`${ref}`]) return
 
         $(this).html(
@@ -96,7 +90,7 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
 
 export function addAndExtractHeadings($html: FileItem | string): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   let nextHeadingNumber = 0
 
@@ -127,15 +121,15 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
           $('<h6>')
             .attr($(this).attr())
             .addClass(`h${level}`)
-            .html($(this).html())
+            .html($(this)?.html() || '')
         )
       }
 
       return {
         id,
         level,
-        text: $(this).text().trim(),
-        html: $(this).html().trim()
+        text: $(this)?.text()?.trim(),
+        html: $(this)?.html()?.trim()
       }
     })
     .toArray()
@@ -150,8 +144,8 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
 
       let last = headings[headings.length - 1]
 
-      last.text = `${last.text} | ${heading.append.text}`
-      last.html = `${last.html} | ${heading.append.html}`
+      last.text = `${last?.text} | ${heading.append.text}`
+      last.html = `${last?.html} | ${heading.append.html}`
 
       return headings
     }, [])
@@ -159,7 +153,7 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
   const pages = $('[id^="p"]')
     .map(function (i, el) {
       const id = $(this).attr('id')
-      return { id, page: id.slice(1) }
+      return { id, page: id?.slice(1) }
     })
     .toArray()
 

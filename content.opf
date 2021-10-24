@@ -1,0 +1,235 @@
+<package version="3.0" xmlns="http://www.idpf.org/2007/opf" xml:lang="en-US" dir="ltr" unique-identifier="pub-id">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:identifier id="pub-id">urn:uuid:3df43f3b-d894-40fb-8ba6-b2dcef42d984</dc:identifier>
+    <dc:title id="title">A Practical Reference for Transgender and Gender-Noncomforming Adults</dc:title>
+    <dc:language>en-US</dc:language>
+    <meta property="dcterms:modified">2021-09-25T01:19:35Z</meta>
+    <dc:publisher>Bainbridge Books</dc:publisher>
+    <dc:creator id="author">Linda Gromko</dc:creator>
+    <meta refines="#author" property="role" scheme="marc:relators">aut</meta>
+    <meta refines="#author" property="display-seq">1</meta>
+    <dc:contributor id="mrlasers">MrLasers.com</dc:contributor>
+    <meta refines="#mrlasers" property="file-as">MrLasers</meta>
+    <meta refines="#mrlasers" property="role" scheme="marc:relators">bkp</meta>
+    <meta name="cover" content="cover-image" />
+  </metadata>
+  <manifest>
+    <item id="steez" media-type="type/css" href="Styles/styles.css" />
+    <item id="cover-image" media-type="image/jpeg" href="Images/cover.jpg" />
+    <item id="nav" media-type="application/xhtml+xml" href="Navigation/nav.xhtml" properties="nav" />
+    <item id="ncx" media-type="application/x-dtbncx+xml" href="Content/cover.xhtml" />
+    <item id="ht-cover" media-type="application/xhtml+xml" href="Content/cover.xhtml" />
+    <item id="ht1" type="application/xhtml+xml" href="Content/Copyright.xhtml" />
+    <item id="ht2" type="application/xhtml+xml" href="Content/Dedication.xhtml" />
+    <item id="ht3" type="application/xhtml+xml" href="Content/Foreword.xhtml" />
+    <item id="ht4" type="application/xhtml+xml" href="Content/Preface.xhtml" />
+    <item id="ht5" type="application/xhtml+xml" href="Content/Introduction.xhtml" />
+    <item id="ht6" type="application/xhtml+xml" href="Content/Chapter1.xhtml" />
+    <item id="ht7" type="application/xhtml+xml" href="Content/Chapter2.xhtml" />
+    <item id="ht8" type="application/xhtml+xml" href="Content/Chapter3.xhtml" />
+    <item id="ht9" type="application/xhtml+xml" href="Content/Chapter4.xhtml" />
+    <item id="ht10" type="application/xhtml+xml" href="Content/Chapter5.xhtml" />
+    <item id="ht11" type="application/xhtml+xml" href="Content/Chapter6.xhtml" />
+    <item id="ht12" type="application/xhtml+xml" href="Content/Chapter7.xhtml" />
+    <item id="ht13" type="application/xhtml+xml" href="Content/Section3Intro.xhtml" />
+    <item id="ht14" type="application/xhtml+xml" href="Content/Chapter8.xhtml" />
+    <item id="ht15" type="application/xhtml+xml" href="Content/Chapter9.xhtml" />
+    <item id="ht16" type="application/xhtml+xml" href="Content/Section4Intro.xhtml" />
+    <item id="ht17" type="application/xhtml+xml" href="Content/Chapter10.xhtml" />
+    <item id="ht18" type="application/xhtml+xml" href="Content/Chapter11.xhtml" />
+    <item id="ht19" type="application/xhtml+xml" href="Content/Chapter12.xhtml" />
+    <item id="ht20" type="application/xhtml+xml" href="Content/Section5Intro.xhtml" />
+    <item id="ht21" type="application/xhtml+xml" href="Content/Chapter13.xhtml" />
+    <item id="ht22" type="application/xhtml+xml" href="Content/Chapter14.xhtml" />
+    <item id="ht23" type="application/xhtml+xml" href="Content/Chapter15.xhtml" />
+    <item id="ht24" type="application/xhtml+xml" href="Content/Chapter16.xhtml" />
+    <item id="ht25" type="application/xhtml+xml" href="Content/Chapter17.xhtml" />
+    <item id="ht26" type="application/xhtml+xml" href="Content/Chapter18.xhtml" />
+    <item id="ht27" type="application/xhtml+xml" href="Content/Chapter19.xhtml" />
+    <item id="ht28" type="application/xhtml+xml" href="Content/Chapter20.xhtml" />
+    <item id="ht29" type="application/xhtml+xml" href="Content/Chapter21.xhtml" />
+    <item id="ht30" type="application/xhtml+xml" href="Content/Chapter22.xhtml" />
+    <item id="ht31" type="application/xhtml+xml" href="Content/Chapter23.xhtml" />
+    <item id="img1" media-type="image/jpeg" href="Images/AlertBracelet.jpg" />
+    <item id="img2" media-type="image/jpeg" href="Images/BipolarMask.jpg" />
+    <item id="img3" media-type="image/jpeg" href="Images/Birdhouse.jpg" />
+    <item id="img4" media-type="image/jpeg" href="Images/BodyOdor.jpg" />
+    <item id="img5" media-type="image/jpeg" href="Images/BreastFeeding.jpg" />
+    <item id="img6" media-type="image/jpeg" href="Images/BuckOff.jpg" />
+    <item id="img7" media-type="image/jpeg" href="Images/CarKeys.jpg" />
+    <item id="img8" media-type="image/jpeg" href="Images/CarlaPetrulli.jpg" />
+    <item id="img9" media-type="image/jpeg" href="Images/Catwatch.jpg" />
+    <item id="img10" media-type="image/jpeg" href="Images/ChickenConnection.jpg" />
+    <item id="img11" media-type="image/jpeg" href="Images/ClothingRack.jpg" />
+    <item id="img12" media-type="image/jpeg" href="Images/ComfortFound.jpg" />
+    <item id="img13" media-type="image/jpeg" href="Images/Computer.jpg" />
+    <item id="img14" media-type="image/jpeg" href="Images/Conversation.jpg" />
+    <item id="img15" media-type="image/jpeg" href="Images/CoupleUnderstanding.jpg" />
+    <item id="img16" media-type="image/jpeg" href="Images/CyberBully.jpg" />
+    <item id="img17" media-type="image/jpeg" href="Images/DepressedGirl.jpg" />
+    <item id="img18" media-type="image/jpeg" href="Images/Drawing.jpg" />
+    <item id="img19" media-type="image/jpeg" href="Images/EarthFlying.jpg" />
+    <item id="img20" media-type="image/jpeg" href="Images/EppyEgg.jpg" />
+    <item id="img21" media-type="image/jpeg" href="Images/EricaSciarretta.jpg" />
+    <item id="img22" media-type="image/jpeg" href="Images/FeelsLikeHome.jpg" />
+    <item id="img23" media-type="image/jpeg" href="Images/Fetus1.jpg" />
+    <item id="img24" media-type="image/jpeg" href="Images/Fetus2.jpg" />
+    <item id="img25" media-type="image/jpeg" href="Images/Fetus3.jpg" />
+    <item id="img26" media-type="image/jpeg" href="Images/Figure111.jpg" />
+    <item id="img27" media-type="image/jpeg" href="Images/Figure1110.jpg" />
+    <item id="img28" media-type="image/jpeg" href="Images/Figure1111.jpg" />
+    <item id="img29" media-type="image/jpeg" href="Images/Figure1112.jpg" />
+    <item id="img30" media-type="image/jpeg" href="Images/Figure1113.jpg" />
+    <item id="img31" media-type="image/jpeg" href="Images/Figure1114.jpg" />
+    <item id="img32" media-type="image/jpeg" href="Images/Figure1115.jpg" />
+    <item id="img33" media-type="image/jpeg" href="Images/Figure1116.jpg" />
+    <item id="img34" media-type="image/jpeg" href="Images/Figure1117.jpg" />
+    <item id="img35" media-type="image/jpeg" href="Images/Figure1118.jpg" />
+    <item id="img36" media-type="image/jpeg" href="Images/Figure1119.jpg" />
+    <item id="img37" media-type="image/jpeg" href="Images/Figure112.jpg" />
+    <item id="img38" media-type="image/jpeg" href="Images/Figure1120.jpg" />
+    <item id="img39" media-type="image/jpeg" href="Images/Figure1121.jpg" />
+    <item id="img40" media-type="image/jpeg" href="Images/Figure113.jpg" />
+    <item id="img41" media-type="image/jpeg" href="Images/Figure114.jpg" />
+    <item id="img42" media-type="image/jpeg" href="Images/Figure115.jpg" />
+    <item id="img43" media-type="image/jpeg" href="Images/Figure116.jpg" />
+    <item id="img44" media-type="image/jpeg" href="Images/Figure117.jpg" />
+    <item id="img45" media-type="image/jpeg" href="Images/Figure118.jpg" />
+    <item id="img46" media-type="image/jpeg" href="Images/Figure119.jpg" />
+    <item id="img47" media-type="image/jpeg" href="Images/Figure121.jpg" />
+    <item id="img48" media-type="image/jpeg" href="Images/Figure122.jpg" />
+    <item id="img49" media-type="image/jpeg" href="Images/Figure123.jpg" />
+    <item id="img50" media-type="image/jpeg" href="Images/Figure124.jpg" />
+    <item id="img51" media-type="image/jpeg" href="Images/Figure125.jpg" />
+    <item id="img52" media-type="image/jpeg" href="Images/Figure141.jpg" />
+    <item id="img53" media-type="image/jpeg" href="Images/Figure171.jpg" />
+    <item id="img54" media-type="image/jpeg" href="Images/Figure201.jpg" />
+    <item id="img55" media-type="image/jpeg" href="Images/Figure22.jpg" />
+    <item id="img56" media-type="image/jpeg" href="Images/Figure23.jpg" />
+    <item id="img57" media-type="image/jpeg" href="Images/Figure31.jpg" />
+    <item id="img58" media-type="image/jpeg" href="Images/Figure51.jpg" />
+    <item id="img59" media-type="image/jpeg" href="Images/Figure52.jpg" />
+    <item id="img60" media-type="image/jpeg" href="Images/Figure53.jpg" />
+    <item id="img61" media-type="image/jpeg" href="Images/Figure54.jpg" />
+    <item id="img62" media-type="image/jpeg" href="Images/Figure55.jpg" />
+    <item id="img63" media-type="image/jpeg" href="Images/Figure56.jpg" />
+    <item id="img64" media-type="image/jpeg" href="Images/Figure71.jpg" />
+    <item id="img65" media-type="image/jpeg" href="Images/Figure72.jpg" />
+    <item id="img66" media-type="image/jpeg" href="Images/Figure73.jpg" />
+    <item id="img67" media-type="image/jpeg" href="Images/Figure74.jpg" />
+    <item id="img68" media-type="image/jpeg" href="Images/Figure75.jpg" />
+    <item id="img69" media-type="image/jpeg" href="Images/Figure76.jpg" />
+    <item id="img70" media-type="image/jpeg" href="Images/Figure77.jpg" />
+    <item id="img71" media-type="image/jpeg" href="Images/Figure78.jpg" />
+    <item id="img72" media-type="image/jpeg" href="Images/Figure79.jpg" />
+    <item id="img73" media-type="image/jpeg" href="Images/Figure82a.jpg" />
+    <item id="img74" media-type="image/jpeg" href="Images/Figure82b.jpg" />
+    <item id="img75" media-type="image/jpeg" href="Images/Figure91.jpg" />
+    <item id="img76" media-type="image/jpeg" href="Images/Figure92.jpg" />
+    <item id="img77" media-type="image/jpeg" href="Images/FindingOurWay.jpg" />
+    <item id="img78" media-type="image/jpeg" href="Images/GingerAdditionalPhoto.jpg" />
+    <item id="img79" media-type="image/jpeg" href="Images/HappyWoman.jpg" />
+    <item id="img80" media-type="image/jpeg" href="Images/HiddenUnderneath.jpg" />
+    <item id="img81" media-type="image/jpeg" href="Images/HoldingTheWorld.jpg" />
+    <item id="img82" media-type="image/jpeg" href="Images/Housework.jpg" />
+    <item id="img83" media-type="image/jpeg" href="Images/HowlingDog.jpg" />
+    <item id="img84" media-type="image/jpeg" href="Images/HuggingDaughter.jpg" />
+    <item id="img85" media-type="image/jpeg" href="Images/IBelong.jpg" />
+    <item id="img86" media-type="image/jpeg" href="Images/InTheTrees.jpg" />
+    <item id="img87" media-type="image/jpeg" href="Images/InTheVeryMiddle.jpg" />
+    <item id="img88" media-type="image/jpeg" href="Images/InattentionToDetail.jpg" />
+    <item id="img89" media-type="image/jpeg" href="Images/JackShephard1.jpg" />
+    <item id="img90" media-type="image/jpeg" href="Images/JackShephard2.jpg" />
+    <item id="img91" media-type="image/jpeg" href="Images/JackShephard3.jpg" />
+    <item id="img92" media-type="image/jpeg" href="Images/JuanCardenas.jpg" />
+    <item id="img93" media-type="image/jpeg" href="Images/KatherineJacksonBar.jpg" />
+    <item id="img94" media-type="image/jpeg" href="Images/LanceForney.jpg" />
+    <item id="img95" media-type="image/jpeg" href="Images/LubeBottle.jpg" />
+    <item id="img96" media-type="image/jpeg" href="Images/MFX.jpg" />
+    <item id="img97" media-type="image/jpeg" href="Images/ManSuitWatch.jpg" />
+    <item id="img98" media-type="image/jpeg" href="Images/ManySocks.jpg" />
+    <item id="img99" media-type="image/jpeg" href="Images/NotHeNotShe.jpg" />
+    <item id="img100" media-type="image/jpeg" href="Images/NotTheSame.jpg" />
+    <item id="img101" media-type="image/jpeg" href="Images/OKCookie.jpg" />
+    <item id="img102" media-type="image/jpeg" href="Images/OnlineDating.jpg" />
+    <item id="img103" media-type="image/jpeg" href="Images/Passport.jpg" />
+    <item id="img104" media-type="image/jpeg" href="Images/Perched.jpg" />
+    <item id="img105" media-type="image/jpeg" href="Images/Pills.jpg" />
+    <item id="img106" media-type="image/jpeg" href="Images/PinkPockets.jpg" />
+    <item id="img107" media-type="image/jpeg" href="Images/Plenty.jpg" />
+    <item id="img108" media-type="image/jpeg" href="Images/Polyamory.jpg" />
+    <item id="img109" media-type="image/jpeg" href="Images/QuitSmoking.jpg" />
+    <item id="img110" media-type="image/jpeg" href="Images/Relationships.jpg" />
+    <item id="img111" media-type="image/jpeg" href="Images/Seahorse.jpg" />
+    <item id="img112" media-type="image/jpeg" href="Images/Section1.jpg" />
+    <item id="img113" media-type="image/jpeg" href="Images/Section2.jpg" />
+    <item id="img114" media-type="image/jpeg" href="Images/Section3.jpg" />
+    <item id="img115" media-type="image/jpeg" href="Images/Section4.jpg" />
+    <item id="img116" media-type="image/jpeg" href="Images/Section5.jpg" />
+    <item id="img117" media-type="image/jpeg" href="Images/Sensei.jpg" />
+    <item id="img118" media-type="image/jpeg" href="Images/SheepConversion.jpg" />
+    <item id="img119" media-type="image/jpeg" href="Images/Sheets.jpg" />
+    <item id="img120" media-type="image/jpeg" href="Images/Shoes.jpg" />
+    <item id="img121" media-type="image/jpeg" href="Images/Shoulder.jpg" />
+    <item id="img122" media-type="image/jpeg" href="Images/SisterDance.jpg" />
+    <item id="img123" media-type="image/jpeg" href="Images/Sleeve.jpg" />
+    <item id="img124" media-type="image/jpeg" href="Images/StephanieDykes.jpg" />
+    <item id="img125" media-type="image/jpeg" href="Images/StillForest.jpg" />
+    <item id="img126" media-type="image/jpeg" href="Images/TRex.jpg" />
+    <item id="img127" media-type="image/jpeg" href="Images/Table 18.1. Minimum daily requirements..jpg" />
+    <item id="img128" media-type="image/jpeg" href="Images/TheBirthdayCat.jpg" />
+    <item id="img129" media-type="image/jpeg" href="Images/TimeEnough.jpg" />
+    <item id="img130" media-type="image/jpeg" href="Images/TreeHouse.jpg" />
+    <item id="img131" media-type="image/jpeg" href="Images/TreeInCat.jpg" />
+    <item id="img132" media-type="image/jpeg" href="Images/UCI.jpg" />
+    <item id="img133" media-type="image/jpeg" href="Images/WashingDishes.jpg" />
+    <item id="img134" media-type="image/jpeg" href="Images/WatchingOver.jpg" />
+    <item id="img135" media-type="image/jpeg" href="Images/WhatMyReflectionShows.jpg" />
+    <item id="img136" media-type="image/jpeg" href="Images/WhoIListenTo.jpg" />
+    <item id="img137" media-type="image/jpeg" href="Images/WomenAccessories.jpg" />
+    <item id="img138" media-type="image/jpeg" href="Images/break.jpg" />
+    <item id="img139" media-type="image/jpeg" href="Images/cover.jpg" />
+    <item id="img140" media-type="image/jpeg" href="Images/half-title.jpg" />
+    <item id="img141" media-type="image/jpeg" href="Images/stop.jpg" />
+    <item id="img142" media-type="image/jpeg" href="Images/title-page.jpg" />
+    <item id="img143" media-type="image/jpeg" href="Images/tylerclementi.jpg" /> <!-- manifest items go here -->
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="ht-cover" linear="no" />
+    <itemref idref="ht1" />
+    <itemref idref="ht2" />
+    <itemref idref="ht3" />
+    <itemref idref="ht4" />
+    <itemref idref="ht5" />
+    <itemref idref="ht6" />
+    <itemref idref="ht7" />
+    <itemref idref="ht8" />
+    <itemref idref="ht9" />
+    <itemref idref="ht10" />
+    <itemref idref="ht11" />
+    <itemref idref="ht12" />
+    <itemref idref="ht13" />
+    <itemref idref="ht14" />
+    <itemref idref="ht15" />
+    <itemref idref="ht16" />
+    <itemref idref="ht17" />
+    <itemref idref="ht18" />
+    <itemref idref="ht19" />
+    <itemref idref="ht20" />
+    <itemref idref="ht21" />
+    <itemref idref="ht22" />
+    <itemref idref="ht23" />
+    <itemref idref="ht24" />
+    <itemref idref="ht25" />
+    <itemref idref="ht26" />
+    <itemref idref="ht27" />
+    <itemref idref="ht28" />
+    <itemref idref="ht29" />
+    <itemref idref="ht30" />
+    <itemref idref="ht31" />
+  </spine>
+  <guide>
+    <reference type="cover" title="Cover" href="Content/cover.xhtml" />
+    <reference type="toc" title="Table of Contents" href="Content/TableOfContents.xhtml" />
+  </guide>
+</package>

@@ -1,0 +1,11 @@
+{
+  
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./",
+  "title": "FileItem",
+  "description": "File items and shit",
+  "type": "object",
+  "properties": {
+    "ti" 
+  }
+}

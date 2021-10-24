@@ -1,39 +1,53 @@
-import Path from 'path'
-import { cheerio, CheerioAPI } from '../lib'
-import beautify from 'js-beautify'
-import { Extractor, FileItem } from '../types'
 import {
-  AcceptedElems,
-  BasicAcceptedElems,
-  Node,
-  Element,
-  Cheerio
+    AcceptedElems,
+    BasicAcceptedElems,
+    Cheerio,
+    Element,
+    Node,
 } from 'cheerio'
+import { pipe } from 'fp-ts/function'
+import { minify } from 'html-minifier-terser'
+import beautify from 'js-beautify'
+import Path from 'path'
+
+import { cheerio, CheerioAPI } from '../lib'
+import { Extractor, FileItem } from '../types'
 
 function RegexEscape(s: string) {
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
 
-export function prettyPrint(html: string) {
+export function finalCleanHtml(html: string): string {
   const tags = ['p', 'div', 'figcaption'].join('|')
+  return (
+    html
+      .replace(/^\s+/g, '')
+      .replace(/\s+$/g, '')
+      .replace(/<p><strong>\/<\/strong><\/p>/g, '')
+      // removes em tag in "<em>.</em>" -- may need to expand this to other tags
+      .replace(new RegExp(`<em>([.])+<\/em>`, 'g'), (_, chars) => chars)
+      .replace(/<\/*(strong)[^>]*>\s*<\/*(strong)[^>]*>/g, ' ')
+      .replace(/<\/*(sup)[^>]*>\s*<\/*(sup)[^>]*>/g, ' ')
+      .replace(/<\/*(em)[^>]*>\s*<\/*(em)[^>]*>/g, ' ')
+      .replace(/<\/*em[^>]*>\s*<\/*em[^>]*>/g, ' ')
+      // trims space inside `tags` noted above
+      .replace(new RegExp(`(<(${tags})[^>]*>)\\s+`, 'g'), (_, tag) => tag)
+      .replace(new RegExp(`\\s+(<\/(${tags})>)`, 'g'), (_, tag) => tag)
+      //:: forgot that this should go in somewhere else
+      // .replace(/\s*<sup>\s*([0-9]+)\s*<\/sup>/g, (_, num) => {
+      //   return `<sup><a id="fnref${num}" href="#fn2${num}" epub:type="noteref">${num}</a></sup>`
+      // .replace(/<p><strong>\/<\/strong><\/p>/g, '')
+      .replace(/\s+<sup>/g, '<sup>')
+      .replace(/[\r\n]+/g, ' ')
+  )
+}
 
-  const cleanHtml = html
-    .replace(/^\s+/g, '')
-    .replace(/\s+$/g, '')
-    .replace(/<p><strong>\/<\/strong><\/p>/g, '')
-    // removes em tag in "<em>.</em>" -- may need to expand this to other tags
-    .replace(new RegExp(`<em>([.])+<\/em>`, 'g'), (_, chars) => chars)
-    .replace(/<\/*(strong|sup|em)[^>]*>\s*<\/*(strong|sup|em)[^>]*>/g, ' ')
-    .replace(/<\/*em[^>]*>\s*<\/*em[^>]*>/g, ' ')
-    // trims space inside `tags` noted above
-    .replace(new RegExp(`(<(${tags})[^>]*>)\\s+`, 'g'), (_, tag) => tag)
-    .replace(new RegExp(`\\s+(<\/(${tags})>)`, 'g'), (_, tag) => tag)
-    //:: forgot that this should go in somewhere else
-    // .replace(/\s*<sup>\s*([0-9]+)\s*<\/sup>/g, (_, num) => {
-    //   return `<sup><a id="fnref${num}" href="#fn2${num}" epub:type="noteref">${num}</a></sup>`
-    // .replace(/<p><strong>\/<\/strong><\/p>/g, '')
-    .replace(/\s+<sup>/g, '<sup>')
-    .replace(/[\r\n]+/g, ' ')
+export function uglyPrint(html: string): string {
+  return pipe(html, finalCleanHtml, minify)
+}
+
+export function prettyPrint(html: string) {
+  const cleanHtml = finalCleanHtml(html)
 
   return beautify.html(cleanHtml, {
     indent_size: 2,
@@ -49,7 +63,7 @@ export function replaceIllustrationPlaceholders(
   $html: string | FileItem
 ): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('div.illus').each(function (i, el) {
     if ($(this).children().length) return
@@ -58,7 +72,9 @@ export function replaceIllustrationPlaceholders(
 
     const img = !file.trim().match(/\.(jpg|png)$/) ? `${file}.jpg` : file
 
-    $(this).html(`<img src="../Images/${img}" alt="${alt ? alt.trim() : ''}"/>`)
+    $(this).html(
+      `<img src="../Images/${img.trim()}" alt="${alt ? alt.trim() : ''}"/>`
+    )
   })
 
   return { ...item, html: $.html() }
@@ -66,7 +82,7 @@ export function replaceIllustrationPlaceholders(
 
 export function mergePullquotes($html: string | FileItem): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('div.pullquote').each(function () {
     $(this)
@@ -103,7 +119,7 @@ export function mergePullquotes($html: string | FileItem): FileItem {
 
 export function mergeLists($html: string | FileItem): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('ul + ul').each(function (i, el) {
     $(this).prev().append($(this).contents())
@@ -120,7 +136,7 @@ export function wrapListItemContentInParagraph(
   $html: string | FileItem
 ): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('li').each(function () {
     $(this)
@@ -149,7 +165,7 @@ export function wrapListItemContentInParagraph(
 // common issue with VBA export
 export function unwrapStrongHeading($html: FileItem | string): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('h1,h2,h3,h4,h5,h6')
     .find('strong')
@@ -165,10 +181,11 @@ export function unwrapStrongHeading($html: FileItem | string): FileItem {
 
 export function removeEmptyParagraphs($html: FileItem | string): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('p').each(function (i, el) {
-    if (!$(this).text().trim().length) {
+    const $trimmed = $(this).text().trim()
+    if (!$trimmed.length || $trimmed === '/') {
       $(this).remove()
     }
   })
@@ -181,7 +198,7 @@ export function removeEmptyParagraphs($html: FileItem | string): FileItem {
 
 export function replaceBreak($html: FileItem | string): FileItem {
   const item = typeof $html === 'string' ? { html: $html } : $html
-  const $ = cheerio.load(item.html)
+  const $ = cheerio.load(item.html as string)
 
   $('*.break').replaceWith(
     '<div class="break"><img src="../Images/break.jpg" alt=""/>'
@@ -195,6 +212,11 @@ export function replaceBreak($html: FileItem | string): FileItem {
 export function removeClasses(remove: string | string[]) {
   return ($html: FileItem | string): FileItem => {
     const item = typeof $html === 'string' ? { html: $html } : $html
+
+    if (!item.html) {
+      return item
+    }
+
     const $ = cheerio.load(item.html)
 
     const toRemove = typeof remove === 'string' ? remove : remove.join(' ')
@@ -205,7 +227,7 @@ export function removeClasses(remove: string | string[]) {
 
     // remove all empty classes
     $('[class]').each(function (i, el) {
-      if (!$(this).attr('class').trim().length) {
+      if (!$(this)?.attr('class')?.trim().length) {
         $(this).removeAttr('class')
       }
     })

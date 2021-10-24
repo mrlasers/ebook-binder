@@ -1,9 +1,37 @@
 import { TaskEither } from 'fp-ts/TaskEither'
 import { Key } from './'
 import { EpubLandmark } from '../epub'
+import { FootnoteItems } from './'
+
+export type Manifest = {
+  metadata: ManifestMetaData
+  files: ManifestItem[]
+}
+
+export type ManifestItem = ImageItem | SectionItem | ContentItem | ErrorItem
+
+export interface Configuration {
+  rootPath: string
+  metadata: any
+  files: Item[]
+  footnotes: FootnoteItems[]
+}
 
 export interface Item {
-  filename: string
+  _tag?: string
+  filename?: string
+  [key: string]: any
+}
+
+export interface ErrorItem extends Item {
+  _tag: 'ERROR'
+  item: Item
+  message?: string
+}
+
+export function isErrorItem(item: any): item is ErrorItem {
+  const $item = item as ErrorItem
+  return $item._tag === 'ERROR' && $item.message !== undefined
 }
 
 export function isItem(item: any): item is Item {
@@ -13,6 +41,51 @@ export function isItem(item: any): item is Item {
   )
 }
 
+export interface ImageItem extends Item {
+  _tag: 'IMAGE'
+  title: string
+  landmark?: string
+  avoidToc?: boolean
+}
+
+export interface SectionItem extends Item {
+  _tag: 'SECTION'
+  title: string
+  level: number
+  landmark?: string
+  avoidToc?: boolean
+}
+
+export function isFilenameImage(filename: string): boolean {
+  return !!filename.match(/\.(jpg|png|gif|svg)/)
+}
+
+export function isSectionItem(item: any): item is SectionItem {
+  return (
+    isItem(item) &&
+    isFilenameImage(item.filename) &&
+    typeof item?.level === 'number' &&
+    typeof item?.title === 'string'
+  )
+}
+
+export function isImageItem(item: any): item is ImageItem {
+  const $item = item as ImageItem
+  return isItem(item) && $item.title !== undefined
+}
+
+export interface ContentItem extends Item {
+  _tag: 'CONTENT'
+  headings?: FileItemHeading[]
+  pages?: PageReference[]
+}
+
+export interface PageReference {
+  id: string
+  page: string
+}
+
+// old but still might be needed to keep things from breaking
 export type FileItem = {
   html?: string
   filename?: string
@@ -70,11 +143,6 @@ export type ManifestFileImage = {
   avoidToc?: boolean
 }
 
-export type ManifestItem = {
-  filename: string
-  [key: Key]: any
-}
-
 export type Uuid = string
 
 export type ManifestMetaData = {
@@ -82,9 +150,4 @@ export type ManifestMetaData = {
   pubId: Uuid
   author: string
   publisher: string
-}
-
-export type Manifest = {
-  metadata: ManifestMetaData
-  files: ManifestItem[]
 }

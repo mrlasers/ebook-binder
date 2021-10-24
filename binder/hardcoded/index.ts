@@ -12,7 +12,7 @@ import * as A from 'fp-ts/Array'
 import * as O from 'fp-ts/Option'
 import * as IO from 'fp-ts/IO'
 import * as IOE from 'fp-ts/IOEither'
-import { processHtml } from '../processing'
+import { processHtmlHACK } from '../processing'
 import { task } from 'fp-ts'
 
 const buildPath =

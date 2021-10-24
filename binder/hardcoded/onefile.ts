@@ -8,7 +8,7 @@ import Fs from 'fs/promises'
 import Path from 'path'
 
 import { readFile, readJson, writeFile } from '../lib'
-import { prettyPrint, processHtml, ProcessOptions } from '../processing'
+import { prettyPrint, processHtmlHACK, ProcessOptions } from '../processing'
 import { FileError, JsonReadError } from '../lib/fileIoTypes'
 import { FileItem, FootnoteItems } from '../types'
 
@@ -63,7 +63,7 @@ export function prepFilePipeline(
 ): TE.TaskEither<Error, Item> {
   return pipe(
     readFile(infile),
-    TE.map(processHtml(options)),
+    TE.map(processHtmlHACK(options)),
     TE.chain((item) => {
       const { html, ...rest } = item
 
