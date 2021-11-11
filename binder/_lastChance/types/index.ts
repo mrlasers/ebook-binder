@@ -4,7 +4,7 @@ export * as Err from './errors'
 export * from './footnotes'
 export * from './outputTuples'
 
-export { FilePaths } from './manifest'
+export { FilePaths, Config, TOCLimit } from './manifest'
 
 export type HTML = string
 export type FilePath = string
@@ -19,6 +19,11 @@ export type GeneratedOutput<
   title?: string
   content: HTML | string
   destination: FilePath
+}
+
+export type NormalizedConfig = {
+  toc: number[]
+  variant?: string
 }
 
 export function isGeneratedOutput(output: Output): output is GeneratedOutput {

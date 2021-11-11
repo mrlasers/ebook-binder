@@ -37,10 +37,21 @@ export function isInput(value: any): value is InputType {
   return true
 }
 
-export const fullpageImageHtml = (filename: string, alt: string) =>
-  `<div class="cover"><p class="cover"><img id="cover" src="${filename}" alt="${
-    alt || ''
+export const fullpageImageHtml = (filename: string, alt: string) => {
+  if (!filename.match(/jpe*g$/)) {
+    console.log(
+      `fullpageImageHtml() :: Forcing ${Path.extname(
+        filename
+      )} to jpg, but we should probably fix this == super broken, tbh`
+    )
+  }
+
+  const src = Path.basename(filename, Path.extname(filename)) + '.jpg'
+
+  return `<div class="cover"><p class="cover"><img id="cover" src="${src}" alt="${
+    alt.replace(/<.+?>/g, '') || ''
   }"/></p></div>`
+}
 
 // not using this because captions are included in image now
 export const _fullpageImageHtmlCaption = (filename: string, caption: string) =>
@@ -68,6 +79,10 @@ export function of(
     Path.resolve(options.sourcePath, input.filename),
     options.internalPath
   )
+
+  if (!!input.filename.match(/^NewPoss/)) {
+    console.log(`image.of() :: ${input.filename}`)
+  }
 
   return TE.of({
     _tag: 'IMAGE',

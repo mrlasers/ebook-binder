@@ -145,6 +145,20 @@ export function temporary_getGuideToc(files: FileOutput[]): string {
   )
 }
 
+export function temporary_getGuideStart(files: FileOutput[]): string {
+  return pipe(
+    files,
+    A.filter((f) => f?.landmark?.split(',')?.includes('bodymatter')),
+    (x) => x[0],
+    O.fromNullable,
+    O.fold(
+      () => '',
+      (f) =>
+        `<reference type="text" title="Start reading" href="${f.filename}"/>`
+    )
+  )
+}
+
 export function temporary_spineItems(files: FileOutput[]): string[] {
   return pipe(
     files,
@@ -234,8 +248,12 @@ export function temporary_manifestContent(files: FileOutput[]): string {
 }
 
 const ImgOrd: Ord<Image> = {
-  compare: (a, b) => (a.source < b.source ? -1 : 1),
-  equals: (a, b) => a.source === b.source
+  compare: (a, b) =>
+    Path.basename(a.source.toLowerCase()) <
+    Path.basename(b.source.toLowerCase())
+      ? -1
+      : 1,
+  equals: (a, b) => Path.basename(a.source) === Path.basename(b.source)
 }
 
 export function temporary_manifestImages(files: Image[]): string {
@@ -305,6 +323,7 @@ export function temporary_manifestFonts(files: FileOutput[]): string {
 export const makeGuideXml = (files: FileOutput[]) => {
   const cover = temporary_getGuideCover(files)
   const toc = temporary_getGuideToc(files)
+  const start = temporary_getGuideStart(files)
 
   if (!cover && !toc) {
     return ''
@@ -314,6 +333,7 @@ export const makeGuideXml = (files: FileOutput[]) => {
 <guide>
 ${cover}
 ${toc}
+${start}
 </guide>
   `
 }

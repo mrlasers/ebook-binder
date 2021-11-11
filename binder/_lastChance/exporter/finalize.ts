@@ -18,7 +18,11 @@ import { GeneratedOutput, HTML } from '../types'
 import { load } from './'
 import { removeClasses } from './cleanHtml'
 
-export function finalClean(html: HTML) {
+export type FinalCleanOptions = {
+  imagePath: string
+}
+
+export function finalClean(html: HTML, options?: FinalCleanOptions) {
   const $ = load(html)
 
   // $('h1,h2,h3,h4,h5,h6').each(function() {
@@ -26,16 +30,29 @@ export function finalClean(html: HTML) {
   // })
   const tempAttributes = ['level', 'new', 'figure', 'table']
 
+  const customDataToRemove = [
+    'toc',
+    'level',
+    'navlevel',
+    'navLevel',
+    'nolandmark'
+  ]
+
+  $('[remove]').each(function () {
+    $(this).remove()
+  })
+
   tempAttributes.forEach((attr) => $(`*[${attr}]`).removeAttr(attr))
 
   $('*[href]').each(function () {
     const href = $(this).attr('href').trim().replace(' ', '%20')
     $(this).attr('href', href)
   })
+  customDataToRemove.forEach((prop) => $(`*[${prop}]`).removeAttr(prop))
   $('del').contents().unwrap()
   $('ins').remove()
   removeClasses('gender')($)
-  addImagePath(Paths.relativePathContentToImages)($)
+  addImagePath(options?.imagePath ?? Paths.relativePathContentToImages)($)
 
   // $('figure img').each(function () {
   //   const url = $(this).attr('src')

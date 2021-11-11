@@ -40,9 +40,10 @@ export const footnoteAmazon: FootnoteFormatter = {
 }
 
 export const footnoteNamaste: FootnoteFormatter = {
-  body: (rows) => `${rows.join('\n')}`,
+  body: (rows) =>
+    `<aside class="namaste" epub:type="footnote">${rows.join('\n')}</aside>`,
   row: (fn, notes) =>
-    `<aside id="footnote${fn}" epub:type="footnote"><a epub:type="noteref" href="#footnote-ref${fn}">${fn}</a>. <span>${notes[0]}</span></aside>`,
+    `<p><a epub:type="noteref" href="#footnote-ref${fn}">${fn}</a>. <span id="footnote${fn}" epub:type="footnote">${notes[0]}</span></p>`,
   ref: (fn) =>
     `<a id="footnote-ref${fn}" href="#footnote${fn}" epub:type="noteref">${fn}</a>`
 }
@@ -54,7 +55,7 @@ export const footnoteIBooks: FootnoteFormatter = {
   ref: (fn) => `<a href="#myNote${fn}" epub:type="noteref">${fn}</a>`
 }
 
-export const footnoteMaker: FootnoteFormatter = footnoteTable
+export const footnoteMaker: FootnoteFormatter = footnoteNamaste // footnoteTable
 
 export const addFootnoteRefs =
   (footnotes?: { [key: number]: string[] }) =>

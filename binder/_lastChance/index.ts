@@ -79,21 +79,7 @@ const writeEpubFromTuples =
               (data: string | Promise<Buffer>) =>
                 zip.file(Paths.joinPath('OEBPS', f[1]), data)
             )
-
-            // =========== this is a little broken below so commented out
-
-            // return pipe(
-            //   f[0] === 'image'
-            //     ? readAndCompressImage(f[2])
-            //     : TE.left(Err.MyError.of(f[2])),
-            //   TE.map((result) => {
-            //     console.log(`===epub writer shit===:: ${result}`)
-            //     return result
-            //   }),
-            //   TE.map((data) => zip.file(Paths.joinPath('OEBPS', f[1]), data))
-            // )
           })
-          // A.sequence(TE.Monad)
         )
 
         return zip
@@ -194,6 +180,7 @@ const loadManifestAndFootnotes = (manifestPath: string) =>
           manifest?.paths?.source
         )
       },
+      config: manifest.config,
       files: manifest.files,
       footnotes
     }))
@@ -219,27 +206,18 @@ export const writeExplodedTE = ({
 
 const program = pipe(
   loadManifestAndFootnotes(manifestArgument),
-  TE.chain(({ footnotes, paths, metadata, files }) =>
-    pipe(
+  TE.chain(({ footnotes, paths, config, metadata, files }) => {
+    return pipe(
       files,
       flow(
         A.map(
           assignToFileTaskEither({
             footnotes,
             removeClasses: classesToRemove,
-            // NOTE: these paths are fine to hard code atm (2021-10-21)
             paths: {
               buildPath: buildPath,
               epub: Paths.combineDefaultEpubPaths(paths?.epub),
               source: Paths.combineDefaultEpubPaths(paths?.source)
-              // epub: Paths.combineDefaultEpubPaths({
-              //   htmlPath: paths?.epub?.htmlPath, //|| Paths.htmlPath,
-              //   // Paths.htmlPath used here because "image" refers to html file
-              //   // generated from an image (aka, "cover" html)
-              //   imagePath: paths?.epub?.htmlPath, //|| Paths.htmlPath,
-              //   stylePath: paths?.epub?.stylePath, //|| Paths.stylePath,
-              //   fontPath: paths?.epub?.fontPath //|| Paths.fontPath
-              // })
             }
           })
         ),
@@ -248,7 +226,10 @@ const program = pipe(
 
       TE.map(
         flow(
-          collectOutput(metadata),
+          collectOutput(metadata, config),
+          (collected) => {
+            return collected
+          },
           addNavDocsToCollected,
           (collected) => {
             return {
@@ -290,17 +271,41 @@ const program = pipe(
                   paths.output.epubPath || 'workshop'
                 )
               })
-            )
+            ),
             // following is big hack for single html output
-            // writeCombinedHtml(
-            //   Path.resolve(outputPath, 'Content', 'combined.xhtml')
-            // )(tuples)
+            writeCombinedHtml(
+              Path.resolve(
+                buildPath,
+                paths?.output?.combinedHtmlPath,
+                'combined.xhtml'
+              ),
+              {
+                stylePath: Path.relative(
+                  Path.resolve(
+                    Path.dirname(manifestArgument),
+                    paths?.output?.combinedHtmlPath
+                  ),
+                  paths?.source?.stylePath
+                ),
+                imagePath: Path.relative(
+                  Path.resolve(
+                    Path.dirname(manifestArgument),
+                    paths?.output?.combinedHtmlPath
+                  ),
+                  Path.resolve(
+                    buildPath,
+                    paths?.output?.explodedEpubPath,
+                    paths?.epub?.imagePath
+                  )
+                )
+              }
+            )(tuples)
           ],
           A.sequence(TE.Monad)
         )
       })
     )
-  )
+  })
 )
 
 program().then(console.log)

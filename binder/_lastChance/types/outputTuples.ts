@@ -9,6 +9,20 @@ export const finalOutputTypes = [
 
 export type OutputTupleTypes = typeof finalOutputTypes[number]
 
+export type OutputOperationWrite = {
+  type: OutputTupleTypes
+  destination: string
+  content: string
+}
+
+export type OutputOperationCopy = {
+  type: OutputTupleTypes
+  destination: string
+  source: string
+}
+
+export type _OutputOperation = OutputOperationWrite | OutputOperationCopy
+
 export type OutputTuple = [
   type: OutputTupleTypes,
   destination: string,

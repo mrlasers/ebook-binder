@@ -100,8 +100,9 @@ export const readFootnotes = (path: string) =>
     // TE.fromTask
   )
 
-export const copyFile = (from: string, to: string) =>
-  TE.tryCatch(
+export const copyFile = (from: string, to: string) => {
+  return TE.tryCatch(
     () => Fs.copyFile(from, to).then(() => `Copied file to ${to}`),
     Err.MyError.of
   )
+}

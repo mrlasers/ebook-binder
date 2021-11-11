@@ -6,6 +6,13 @@
  */
 
 export type UUID = string;
+export type TOCLimit =
+  | number
+  | {
+      minimum?: number;
+      maximum?: number;
+    }
+  | number[];
 export type HtmlFilename = string;
 export type ImageFilename = string;
 export type StylesFilename = string;
@@ -14,6 +21,7 @@ export type PageNumber = string;
 
 export interface Manifest {
   metadata?: Metadata;
+  config?: Config;
   paths?: {
     footnotes?: string;
     source?: FilePaths;
@@ -41,6 +49,11 @@ export interface Metadata {
   publisher?: string;
   [k: string]: unknown;
 }
+export interface Config {
+  toc?: TOCLimit;
+  navdoc?: TOCLimit;
+  variant?: string;
+}
 export interface FilePaths {
   htmlPath?: string;
   imagePath?: string;
@@ -59,6 +72,7 @@ export interface Section {
   filename: ImageFilename;
   title: string;
   level?: number;
+  navlevel?: number;
   landmark?: string;
   toc?: boolean;
   pageNumber?: PageNumber;

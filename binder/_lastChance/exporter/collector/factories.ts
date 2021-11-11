@@ -13,57 +13,96 @@ import {
 import { reduceFilterImages, sortImages } from '../..'
 import * as Paths from '../../paths'
 import { FileOutput, Heading, Image, Page } from '../../tasks'
-import { Metadata } from '../../types'
+import { Metadata, NormalizedConfig } from '../../types'
 import { reduceToNestedHeadings } from '../navdocs/nesto'
 
-export const resolveFactories = (collected: Collector) => {
-  //== only doing toc factory atm
-  return {
-    ...collected,
-    files: collected.files.map((file) => {
-      if (file._tag !== 'FACTORY') {
-        return file
-      }
+export type TocFactory = {
+  [key: string | symbol]: (file: FileOutput, collected: Collector) => FileOutput
+}
 
-      return {
-        ...file,
-        html:
-          `<h1><span>Table of Contents</span></h1>` +
-          collected.headings
-            .filter((heading) => heading.toc)
-            .map((heading) => {
-              if (
-                heading.text ===
-                'Helpful Pointers for Dilation after vaginoplasty'
-              ) {
-                console.log(
-                  `resolveFactories() :: ${heading.text} ${heading.level + 1} ${
-                    heading.id
-                  } ${heading.filename}`
-                )
-              }
-              const level = heading.level + 1
-              const tocClass =
-                level === 2 && !heading.text.toLowerCase().match(/^chapter/)
-                  ? `toc`
-                  : `toc${level}`
+const tocFactory: TocFactory = {
+  _default: (file, collected) => {
+    return {
+      ...file,
+      html:
+        `<h1><span>${
+          file.headings?.[0].text ?? 'Table of Contents'
+        }</span></h1>` +
+        // collected.headings
+        collected.toc.inline
+          // .filter((heading) => heading.toc)
+          .map((heading) => {
+            const level = heading.level + 1
+            const tocClass =
+              level === 2 && !heading.text.toLowerCase().match(/^chapter/)
+                ? `toc`
+                : `toc${level}`
 
-              if (
-                heading.text ===
-                'If you were assigned female, learn about egg harvesting and cryopreservation'
-              ) {
-                console.log(`${heading.text}\n${toTitleCase(heading.text)}`)
-              }
+            return `${'  '.repeat(
+              heading.level
+            )}<p class="${tocClass}"><a href="${Paths.relativePath(
+              Paths.htmlPath,
+              heading.filename
+            )}">${heading.html}</a></p>`
+          })
+          .join('\n')
+    }
+  },
+  possibilities: (file, collected) => {
+    return {
+      ...file,
+      html:
+        `<h1>${file.headings?.[0].text ?? 'Table of Contents'}</h1>` +
+        `<table class="toc">` +
+        collected.toc.inline
+          .map((heading) => {
+            const level = heading.level + 1
+            const tocClass = `toc${level}`
+            const path = Paths.relativePath(Paths.htmlPath, heading.filename)
+            const [left, right] = heading.html
+              .split('</span>')
+              .map((s) => s.replace(/<span>/g, ''))
 
-              return `${'  '.repeat(
-                heading.level
-              )}<p class="${tocClass}"><a href="${Paths.relativePath(
-                Paths.htmlPath,
-                heading.filename + (heading.id ? `#${heading.id}` : '')
-              )}">${heading.html}</a></p>`
-            })
-            .join('\n')
-      }
-    })
+            if (!right) {
+              return `<tr class="${tocClass}"><td colspan="2"><a href="${path}">${left}</a></td></tr>`
+            }
+            return `<tr class="${tocClass}"><td>${left}</td><td><a href="${path}">${
+              right ?? left
+            }</a></td></tr>`
+          })
+          .join('\n') +
+        `</table>`
+    }
   }
 }
+
+export const resolveFactories =
+  (config?: NormalizedConfig) => (collected: Collector) => {
+    console.log(
+      `
+=== resolveFactories() ========================================
+Need to fix:
+  * chooses between 'toc' and 'toc2' classes based on whether
+    the text begins with "chapter"
+  -------------------------------------------------------------
+  variant: ${config?.variant}
+===============================================================
+  `.trim()
+    )
+    //== only doing toc factory atm
+    return {
+      ...collected,
+      files: collected.files.map((file) => {
+        if (file._tag !== 'FACTORY') {
+          return file
+        }
+
+        // console.log(`resolveFactories() :: ${file.landmark}`)
+
+        return (tocFactory[config?.variant] || tocFactory['_default'])(
+          file,
+          collected
+        )
+      })
+    }
+  }

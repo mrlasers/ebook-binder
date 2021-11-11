@@ -4,6 +4,7 @@
   "title": "Manifest",
   "properties": {
     "metadata": { "$ref": "#/$defs/Metadata" },
+    "config": { "$ref": "#/$defs/Config" },
     "paths": {
       "type": "object",
       "properties": {
@@ -82,6 +83,7 @@
         "filename": { "$ref": "#/$defs/imageFilename" },
         "title": { "type": "string" },
         "level": { "type": "integer" },
+        "navlevel": { "type": "integer" },
         "landmark": { "type": "string" },
         "toc": { "type": "boolean" },
         "pageNumber": { "$ref": "#/$defs/PageNumber" }
@@ -161,6 +163,33 @@
         "author": { "type": "string" },
         "publisher": { "type": "string" }
       }
+    },
+    "Config": {
+      "type": "object",
+      "properties": {
+        "toc": { "$ref": "#/$defs/TOCLimit" },
+        "navdoc": { "$ref": "#/$defs/TOCLimit" },
+        "variant": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "TOCLimit": {
+      "oneOf": [
+        { "type": "number", "minimum": 0, "maximum": 10 },
+        {
+          "type": "object",
+          "properties": {
+            "minimum": { "type": "number", "minimum": 0, "maximum": 10 },
+            "maximum": { "type": "number", "minimum": 0, "maximum": 10 }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0, "maximum": 10 },
+          "uniqueItems": true
+        }
+      ]
     }
   }
 }

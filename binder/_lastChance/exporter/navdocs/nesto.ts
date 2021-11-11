@@ -13,6 +13,7 @@ export type TocNode = {
   id: string
   children: TocNode[]
   level: number
+  navlevel: number
   toc: boolean
   landmark: string | null
 }
@@ -34,28 +35,47 @@ export const boundHeadingLevel =
 
 export const headingToTocNode =
   (opts?: HeadingToTocNodeOptions) =>
-  (heading: Heading): TocNode => ({
-    text: heading.html,
-    filename: pipe(
-      heading.id ? `#${heading.id}` : '',
-      (id) => heading.filename + id
-    ),
-    id: heading.id,
-    children: [],
-    // making some changes here to see if we can't flatten the bottom level
-    level: boundHeadingLevel(opts.floor, opts.ceiling)(heading.level), //heading.level <= opts?.floor ? 0 : heading.level,
-    toc: isBoolean(heading.toc) ? heading.toc : false,
-    landmark: heading?.landmark ?? null
-  })
+  (heading: Heading): TocNode => {
+    return {
+      text: heading.html,
+      filename: pipe(
+        heading.id ? `#${heading.id}` : '',
+        (id) => heading.filename + id
+      ),
+      id: heading.id,
+      children: [],
+      // making some changes here to see if we can't flatten the bottom level
+      level: boundHeadingLevel(opts.floor, opts.ceiling)(heading.level), //heading.level <= opts?.floor ? 0 : heading.level,
+      navlevel: boundHeadingLevel(opts.floor, opts.ceiling)(heading.navlevel),
+      toc: isBoolean(heading.toc) ? heading.toc : false,
+      landmark: heading?.landmark ?? null
+    }
+  }
+
+let addChildWarning = false
 
 function addChild(nodes: TocNode[], child: TocNode) {
+  if (!addChildWarning) {
+    console.log(
+      `
+${'='.repeat(60)}
+  addChild() :: We might have a problem with changing
+             :: the following when recompiling early books
+             from: tail.navLevel < child.navLevel
+               to: tail.navLevel <= child.navLevel
+${'='.repeat(60)}
+  `.trim()
+    )
+    addChildWarning = true
+  }
+
   return (ns: TocNode[]): TocNode[] =>
     pipe(
       ns,
       headsTail,
       (xs: [TocNode[], TocNode]) => xs,
       E.fromPredicate(
-        ([_, tail]) => tail.level < child.level,
+        ([_, tail]) => tail.navlevel < child.navlevel,
         () => [...nodes, child]
       ),
       E.map(([heads, tail]) => [
@@ -89,10 +109,19 @@ export function levelsToTree(nodes: TocNode[], child: TocNode) {
   )
 }
 
-export const reduceToNestedHeadings = (headings: Heading[]) =>
-  pipe(
+export const reduceToNestedHeadings = (headings: Heading[]) => {
+  console.log(`=======reduceToNestedHeadings (big dump coming)=======`)
+  console.log(
+    JSON.stringify(
+      headings.map(({ text, navlevel }) => ({ text, navlevel })).slice(0, 5),
+      null,
+      2
+    )
+  )
+  return pipe(
     headings,
-    A.map(headingToTocNode({ floor: 2, ceiling: 3 })),
+    A.map(headingToTocNode({ floor: 0, ceiling: 3 })),
     A.filter((heading) => heading.toc),
     A.reduce<TocNode, TocNode[]>([], levelsToTree)
   )
+}

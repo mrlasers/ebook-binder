@@ -27,7 +27,8 @@ export function of(
         text: input.title,
         html: input.title,
         toc: input.toc,
-        level: 0
+        level: 0,
+        landmark: 'toc'
       }
     ],
     pages: [],

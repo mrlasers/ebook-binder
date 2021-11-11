@@ -42,6 +42,7 @@ export type Heading = {
   text: string
   html?: string
   level: number
+  navlevel?: number
   filename?: string
   toc?: boolean
   landmark?: string
@@ -146,9 +147,9 @@ export const assignToFileTaskEither =
           )
         })
       case 'FONT':
-        console.log(
-          `assignToFileTaskEither(fontPath):: ${options?.paths?.source?.fontPath}`
-        )
+        // console.log(
+        //   `assignToFileTaskEither(fontPath):: ${options?.paths?.source?.fontPath}`
+        // )
         return Font.of(file, {
           path: options?.paths?.epub?.fontPath,
           sourcePath: Path.resolve(

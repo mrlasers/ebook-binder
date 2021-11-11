@@ -36,7 +36,7 @@ export function of(
   const filename =
     Paths.safeJoinPath(options?.internalPath, input.filename) || input.filename
 
-  console.log(`Styles.of(): ${filename}`)
+  // console.log(`Styles.of(): ${filename}`)
 
   return pipe(
     readFile(

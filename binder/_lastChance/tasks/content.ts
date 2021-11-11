@@ -75,6 +75,14 @@ export function of(
         filename: filename,
         headings: pipe(
           getHeadingsFromHtml($html, input.landmark),
+          (headings) => {
+            if (!!filename.match(/Acknowledgments.xhtml$/)) {
+              console.log(
+                `+++ content.of() :: ${JSON.stringify(headings, null, 2)}`
+              )
+            }
+            return headings
+          },
           A.concat<Heading>(
             !!input.title
               ? [

@@ -83,6 +83,16 @@ const replaceIllustrationPlaceholders =
 
       const [file, alt] = $(this).text().split('|')
 
+      if (file.trim() === '/') {
+        console.log(
+          `replaceIllustrationPlaceholders() :: ignoring empty image placeholders, but should really do better with this`
+        )
+        $(this).addClass('fixme')
+        $(this).text(`IMAGE PLACEHOLDER WAS NOT PROCESSED BECAUSE OOPS`)
+
+        return
+      }
+
       const img = !file.trim().match(/\.(jpg|jpeg|png|gif)$/)
         ? `${file}.jpg`
         : file
@@ -210,7 +220,7 @@ const addHeadingIDs: CheerioFunc = ($) => {
       $(this).attr('id'),
       O.fromNullable,
       O.chain((id) => {
-        return !!id.match(/^(p([0-9]+|[ivxmcIVXMC]+)|x-[a-z0-9\-_]+)$/)
+        return !!id.match(/^(p([0-9]+|[ivxmcIVXMC]+)|x-[A-z0-9\-_]+)$/)
           ? O.of(id.replace(/^x-/, ''))
           : O.none
       }),
@@ -292,10 +302,12 @@ export function addDocumentWrapHtml(styles: StylesOutput[]) {
   return (file: FileOutput): HTML => {
     return `
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en-US">
 <head>
 <meta http-equiv="default-style" content="text/html;charset=utf-8"/>
-<title>${file?.headings?.[0]?.text || stripExt(file.filename)}</title>
+<title>${
+      file?.headings?.[0]?.text.replace(/<.+?>/g, '') || stripExt(file.filename)
+    }</title>
 ${pipe(
   styles,
   A.map(

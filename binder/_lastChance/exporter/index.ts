@@ -55,6 +55,7 @@ export type Collector = {
   missingFootnotes: string[]
   images: Image[]
   toc?: {
+    inline: CollectorTOC[]
     linear: CollectorTOC[]
     nested: TocNode[]
   }
@@ -83,37 +84,85 @@ export function getHeadingsFromHtml(
 
   const headings = $('*[level]') // $('h1,h2,h3,h4,h5,h6,.h7,.h8,.h9,.h10')
     .map(function (i, el): Heading {
+      if ($(this).attr('toc') === 'false') {
+        // console.log(`skipping heading: ${$(this).text()}`)
+        return null
+      }
+      $(this).find('img').remove()
       $(this).find('sup').remove()
       $(this).find('del').remove()
       $(this).find('ins').contents().unwrap()
-      $(this).find('span').contents().unwrap()
+      // $(this).find('span').contents().unwrap()
       // $(this)
       //   .find('ins')
       //   .each(function () {
       //     console.log('headHeadingsFromHtml():', $(this).text())
       //   })
       $(this).find('br').replaceWith(' ')
-
       const html = $(this).html().trim().replace(/\s+/g, ' ')
 
+      if ($(this).attr('toc')) {
+        console.log(
+          `getHeadingsFromHTML() :: ${isNumber(Number($(this).attr('toc')))}`
+        )
+      }
+
+      const level =
+        $(this).attr('toc') && isNumber(Number($(this).attr('toc')))
+          ? Number($(this).attr('toc'))
+          : Number($(this).attr('level'))
       // $(this).find('ins').contents().unwrap()
+
+      const navlevel =
+        $(this).attr('navlevel') && isNumber(Number($(this).attr('navlevel')))
+          ? Number($(this).attr('navlevel'))
+          : Number($(this).attr('level'))
+
+      // if (
+      //   !!$(this)
+      //     .text()
+      //     .match(/Acknowledgments/)
+      // ) {
+      //   console.log(`~~~~~~~~~~~~~ ${!!$(this).attr('nolandmark')}`)
+      // }
+
+      const nextLandmark =
+        landmark && i === 0 && !$(this).attr('nolandmark')
+          ? landmark
+          : undefined
+
+      // if (
+      //   !!$(this)
+      //     .text()
+      //     .match(/Acknowledgments/)
+      // ) {
+      //   console.log(`~~~~~~~~~~~~~ ${nextLandmark}`)
+      // }
+
+      // if (nextLandmark && !!nextLandmark.match(/bodymatter/)) {
+      //   console.log(
+      //     `=== getHeadingsFromHtml :: ${i} : ${nextLandmark} : ${nextLandmark}`
+      //   )
+      // }
 
       const result = {
         id: $(this).attr('id'),
-        level: Number($(this).attr('level')), //Number(el.name.slice(1)),
+        level: level, // Number($(this).attr('level')), //Number(el.name.slice(1)),
+        navlevel: navlevel,
         text: $(this)
           .text()
           .trim()
           .replace(/\s+/g, ' ')
           .replace(/^.+?\|/, (str) => str.toUpperCase()),
         html: html,
-        landmark: landmark && i === 0 ? landmark : undefined
+        landmark: nextLandmark
         // .replace(/<\/*del>/g, '')
       }
 
       return result
     })
     .toArray()
+    .filter(Boolean)
 
   return headings
 }
@@ -183,6 +232,10 @@ export function getFootnotesFromHtml(html: string) {
 
 export function decorateFileOutput(file: FileOutput): FileOutput {
   let headings = [...file.headings, ...getHeadingsFromHtml(file.html)]
+
+  if (!!file?.landmark?.match(/toc/)) {
+    console.log(`decorateFileOutput() :: ${JSON.stringify(file)}`)
+  }
 
   return {
     ...file,

@@ -11,6 +11,7 @@ import Path from 'path'
 
 import { manifestPath } from '../paths'
 import { readJson } from '../readWrite'
+import { Config, NormalizedConfig, TOCLimit } from '../types'
 import { Err } from './'
 import {
     Content,
@@ -100,6 +101,47 @@ const result = pipe(
   TE.map((manifest) => {})
 )
 
+export const normalizeConfigTOC = (toc: TOCLimit): number[] => {
+  //   console.log(`
+  // ======================================================
+  // normalizeConfigTOC(incoming toc) :: ${toc}
+  // ======================================================
+  // `)
+  if (typeof toc === 'number') {
+    return new Array(toc + 1).fill(0).map((_, i) => i)
+  }
+
+  if (Array.isArray(toc)) {
+    return toc.sort((a, b) => (a > b ? 1 : -1))
+  }
+
+  if (!!toc?.minimum) {
+    const minimum = toc.minimum < toc.maximum ? toc.minimum : toc.maximum
+    const maximum = toc.maximum > toc.minimum ? toc.maximum : toc.minimum
+
+    return new Array(Math.abs(minimum - maximum))
+      .fill(0)
+      .map((_, i) => minimum + i)
+  }
+
+  const tocLevels = new Array(11).fill(0).map((_, i) => i)
+
+  //   console.log(`
+  // ======================================================
+  // normalizeConfigTOC(tocLevels) :: ${tocLevels}
+  // ======================================================
+  // `)
+
+  return tocLevels
+}
+
+export const normalizeConfig = (config: Config = {}): NormalizedConfig => {
+  return {
+    ...config,
+    toc: normalizeConfigTOC(config.toc)
+  }
+}
+
 export const loadManifest = (manifestPath: string) =>
   pipe(
     readJson(manifestPath),
@@ -108,6 +150,7 @@ export const loadManifest = (manifestPath: string) =>
       return {
         metadata: manifest.metadata,
         paths: manifest.paths || {},
+        config: normalizeConfig(manifest.config),
         files: manifest.files
           .map(
             (
@@ -186,6 +229,7 @@ export const loadManifest = (manifestPath: string) =>
                     filename: file.filename.trim(),
                     landmark: file.landmark || null,
                     level: file.level || 0,
+                    navlevel: file.navlevel || 0,
                     title: file.title || '',
                     toc: isBoolean(file.toc) ? file.toc : true,
                     pageNumber: file.pageNumber || null

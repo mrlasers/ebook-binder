@@ -40,6 +40,10 @@ export function of(
   input: InputSection,
   options?: { path?: string }
 ): TE.TaskEither<never, FileOutput> {
+  if (!!input.filename.match(/^NewPoss/)) {
+    console.log(`Section.of() :: ${input.filename}`)
+  }
+
   return TE.of({
     _tag: 'SECTION',
     filename:
@@ -51,15 +55,17 @@ export function of(
         text: input.title.replace(/^.+?\|/, (str) => str.toUpperCase()),
         html: input.title.replace(/^.+?\|/, (str) => str.toUpperCase()),
         level: input.level,
+        navlevel: input.navlevel,
         toc: input.toc,
         landmark: input.landmark
       }
     ],
     pages: !!input.pageNumber ? [{ id: null, num: input.pageNumber }] : [],
-    images: [srcFilenameToImage(input.filename)],
+    images: [], // [srcFilenameToImage(input.filename)],
     html: fullpageImageHtml(input.filename.trim(), input.title.trim()),
     // html: `<div class="cover"><img src="${input.filename.trim()}" alt="${input.title.trim()}"/></div>`,
     level: input.level || 0,
+    navlevel: input.navlevel || 0,
     toc: input.toc,
     landmark: input.landmark || undefined
   })

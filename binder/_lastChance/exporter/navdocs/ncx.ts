@@ -69,16 +69,21 @@ type NcxData = {
 }
 
 export function tocToNavPoint(idx: number, toc: CollectorTOC) {
-  return `<navPoint id="np${idx + 1}" playOrder="${idx + 1}"><navLabel><text>${
-    toc.text
-  }</text></navLabel><content src="${Paths.relativePath(
+  return `<navPoint id="np${idx + 1}" playOrder="${
+    idx + 1
+  }"><navLabel><text>${toc.text.replace(
+    /<.+?>/g,
+    ''
+  )}</text></navLabel><content src="${Paths.relativePath(
     Paths.navPath,
     toc.filename
   )}"/></navPoint>`
 }
 
 export function pageToPageTarget(idx: number, page: Required<Page>) {
-  return `<pageTarget id="p${idx}" type="normal" value="${idx}"><navLabel><text>${
+  return `<pageTarget id="p${page.num}" type="normal" value="${
+    page.num
+  }"><navLabel><text>${
     page.num
   }</text></navLabel><content src="${Paths.relativePath(
     Paths.navPath,
