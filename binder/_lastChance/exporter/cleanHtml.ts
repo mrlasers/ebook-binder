@@ -1,9 +1,9 @@
 import Cheerio, {
-    BasicAcceptedElems,
-    CheerioAPI,
-    CheerioOptions,
-    Document,
-    Node,
+  BasicAcceptedElems,
+  CheerioAPI,
+  CheerioOptions,
+  Document,
+  Node,
 } from 'cheerio'
 import { id } from 'date-fns/locale'
 import { join } from 'fp-ts-std/Array'
@@ -20,9 +20,9 @@ import * as Paths from '../paths'
 import { FileOutput, StylesOutput } from '../tasks'
 import { GeneratedOutput, HTML } from '../types'
 import {
-    addFootnoteRefs,
-    convertOversetHeadings,
-    wrapConsecutiveH1Headings,
+  addFootnoteRefs,
+  convertOversetHeadings,
+  wrapConsecutiveH1Headings,
 } from './clean'
 
 // const getIO
@@ -96,6 +96,7 @@ const replaceIllustrationPlaceholders =
       const img = !file.trim().match(/\.(jpg|jpeg|png|gif)$/)
         ? `${file}.jpg`
         : file
+      // const img = `${file.replace(/\.png$/, '')}.jpg`
 
       const parent = pipe(
         O.fromNullable($(this).parent().get()[0]),
@@ -121,7 +122,7 @@ const replaceIllustrationPlaceholders =
 
       $(this).html(
         `<img src="${pathJoin(imgPath, img.trim())}" alt="${
-          alt ? alt.trim() : ''
+          alt ? alt.replace(/\s+/g, ' ').trim() : ''
         }"/>` + caption
       )
     })
@@ -398,6 +399,12 @@ export function combineConsecutiveH1Headings($: CheerioAPI): CheerioAPI {
   return $
 }
 
+export const conformHtmlEntities = ($: CheerioAPI): CheerioAPI => {
+  const html = $.html().replace('&nbsp;', '&#xa0;')
+
+  return $.load(html)
+}
+
 export function cleanHtml(
   html: string,
   options?: CleanHtmlOptions
@@ -414,6 +421,7 @@ export function cleanHtml(
 
           return $
         },
+        // conformHtmlEntities,
         cleanPlaceholders(options?.imageRelPath ?? ''),
         flow(unwrapStrongHeading, cleanLists),
         mergePullquotes,
@@ -423,12 +431,10 @@ export function cleanHtml(
           convertOversetHeadings,
           wrapConsecutiveH1Headings({
             divClass: 'chapter',
-            secondClass: 'title'
+            secondClass: 'title',
           })
         ),
-
-        addFootnoteRefs(options?.footnotes),
-        removeEmptyParagraphs
+        flow(addFootnoteRefs(options?.footnotes), removeEmptyParagraphs)
       )
     ),
     IO.map(getCheerioHtml)

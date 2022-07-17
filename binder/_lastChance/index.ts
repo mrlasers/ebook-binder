@@ -8,15 +8,15 @@ import JSZip from 'jszip'
 import Path from 'path'
 
 import {
-    addDocumentWrapHtml,
-    Collector,
-    collectOutput,
-    finalClean,
-    htmlBodyToCombinedHtml,
-    load,
-    outputExploded,
-    unwrapDocumentBody,
-    writeCombinedHtml,
+  addDocumentWrapHtml,
+  Collector,
+  collectOutput,
+  finalClean,
+  htmlBodyToCombinedHtml,
+  load,
+  outputExploded,
+  unwrapDocumentBody,
+  writeCombinedHtml,
 } from './exporter'
 import { AppleIbooksDisplayXML, ContainerXML } from './exporter/epub'
 import { navdocFromCollector, ncxFromCollector } from './exporter/navdocs'
@@ -43,8 +43,8 @@ export const addNavDocsToCollected = (collected: Collector) => ({
   files: [
     ncxFromCollector(collected),
     navdocFromCollector(collected),
-    ...collected.files
-  ]
+    ...collected.files,
+  ],
 })
 
 export type WriteEpubOptions = {
@@ -63,7 +63,7 @@ const writeEpubFromTuples =
 
         zip
           .file('mimetype', 'application/epub+zip', {
-            compression: 'STORE'
+            compression: 'STORE',
           })
           .file('META-INF/container.xml', ContainerXML())
           .file(
@@ -76,8 +76,14 @@ const writeEpubFromTuples =
           A.map((f) => {
             return pipe(
               f[0] === 'image' ? readAndCompressImage(f[2]) : f[2],
-              (data: string | Promise<Buffer>) =>
-                zip.file(Paths.joinPath('OEBPS', f[1]), data)
+              (data: string | Promise<Buffer>) => {
+                // -- DEBUG
+                console.log('writeEpubFromTuples')
+                console.log(f[1])
+                // -- /DEBUG
+
+                return zip.file(Paths.joinPath('OEBPS', f[1]), data)
+              }
             )
           })
         )
@@ -86,9 +92,10 @@ const writeEpubFromTuples =
       },
       writeZip(Path.resolve(outputPath, filename || 'ebook.epub'), {
         compression: 'DEFLATE',
-        compressionOptions: { level: 9 }
+        compressionOptions: { level: 9 },
       })
     )
+
 export function epubFilenameFromTitle(title?: string) {
   if (typeof title !== 'string') return 'ebook.epub'
 
@@ -137,7 +144,7 @@ export const resolveFilePaths = (dir: string) => (paths: FilePaths) =>
     (acc, key) => {
       return {
         ...acc,
-        [key]: resolveFilePath(dir)(paths[key])
+        [key]: resolveFilePath(dir)(paths[key]),
       }
     },
     {
@@ -145,7 +152,7 @@ export const resolveFilePaths = (dir: string) => (paths: FilePaths) =>
       imagePath: dir,
       stylePath: dir,
       fontPath: dir,
-      navPath: dir
+      navPath: dir,
     }
   )
 
@@ -178,11 +185,11 @@ const loadManifestAndFootnotes = (manifestPath: string) =>
         // ),
         source: resolveFilePaths(Path.dirname(manifestPath))(
           manifest?.paths?.source
-        )
+        ),
       },
       config: manifest.config,
       files: manifest.files,
-      footnotes
+      footnotes,
     }))
 
 // hardcoded variables that should be replaced with configuration in manifest.json
@@ -194,12 +201,12 @@ export type WriteExplodedTEOptions = {
 }
 export const writeExplodedTE = ({
   path,
-  exclude = []
+  exclude = [],
 }: WriteExplodedTEOptions) =>
   flow(
     outputExploded({
       explodedEpubBasePath: path,
-      exclude: exclude // ['style'] // ['xml', 'style']
+      exclude: exclude, // ['style'] // ['xml', 'style']
     }),
     TE.map(() => `Exploded files written to ${path}`)
   )
@@ -217,8 +224,8 @@ const program = pipe(
             paths: {
               buildPath: buildPath,
               epub: Paths.combineDefaultEpubPaths(paths?.epub),
-              source: Paths.combineDefaultEpubPaths(paths?.source)
-            }
+              source: Paths.combineDefaultEpubPaths(paths?.source),
+            },
           })
         ),
         A.sequence(TE.Monad)
@@ -234,13 +241,13 @@ const program = pipe(
           (collected) => {
             return {
               ...collected,
-              files: [collectedToOpf(collected), ...collected.files]
+              files: [collectedToOpf(collected), ...collected.files],
             }
           },
           collectedToOutputTuples({
             sourceImagePath: paths.source.imagePath,
             sourceFontPath: paths.source.fontPath,
-            epub: false
+            epub: false,
           })
         )
       ),
@@ -258,7 +265,7 @@ const program = pipe(
               // },
               writeExplodedTE({
                 path: Path.join(buildPath, paths.output.explodedEpubPath),
-                exclude: []
+                exclude: [],
               })
             ),
             // write epub
@@ -269,7 +276,7 @@ const program = pipe(
                 outputPath: Path.join(
                   buildPath,
                   paths.output.epubPath || 'workshop'
-                )
+                ),
               })
             ),
             // following is big hack for single html output
@@ -297,9 +304,9 @@ const program = pipe(
                     paths?.output?.explodedEpubPath,
                     paths?.epub?.imagePath
                   )
-                )
+                ),
               }
-            )(tuples)
+            )(tuples),
           ],
           A.sequence(TE.Monad)
         )

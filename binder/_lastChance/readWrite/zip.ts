@@ -10,15 +10,21 @@ export type WriteZipOptions = {
   compressionOptions?: { level: number }
 }
 
-export function writeZip(path: string, options?: WriteZipOptions) {
+export function writeZip(
+  fullZipFileOutputFilePath: string,
+  options?: WriteZipOptions
+) {
+  // console.log('writeZip ::', fullZipFileOutputFilePath)
   return (zip: JSZip) =>
     TE.tryCatch(
       () =>
         new Promise((res, rej) => {
           zip
             .generateNodeStream(options)
-            .pipe(Fs.createWriteStream(path))
-            .on('finish', () => res(`Zip file written to ${path}`))
+            .pipe(Fs.createWriteStream(fullZipFileOutputFilePath))
+            .on('finish', () =>
+              res(`Zip file written to ${fullZipFileOutputFilePath}`)
+            )
             .on('error', flow(Err.MyError.of, rej))
         }),
       Err.MyError.of

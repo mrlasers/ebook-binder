@@ -5,10 +5,10 @@ import * as O from 'fp-ts/Option'
 import { toTitleCase } from '@artsy/to-title-case'
 
 import {
-    Collector,
-    CollectorTOC,
-    decorateFileOutput,
-    getFootnotesFromHtml,
+  Collector,
+  CollectorTOC,
+  decorateFileOutput,
+  getFootnotesFromHtml,
 } from '../'
 import { reduceFilterImages, sortImages } from '../..'
 import * as Paths from '../../paths'
@@ -72,6 +72,35 @@ const tocFactory: TocFactory = {
           })
           .join('\n') +
         `</table>`
+    }
+  },
+  gaines: (file, collected) => {
+    return {
+      ...file,
+      html:
+        `<h1><span>${
+          file.headings?.[0].text ?? 'Table of Contents'
+        }</span></h1>` +
+        // collected.headings
+        collected.toc.inline
+          // .filter((heading) => heading.toc)
+          .map((heading) => {
+            const level = heading.level
+            // const tocClass =
+            //   level === 2 && !heading.text.toLowerCase().match(/^chapter/)
+            //     ? `toc`
+            //     : `toc${level}`
+            // const tocClass = level <= 1 ? `toc` : `toc${level}`
+            const tocClass = `toc${level}`
+
+            return `${'  '.repeat(
+              heading.level
+            )}<p class="${tocClass}"><a href="${Paths.relativePath(
+              Paths.htmlPath,
+              heading.filename
+            )}">${heading.html}</a></p>`
+          })
+          .join('\n')
     }
   }
 }
