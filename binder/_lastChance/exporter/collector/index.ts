@@ -5,13 +5,13 @@ import * as O from 'fp-ts/Option'
 import { toTitleCase } from '@artsy/to-title-case'
 
 import {
-    Collector,
-    CollectorTOC,
-    decorateFileOutput,
-    getFiguresFromHtml,
-    getFootnotesFromHtml,
+  Collector,
+  CollectorTOC,
+  decorateFileOutput,
+  getFiguresFromHtml,
+  getFootnotesFromHtml,
 } from '../'
-import { reduceFilterImages, sortImages } from '../..'
+import { reduceFilterImages, sortImages } from '../../main'
 import { FileOutput, Heading, Image, Page, TextLink } from '../../tasks'
 import { Config, Metadata, NormalizedConfig } from '../../types'
 import { reduceToNestedHeadings } from '../navdocs/nesto'
@@ -28,7 +28,7 @@ export const collectOutput =
         ...collected,
         images: collected.images
           .reduce<Image[]>(reduceFilterImages, [])
-          .sort(sortImages)
+          .sort(sortImages),
       }),
       // (x) => {
       //   console.log(x.toc.linear)
@@ -46,7 +46,7 @@ const emptyCollector = (metadata: Metadata) => {
     missingFootnotes: [],
     images: [],
     figures: [],
-    tables: []
+    tables: [],
   }
 }
 
@@ -66,13 +66,13 @@ export function collectFileOutput(
           getFiguresFromHtml(file.html),
           A.map((link) => ({
             text: link.text,
-            filename: file.filename + '#' + link.filename
+            filename: file.filename + '#' + link.filename,
           }))
         )
 
         const collectedHeadings = [
           ...collector.headings,
-          ...fileToHeadings(file)
+          ...fileToHeadings(file),
         ]
 
         return {
@@ -81,11 +81,11 @@ export function collectFileOutput(
           pages: [...collector.pages, ...fileToPages(file)],
           missingFootnotes: [
             ...(collector.missingFootnotes || []),
-            ...footnotes
+            ...footnotes,
           ],
           images: [...(collector.images || []), ...file.images],
           files: [...collector.files, file],
-          figures: [...collector.figures, ...figures]
+          figures: [...collector.figures, ...figures],
         }
       }
     ),
@@ -102,7 +102,7 @@ export function fileToHeadings(file: FileOutput) {
       ...heading,
       filename: file.filename,
       toc: file.toc || false,
-      landmark: heading.landmark // file.landmark
+      landmark: heading.landmark, // file.landmark
     }
   })
 }
@@ -119,7 +119,7 @@ export function fileToPages(file: FileOutput) {
             () => file.filename,
             (id) => file.filename + '#' + id
           )
-        )
+        ),
       })
     )
   )
@@ -146,7 +146,7 @@ export function collectedToTOC(config: NormalizedConfig) {
               level: h.level,
               text: h.text,
               html: h.html,
-              landmark: h.landmark
+              landmark: h.landmark,
             }
           })
         ),
@@ -160,7 +160,7 @@ export function collectedToTOC(config: NormalizedConfig) {
               level: h.level,
               text: h.text,
               html: h.html,
-              landmark: h.landmark
+              landmark: h.landmark,
             }
           })
         ),
@@ -208,7 +208,7 @@ export function collectedToTOC(config: NormalizedConfig) {
 
               return {
                 ...t,
-                navlevel: 0
+                navlevel: 0,
               }
             }
 
@@ -223,8 +223,8 @@ export function collectedToTOC(config: NormalizedConfig) {
           //   return h
           // }),
           reduceToNestedHeadings
-        )
-      }
+        ),
+      },
     }
   }
 }

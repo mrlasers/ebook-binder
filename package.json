@@ -21,6 +21,7 @@
     "test:lastchanceREFACTOR": "jest --watch ./__lastChangeREFACTOR",
     "lastchance": "tsnd --respawn ./binder/_lastChance/index.ts",
     "lastchance:gender": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\A Practical Reference\\build\\manifest.json\"",
+    "lastchance:gender2": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\GendoBendo2\\build\\manifest.json\"",
     "lastchance:test1": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\_\\evock\\test1\\manifest.json\"",
     "lastchance:possibilities": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\L\\Leslie Eliel\\New Possibilities\\build\\manifest.json\"",
     "lastchance:sing": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\I'll Sing Again Tomorrow\\build\\manifest.json\"",

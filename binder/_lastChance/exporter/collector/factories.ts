@@ -10,7 +10,7 @@ import {
   decorateFileOutput,
   getFootnotesFromHtml,
 } from '../'
-import { reduceFilterImages, sortImages } from '../..'
+import { reduceFilterImages, sortImages } from '../../main'
 import * as Paths from '../../paths'
 import { FileOutput, Heading, Image, Page } from '../../tasks'
 import { Metadata, NormalizedConfig } from '../../types'
@@ -45,7 +45,7 @@ const tocFactory: TocFactory = {
               heading.filename
             )}">${heading.html}</a></p>`
           })
-          .join('\n')
+          .join('\n'),
     }
   },
   possibilities: (file, collected) => {
@@ -71,7 +71,7 @@ const tocFactory: TocFactory = {
             }</a></td></tr>`
           })
           .join('\n') +
-        `</table>`
+        `</table>`,
     }
   },
   gaines: (file, collected) => {
@@ -100,9 +100,9 @@ const tocFactory: TocFactory = {
               heading.filename
             )}">${heading.html}</a></p>`
           })
-          .join('\n')
+          .join('\n'),
     }
-  }
+  },
 }
 
 export const resolveFactories =
@@ -132,6 +132,6 @@ Need to fix:
           file,
           collected
         )
-      })
+      }),
     }
   }
