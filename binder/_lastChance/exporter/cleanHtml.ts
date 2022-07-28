@@ -24,6 +24,7 @@ import {
   convertOversetHeadings,
   wrapConsecutiveH1Headings,
 } from './clean'
+import * as variantCleaners from './cleanHtml/variants'
 
 // const getIO
 
@@ -414,13 +415,65 @@ export function cleanHtml(
     IO.ap(IO.of(html)),
     IO.map(
       flow(
-        unwrapDocumentBody,
-        ($) => {
-          // remove all ids that aren't for pages
-          $('*[id^="r"]').removeAttr('id')
+        flow(
+          unwrapDocumentBody,
+          ($) => {
+            /* clean up box start/end elements */
+            $('div.box').each(function (i, el) {
+              if ($(this).text().trim().toLowerCase() === 'start') {
+                const selection = $(this).nextUntil('div.box')
 
-          return $
-        },
+                selection.wrapAll($('<div>').addClass($(this).attr('class')))
+
+                $(this).remove()
+              } else if ($(this).text().trim().toLowerCase() === 'end') {
+                $(this).remove()
+              }
+            })
+
+            $('div.box h2, div.box h3, div.box h4, div.box h5').each(
+              function () {
+                const children = $(this).children
+                $(this).replaceWith(`<h10>${$(this).html()}</h10>`)
+              }
+            )
+            $('div.box .break').remove()
+
+            return $
+          },
+          ($) => {
+            /* remove breaks from around .pullquote */
+            $('.break').each(function () {
+              if (
+                $(this).prev('.pullquote, .box') ||
+                $(this).next('.pullquote, .box')
+              ) {
+                $(this).remove()
+              }
+            })
+
+            return $
+          },
+          ($) => {
+            /* consolidate consecutive anchors with the same link */
+
+            $('a').each(function () {
+              const next = $(this).next('a')
+              if ($(this).attr('href') === $(next).attr('href')) {
+                $(this).html($(this).html().trim() + $(next).html().trim())
+                $(next).remove()
+              }
+            })
+
+            return $
+          },
+          ($) => {
+            /* remove all ids that aren't for pages */
+            $('*[id^="r"]').removeAttr('id')
+
+            return $
+          }
+        ),
         // conformHtmlEntities,
         cleanPlaceholders(options?.imageRelPath ?? ''),
         flow(unwrapStrongHeading, cleanLists),
@@ -434,7 +487,8 @@ export function cleanHtml(
             secondClass: 'title',
           })
         ),
-        flow(addFootnoteRefs(options?.footnotes), removeEmptyParagraphs)
+        flow(addFootnoteRefs(options?.footnotes), removeEmptyParagraphs),
+        variantCleaners.gender
       )
     ),
     IO.map(getCheerioHtml)

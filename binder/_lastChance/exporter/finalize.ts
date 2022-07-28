@@ -1,9 +1,9 @@
 import Cheerio, {
-    BasicAcceptedElems,
-    CheerioAPI,
-    CheerioOptions,
-    Document,
-    Node,
+  BasicAcceptedElems,
+  CheerioAPI,
+  CheerioOptions,
+  Document,
+  Node,
 } from 'cheerio'
 import { id } from 'date-fns/locale'
 import * as E from 'fp-ts/Either'
@@ -35,7 +35,7 @@ export function finalClean(html: HTML, options?: FinalCleanOptions) {
     'level',
     'navlevel',
     'navLevel',
-    'nolandmark'
+    'nolandmark',
   ]
 
   $('[remove]').each(function () {
