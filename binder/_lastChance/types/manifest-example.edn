@@ -1,0 +1,28 @@
+{:metadata {:title "Hello, World!: An Introduction to Ebook Development"
+            :pubId "123"
+            :author "Timothy Pew"
+            :publisher "MrLasers.com"}
+ :config {:toc 3
+          :navdoc 3
+          :variant "MrLasers"}
+ :paths {:source {:footnotes "footnotes.json"
+                  :html "source/xhtml"
+                  :styles "source/Styles"
+                  :images "source/images"
+                  :fonts "source/fonts"}
+         :output {:exploded "output/epub"
+                  :epub "output"
+                  :combined "output"
+                  :path-to-styles "../oops-i-did-it-again"}}
+ :files '("Knockout-48.otf"
+          {:tag "SECTION"
+           :title "Cover"
+           :filename "cover.jpg"
+           :landmark "cover"
+           :toc? false}
+          {:tag "SECTION"
+           :title "Half-Title Page"
+           :filename "half-title.jpg"
+           :landmark "halftitlepage"
+           :toc? false
+           :page# "i"})}

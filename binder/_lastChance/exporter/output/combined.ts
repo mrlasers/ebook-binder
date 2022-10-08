@@ -25,13 +25,15 @@ export const htmlBodyToCombinedHtml =
     A.map(
       (style) =>
         `<link rel="stylesheet" type="text/css" href="${safeJoinPath(
-          stylePath,
+          // stylePath,
+          'combined-styles',
           style
         )}" />`
     )
   )}
   <link rel="stylesheet" type="text/css" href="${safeJoinPath(
-    stylePath,
+    // stylePath,
+    'combined-styles',
     'debug.css'
   )}" />
 </head>
@@ -66,12 +68,14 @@ export const writeCombinedHtml =
       A.filter((tup) => ['content'].includes(tup[0])),
       A.map((tup): [string, CheerioAPI] => [
         Path.basename(tup[1]),
-        load(tup[2])
+        load(tup[2]),
       ]),
       A.map(([filename, $]) => {
         const html = unwrapDocumentBody($).html()
 
-        return `<div class="debug"><hr/><a href="${filename}">${filename}</a><hr/></div>${html}`
+        return `<div class="debug"><hr/><a href="${filename}">${filename}</a><hr/></div>
+
+        <div class="debug-html-body">${html}</div>`
       }),
       join('\n'),
       htmlBodyToCombinedHtml({ ...options, styles: styles }),

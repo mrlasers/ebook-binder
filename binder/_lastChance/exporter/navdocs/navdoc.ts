@@ -25,8 +25,8 @@ export function navdocFromCollector(c: Collector): FileOutput {
       title: c.metadata.title,
       headings: c.headings,
       pages: c.pages,
-      toc: c.toc
-    })
+      toc: c.toc,
+    }),
   }
 }
 
@@ -82,7 +82,7 @@ export function tocFromTocNodes(toc: TocNode[]): O.Option<string> {
           return `<li><a href="${Paths.relativePath(
             Paths.navPath,
             t.filename
-          )}">${t.text}</a>${pipe(
+          )}">${t.text.replace(/<a.+?a>/, '')}</a>${pipe(
             tocFromTocNodes(t.children),
             O.fold(
               () => '',

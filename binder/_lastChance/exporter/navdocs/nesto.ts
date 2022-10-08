@@ -1,3 +1,4 @@
+import Cheerio from 'cheerio'
 import * as A from 'fp-ts/Array'
 import * as E from 'fp-ts/Either'
 import { flow, identity, pipe } from 'fp-ts/function'
@@ -48,7 +49,7 @@ export const headingToTocNode =
       level: boundHeadingLevel(opts.floor, opts.ceiling)(heading.level), //heading.level <= opts?.floor ? 0 : heading.level,
       navlevel: boundHeadingLevel(opts.floor, opts.ceiling)(heading.navlevel),
       toc: isBoolean(heading.toc) ? heading.toc : false,
-      landmark: heading?.landmark ?? null
+      landmark: heading?.landmark ?? null,
     }
   }
 
@@ -80,24 +81,10 @@ ${'='.repeat(60)}
       ),
       E.map(([heads, tail]) => [
         ...heads,
-        { ...tail, children: levelsToTree(tail.children, child) }
+        { ...tail, children: levelsToTree(tail.children, child) },
       ]),
       E.getOrElse(identity)
     )
-
-  // return flow(
-  //   headsTail,
-  //   (xs: [TocNode[], TocNode]) => xs,
-  //   E.fromPredicate(
-  //     ([_, tail]) => tail.level < child.level,
-  //     () => [...nodes, child]
-  //   ),
-  //   E.map(([heads, tail]) => [
-  //     ...heads,
-  //     { ...tail, children: levelsToTree(tail.children, child) }
-  //   ]),
-  //   E.getOrElse(identity)
-  // )
 }
 
 export function levelsToTree(nodes: TocNode[], child: TocNode) {

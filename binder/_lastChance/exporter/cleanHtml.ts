@@ -4,27 +4,27 @@ import Cheerio, {
   CheerioOptions,
   Document,
   Node,
-} from 'cheerio'
-import { id } from 'date-fns/locale'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import * as E from 'fp-ts/Either'
-import { flow, pipe } from 'fp-ts/function'
-import * as IO from 'fp-ts/IO'
-import * as O from 'fp-ts/Option'
-import Path from 'path'
+} from "cheerio"
+import { id } from "date-fns/locale"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import * as E from "fp-ts/Either"
+import { flow, pipe } from "fp-ts/function"
+import * as IO from "fp-ts/IO"
+import * as O from "fp-ts/Option"
+import Path from "path"
 
-import { stripExt } from '../../__lastChangeREFACTOR/helpers'
-import { prettyPrint } from '../../processing'
-import * as Paths from '../paths'
-import { FileOutput, StylesOutput } from '../tasks'
-import { GeneratedOutput, HTML } from '../types'
+import { stripExt } from "../../__lastChangeREFACTOR/helpers"
+import { prettyPrint } from "../../processing"
+import * as Paths from "../paths"
+import { FileOutput, StylesOutput } from "../tasks"
+import { GeneratedOutput, HTML } from "../types"
 import {
   addFootnoteRefs,
   convertOversetHeadings,
   wrapConsecutiveH1Headings,
-} from './clean'
-import * as variantCleaners from './cleanHtml/variants'
+} from "./clean"
+import * as variantCleaners from "./cleanHtml/variants"
 
 // const getIO
 
@@ -134,7 +134,7 @@ const replaceIllustrationPlaceholders =
 const replaceBreak =
   (imgPath: string): CheerioFunc =>
   ($) => {
-    $('*.break').replaceWith(
+    $('.break').replaceWith(
       `<div class="break"><img src="${pathJoin(
         imgPath,
         'break.jpg'
@@ -202,7 +202,6 @@ const mergeLists: CheerioFunc = ($) => {
 const addHeadingIDs: CheerioFunc = ($) => {
   let nextHeadingNumbo = 1
 
-  //'h1,h2,h3,h4,h5,h6,h7,h8,h9,h10'
   $('h1,h2,h3,h4,h5,h6,h7,h8').each(function (i, el) {
     const hasNewAttr = !!$(this).attr('new')
 
@@ -223,7 +222,7 @@ const addHeadingIDs: CheerioFunc = ($) => {
       O.fromNullable,
       O.chain((id) => {
         return !!id.match(/^(p([0-9]+|[ivxmcIVXMC]+)|x-[A-z0-9\-_]+)$/)
-          ? O.of(id.replace(/^x-/, ''))
+          ? O.of(id.replace(/^x-/, 'x-'))
           : O.none
       }),
       O.getOrElse(() => `r${nextHeadingNumbo++}`)
@@ -270,7 +269,7 @@ const cleanPlaceholders = (imgPath: string) =>
   flow(replaceIllustrationPlaceholders(imgPath), replaceBreak(imgPath))
 
 const markupQA: CheerioFunc = ($) => {
-  $('div.qa > p').each(function () {
+  $('div.qa > p, p.qa').each(function () {
     const thisText = $(this).text().trim()
     const thisHtml = $(this).html().trim()
 
@@ -281,6 +280,12 @@ const markupQA: CheerioFunc = ($) => {
     // if (!!thisHtml.match(/^\s*([A])(?=\s)/)) {
     //   $(this).addClass('top0')
     // }
+
+    const qOrA = $(this).text().trim()[0]?.toLowerCase()
+
+    if (qOrA === 'q' || qOrA === 'a') {
+      $(this).addClass(qOrA)
+    }
 
     $(this).html(
       thisHtml.replace(
@@ -387,7 +392,7 @@ export const unwrapDocumentBody = ($: CheerioAPI): CheerioAPI => {
 }
 
 export function combineConsecutiveH1Headings($: CheerioAPI): CheerioAPI {
-  $('h1 + h1').each(function () {
+  $('h1 + h1').each(function (el) {
     if ($(this).hasClass('new')) return
 
     $(this).prev().text($(this).prev().text().toUpperCase())
@@ -417,50 +422,21 @@ export function cleanHtml(
       flow(
         flow(
           unwrapDocumentBody,
-          ($) => {
-            /* clean up box start/end elements */
-            $('div.box').each(function (i, el) {
-              if ($(this).text().trim().toLowerCase() === 'start') {
-                const selection = $(this).nextUntil('div.box')
+          flow(
+            /* variants go here */
 
-                selection.wrapAll($('<div>').addClass($(this).attr('class')))
-
-                $(this).remove()
-              } else if ($(this).text().trim().toLowerCase() === 'end') {
-                $(this).remove()
-              }
-            })
-
-            $('div.box h2, div.box h3, div.box h4, div.box h5').each(
-              function () {
-                const children = $(this).children
-                $(this).replaceWith(`<h10>${$(this).html()}</h10>`)
-              }
-            )
-            $('div.box .break').remove()
-
-            return $
-          },
-          ($) => {
-            /* remove breaks from around .pullquote */
-            $('.break').each(function () {
-              if (
-                $(this).prev('.pullquote, .box') ||
-                $(this).next('.pullquote, .box')
-              ) {
-                $(this).remove()
-              }
-            })
-
-            return $
-          },
+            variantCleaners.gender
+          ),
           ($) => {
             /* consolidate consecutive anchors with the same link */
 
             $('a').each(function () {
               const next = $(this).next('a')
               if ($(this).attr('href') === $(next).attr('href')) {
-                $(this).html($(this).html().trim() + $(next).html().trim())
+                const thisHtml = $(this).html() ?? ''
+                const nextHtml = $(this).html() ?? ''
+
+                $(this).html(thisHtml.trim() + nextHtml.trim())
                 $(next).remove()
               }
             })
@@ -487,20 +463,9 @@ export function cleanHtml(
             secondClass: 'title',
           })
         ),
-        flow(addFootnoteRefs(options?.footnotes), removeEmptyParagraphs),
-        variantCleaners.gender
+        flow(addFootnoteRefs(options?.footnotes), removeEmptyParagraphs)
       )
     ),
     IO.map(getCheerioHtml)
-    // IO.map(tightenUpTheGraphicsOnLevelSeven)
-    // IO.map((html) => (options?.pretty ? prettyPrint(html) : html))
   )
 }
-
-const html = `<h1 class="gendo bendo">Hello, <strong>World</strong>!</h1><h2 id="p23">Page 23</h2><div class="pullquote">Hello, World!</div><div class="pullquote">The End  <sup>  1  </sup> </div>
-
-<div class="illus">   Hello.jpg |   Hello, World!   </div>
-
-  <div class="pullquote qa"><p>Q Do you think sex is just a synonym for gender?</p><p>A Yes, yes I am that much of a retard</p></div>
-
-  <div class="break"/><ul><li>Hello</li><li>World<sup>2</sup></li></ul><p><strong>/</strong></p><p>The. End.</p><ul><li>Hello, World!</li></ul><ul><li>The end.</li></ul>`

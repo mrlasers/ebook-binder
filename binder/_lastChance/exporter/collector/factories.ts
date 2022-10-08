@@ -1,20 +1,10 @@
 import * as A from 'fp-ts/Array'
 import { flow, pipe } from 'fp-ts/function'
-import * as O from 'fp-ts/Option'
 
-import { toTitleCase } from '@artsy/to-title-case'
-
-import {
-  Collector,
-  CollectorTOC,
-  decorateFileOutput,
-  getFootnotesFromHtml,
-} from '../'
-import { reduceFilterImages, sortImages } from '../../main'
+import { Collector } from '../'
 import * as Paths from '../../paths'
 import { FileOutput, Heading, Image, Page } from '../../tasks'
 import { Metadata, NormalizedConfig } from '../../types'
-import { reduceToNestedHeadings } from '../navdocs/nesto'
 
 export type TocFactory = {
   [key: string | symbol]: (file: FileOutput, collected: Collector) => FileOutput
@@ -81,16 +71,9 @@ const tocFactory: TocFactory = {
         `<h1><span>${
           file.headings?.[0].text ?? 'Table of Contents'
         }</span></h1>` +
-        // collected.headings
         collected.toc.inline
-          // .filter((heading) => heading.toc)
           .map((heading) => {
             const level = heading.level
-            // const tocClass =
-            //   level === 2 && !heading.text.toLowerCase().match(/^chapter/)
-            //     ? `toc`
-            //     : `toc${level}`
-            // const tocClass = level <= 1 ? `toc` : `toc${level}`
             const tocClass = `toc${level}`
 
             return `${'  '.repeat(

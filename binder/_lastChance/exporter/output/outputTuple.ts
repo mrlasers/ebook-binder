@@ -3,10 +3,10 @@ import { flow, pipe } from 'fp-ts/function'
 import Path from 'path'
 
 import {
-    addDocumentWrapHtml,
-    Collector,
-    decorateFileOutput,
-    finalClean,
+  addDocumentWrapHtml,
+  Collector,
+  decorateFileOutput,
+  finalClean,
 } from '../'
 import { prettyPrint } from '../../../processing'
 import * as Paths from '../../paths'
@@ -16,7 +16,7 @@ import { Metadata, OutputTuple, OutputTupleOptions } from '../../types'
 export const makeStyleTuple = (path: string, css: string): OutputTuple => [
   'style',
   path,
-  css
+  css,
 ]
 
 export function collectedToOutputTuples(options: OutputTupleOptions) {
@@ -40,7 +40,7 @@ export function collectedToOutputTuples(options: OutputTupleOptions) {
                 file,
                 addDocumentWrapHtml(collected.files.filter(isStylesOutput)),
                 finalClean
-              )
+              ),
             ]
           case 'NAVDOC':
           case 'NCX':
@@ -50,7 +50,10 @@ export function collectedToOutputTuples(options: OutputTupleOptions) {
             return [
               'font',
               file.filename,
-              Path.resolve(options.sourceFontPath, Path.basename(file.filename))
+              Path.resolve(
+                options.sourceFontPath,
+                Path.basename(file.filename)
+              ),
             ]
         }
       }),
@@ -62,7 +65,7 @@ export function collectedToOutputTuples(options: OutputTupleOptions) {
             return [
               'image',
               img.destination,
-              Path.resolve(options.sourceImagePath, img.source)
+              Path.resolve(options.sourceImagePath, img.source),
             ]
           })
         )

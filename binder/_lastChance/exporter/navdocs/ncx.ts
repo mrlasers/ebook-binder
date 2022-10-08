@@ -112,8 +112,8 @@ export function ncxFromCollector(c: Collector): FileOutput {
           (x) => x
         )
       ),
-      pageTargets: pipe(c.pages, A.mapWithIndex(pageToPageTarget), join('\n'))
-    })
+      pageTargets: pipe(c.pages, A.mapWithIndex(pageToPageTarget), join('\n')),
+    }),
   }
 }
 

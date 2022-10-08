@@ -22,7 +22,7 @@ export const footnoteTable: FootnoteFormatter = {
       .map((note) => `<p>${note}</p>`)
       .join('')}</div></td></tr>`,
   ref: (fn) =>
-    `<a id="fnref${fn}" href="#fn${fn}" epub:type="noteref">${fn}</a>`
+    `<a id="fnref${fn}" href="#fn${fn}" epub:type="noteref">${fn}</a>`,
 }
 
 /*
@@ -36,7 +36,7 @@ export const footnoteAmazon: FootnoteFormatter = {
     `<aside id="ft-${fn}" epub:type="footnote"><p><a epub:type="noteref" href="#source${fn}">${fn}.</a> ${rows[0]}</p></aside>`,
   body: (rows) => rows.join('\n'),
   ref: (fn) =>
-    `<a id="source${fn}" href="#ft-${fn}" epub:type="noteref">${fn}</a>`
+    `<a id="source${fn}" href="#ft-${fn}" epub:type="noteref">${fn}</a>`,
 }
 
 export const footnoteNamaste: FootnoteFormatter = {
@@ -45,17 +45,23 @@ export const footnoteNamaste: FootnoteFormatter = {
   row: (fn, notes) =>
     `<p><a epub:type="noteref" href="#footnote-ref${fn}">${fn}</a>. <span id="footnote${fn}" epub:type="footnote">${notes[0]}</span></p>`,
   ref: (fn) =>
-    `<a id="footnote-ref${fn}" href="#footnote${fn}" epub:type="noteref">${fn}</a>`
+    `<a id="footnote-ref${fn}" href="#footnote${fn}" epub:type="noteref">${fn}</a>`,
 }
 
 export const footnoteIBooks: FootnoteFormatter = {
   row: (fn, notes) =>
     `<aside id="myNote${fn}" epub:type="footnote">${notes[0]}</aside>`,
   body: (rows) => `${rows.join('\n')}`,
-  ref: (fn) => `<a href="#myNote${fn}" epub:type="noteref">${fn}</a>`
+  ref: (fn) => `<a href="#myNote${fn}" epub:type="noteref">${fn}</a>`,
 }
 
-export const footnoteMaker: FootnoteFormatter = footnoteNamaste // footnoteTable
+const footnoteNoop: FootnoteFormatter = {
+  row: () => '',
+  body: () => '',
+  ref: () => '',
+}
+
+export const footnoteMaker: FootnoteFormatter = footnoteTable // footnoteNamaste
 
 export const addFootnoteRefs =
   (footnotes?: { [key: number]: string[] }) =>
@@ -68,7 +74,7 @@ export const addFootnoteRefs =
             O.fromPredicate((n) => !isNaN(n) && !!footnotes[n]),
             O.map((n) => ({
               fn: n,
-              notes: footnotes[n].map((fn) => fn.trim()).filter(Boolean)
+              notes: footnotes[n].map((fn) => fn.trim()).filter(Boolean),
             })),
             O.map(({ fn, notes }) => {
               $(this).html(footnoteMaker.ref(fn))

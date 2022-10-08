@@ -95,11 +95,13 @@ export function collectFileOutput(
 
 export function fileToHeadings(file: FileOutput) {
   return file.headings.map((heading): Heading => {
-    if (!!heading?.landmark?.match(/toc/)) {
-      console.log(`fileToHeadings():: ${JSON.stringify(file)}`)
-    }
+    // if (!!heading?.landmark?.match(/toc/)) {
+    //   console.log(`fileToHeadings():: ${JSON.stringify(file)}`)
+    // }
     return {
       ...heading,
+      text: heading.text,
+      html: heading.html.replace(/<a.+?a>/, ''),
       filename: file.filename,
       toc: file.toc || false,
       landmark: heading.landmark, // file.landmark
@@ -127,11 +129,11 @@ export function fileToPages(file: FileOutput) {
 
 export function collectedToTOC(config: NormalizedConfig) {
   return (collected: Collector) => {
-    console.log(
-      `collectedToTOC(toc?) :: ${collected.headings.filter((h) =>
-        h?.landmark?.match(/toc/)
-      )}`
-    )
+    // console.log(
+    //   `collectedToTOC(toc?) :: ${collected.headings.filter((h) =>
+    //     h?.landmark?.match(/toc/)
+    //   )}`
+    // )
     return {
       ...collected,
 
