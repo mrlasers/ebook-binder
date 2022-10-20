@@ -20,7 +20,7 @@ import { stripExt } from "../helpers"
 import { load } from "../lib/cheerio"
 import * as Paths from "../paths"
 import { FileOutput, StylesOutput } from "../tasks"
-import { GeneratedOutput, HTML } from "../types"
+import { GeneratedOutput, Html } from "../types"
 import {
   addFootnoteRefs,
   convertOversetHeadings,
@@ -290,7 +290,7 @@ type ProcessOptions = {
 }
 
 export function addDocumentWrapHtml(styles: StylesOutput[]) {
-  return (file: FileOutput): HTML => {
+  return (file: FileOutput): Html => {
     return `
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en-US">

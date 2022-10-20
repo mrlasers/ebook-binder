@@ -1,4 +1,4 @@
-import * as Manifest from './manifest'
+import * as Manifest from "./manifest"
 
 export * as Err from './errors'
 export * from './footnotes'
@@ -6,7 +6,7 @@ export * from './outputTuples'
 
 export { FilePaths, Config, TOCLimit } from './manifest'
 
-export type HTML = string
+export type Html = string
 export type FilePath = string
 
 export type GeneratedOutputTypes = 'CONTENT' | 'NCX' | 'NAVDOC' | 'OPF'
@@ -17,7 +17,7 @@ export type GeneratedOutput<
   operation: 'WRITE'
   type: Type
   title?: string
-  content: HTML | string
+  content: Html | string
   destination: FilePath
 }
 

@@ -120,15 +120,11 @@ export function epubFilenameFromTitle(title?: string) {
   )
 }
 
-// console.log(`process.args: ${process.argv.slice(-1)}`)
-
 const manifestArgument = process.argv.slice(-1)[0]
 
 const manifestPath = Path.resolve(manifestArgument)
 
 const buildPath = Path.dirname(manifestPath)
-
-// const outputPath = Path.resolve(buildPath, 'workshop')
 
 // hardcoded variables that should be replaced with configuration in manifest.json
 const classesToRemove = ['gender']
@@ -144,7 +140,7 @@ export const writeExplodedTE = ({
   flow(
     outputExploded({
       explodedEpubBasePath: path,
-      exclude: exclude, // ['style'] // ['xml', 'style']
+      exclude: exclude,
     }),
     TE.map(() => `Exploded files written to ${path}`)
   )

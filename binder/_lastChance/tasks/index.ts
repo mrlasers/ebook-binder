@@ -1,17 +1,17 @@
-import * as TE from 'fp-ts/TaskEither'
-import * as Path from 'path'
+import * as TE from "fp-ts/TaskEither"
+import * as Path from "path"
 
-import { CleanHtmlOptions } from '../exporter'
-import * as Paths from '../paths'
-import { Err, FileInput, FilePaths } from '../types'
-// import {Image,Content,} from '../types/manifest'
-import * as Manifest from '../types/manifest'
-import * as Content from './content'
-import * as Factory from './factory'
-import * as Font from './font'
-import * as ImageSection from './image'
-import * as Section from './section'
-import * as Styles from './styles'
+import { CleanHtmlOptions } from "../exporter"
+import * as Paths from "../paths"
+import { readFile } from "../readWrite"
+import { Err, FileInput, FilePaths, Html } from "../types"
+import { MyError } from "../types/errors"
+import * as Content from "./content"
+import * as Factory from "./factory"
+import * as Font from "./font"
+import * as ImageSection from "./image"
+import * as Section from "./section"
+import * as Styles from "./styles"
 
 export const basename = (filename: string) =>
   filename.trim().replace(/\.[^.]*$/g, '')
@@ -32,7 +32,7 @@ export const ALL_TAGS = [
   'NAVDOC',
   'STYLES',
   'OPF',
-  'FONT'
+  'FONT',
 ] as const
 export type TagTuple = typeof ALL_TAGS
 export type Tag = TagTuple[number]
@@ -114,16 +114,13 @@ export const assignToFileTaskEither =
           )
         )
       case 'CONTENT':
-        // console.log(
-        //   `assignToFileTaskEither() :: ${options?.paths?.source?.stylePath}`
-        // )
         return Content.of(file, {
           internalPath: options?.paths?.epub?.htmlPath,
           sourcePath: Path.resolve(
             options.paths.buildPath,
             options?.paths?.source?.htmlPath
           ),
-          footnotes: options?.footnotes
+          footnotes: options?.footnotes,
         })
       case 'IMAGE':
         return ImageSection.of(file, {
@@ -132,7 +129,7 @@ export const assignToFileTaskEither =
             options.paths.buildPath,
             options?.paths?.source?.imagePath
           ),
-          htmlPath: Paths.joinPath(options?.paths?.epub?.htmlPath)
+          htmlPath: Paths.joinPath(options?.paths?.epub?.htmlPath),
         })
       case 'SECTION':
         return Section.of(file, { path: options?.paths?.epub?.htmlPath })
@@ -144,7 +141,7 @@ export const assignToFileTaskEither =
           sourcePath: Path.resolve(
             options.paths.buildPath,
             options?.paths?.source?.stylePath
-          )
+          ),
         })
       case 'FONT':
         // console.log(
@@ -155,7 +152,7 @@ export const assignToFileTaskEither =
           sourcePath: Path.resolve(
             options.paths.buildPath,
             options?.paths?.source?.fontPath
-          )
+          ),
         })
     }
   }

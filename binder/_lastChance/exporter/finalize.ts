@@ -4,25 +4,25 @@ import Cheerio, {
   CheerioOptions,
   Document,
   Node,
-} from 'cheerio'
-import { id } from 'date-fns/locale'
-import * as E from 'fp-ts/Either'
-import { flow, pipe } from 'fp-ts/function'
-import * as IO from 'fp-ts/IO'
-import * as O from 'fp-ts/Option'
-import Path from 'path'
+} from "cheerio"
+import { id } from "date-fns/locale"
+import * as E from "fp-ts/Either"
+import { flow, pipe } from "fp-ts/function"
+import * as IO from "fp-ts/IO"
+import * as O from "fp-ts/Option"
+import Path from "path"
 
-import { prettyPrint } from '../../processing'
-import * as Paths from '../paths'
-import { GeneratedOutput, HTML } from '../types'
-import { load } from './'
-import { removeClasses } from './cleanHtml'
+import { prettyPrint } from "../../processing"
+import * as Paths from "../paths"
+import { GeneratedOutput, Html } from "../types"
+import { load } from "./"
+import { removeClasses } from "./cleanHtml"
 
 export type FinalCleanOptions = {
   imagePath: string
 }
 
-export function finalClean(html: HTML, options?: FinalCleanOptions) {
+export function finalClean(html: Html, options?: FinalCleanOptions) {
   const $ = load(html)
 
   // $('h1,h2,h3,h4,h5,h6').each(function() {

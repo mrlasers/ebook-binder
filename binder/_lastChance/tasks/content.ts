@@ -1,31 +1,31 @@
-import * as A from 'fp-ts/Array'
-import { pipe } from 'fp-ts/function'
-import { isBoolean } from 'fp-ts/lib/boolean'
-import { isNumber } from 'fp-ts/lib/number'
-import { isString } from 'fp-ts/lib/string'
-import * as TE from 'fp-ts/TaskEither'
-import Path from 'path'
+import * as A from "fp-ts/Array"
+import { pipe } from "fp-ts/function"
+import { isBoolean } from "fp-ts/lib/boolean"
+import { isNumber } from "fp-ts/lib/number"
+import { isString } from "fp-ts/lib/string"
+import * as TE from "fp-ts/TaskEither"
+import Path from "path"
 
 import {
-    cleanHtml,
-    CleanHtmlOptions,
-    getFiguresFromHtml,
-    getHeadingsFromHtml,
-    getImagesFromHtml,
-    getPagesFromHtml,
-} from '../exporter'
-import * as Paths from '../paths'
-import { readFile } from '../readWrite'
-import { Err, FilePaths, InputContent } from '../types'
-import { Content as InputType } from '../types/manifest'
+  cleanHtml,
+  CleanHtmlOptions,
+  getFiguresFromHtml,
+  getHeadingsFromHtml,
+  getImagesFromHtml,
+  getPagesFromHtml,
+} from "../exporter"
+import * as Paths from "../paths"
+import { readFile } from "../readWrite"
+import { Err, FilePaths, InputContent } from "../types"
+import { Content as InputType } from "../types/manifest"
 import {
-    basename,
-    FileOutput,
-    Heading,
-    Image,
-    isHtmlFilename,
-    TextLink,
-} from './'
+  basename,
+  FileOutput,
+  Heading,
+  Image,
+  isHtmlFilename,
+  TextLink,
+} from "./"
 
 export function isInput(value: any): value is InputType {
   const content = value as InputType
@@ -56,11 +56,10 @@ export function of(
   input: InputContent,
   options?: CleanHtmlOptions & Options
 ): TE.TaskEither<Err.MyError, FileOutput> {
-  // console.log('Content.of()', input.filename)
-
   return pipe(
     readFile(
-      Path.resolve(options?.sourcePath ?? Paths.sourceHtmlPath, input.filename)
+      // Path.resolve(options?.sourcePath ?? Paths.sourceHtmlPath, input.filename)
+      Path.resolve(options?.sourcePath, input.filename)
     ),
     TE.map((html): FileOutput => {
       const $html = cleanHtml(html, options)()
@@ -68,21 +67,11 @@ export function of(
         Paths.safeJoinPath(options?.internalPath, input.filename) ||
         input.filename
 
-      // console.log(`Content.of(): ${filename}`)
-
       return {
         _tag: 'HTML',
         filename: filename,
         headings: pipe(
           getHeadingsFromHtml($html, input.landmark),
-          (headings) => {
-            if (!!filename.match(/Acknowledgments.xhtml$/)) {
-              console.log(
-                `+++ content.of() :: ${JSON.stringify(headings, null, 2)}`
-              )
-            }
-            return headings
-          },
           A.concat<Heading>(
             !!input.title
               ? [
@@ -93,8 +82,8 @@ export function of(
                     filename: input.filename,
                     html: input.title,
                     landmark: input.landmark,
-                    toc: input.toc
-                  }
+                    toc: input.toc,
+                  },
                 ]
               : []
           )
@@ -103,7 +92,7 @@ export function of(
         toc: isBoolean(input.toc) ? input.toc : true,
         images: getImagesFromHtml($html),
         landmark: input.landmark || undefined,
-        pages: getPagesFromHtml($html)
+        pages: getPagesFromHtml($html),
       }
     })
   )

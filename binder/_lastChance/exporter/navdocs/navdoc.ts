@@ -1,16 +1,16 @@
-import { Do } from 'fp-ts-contrib/Do'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as IO from 'fp-ts/IO'
-import * as O from 'fp-ts/Option'
+import { Do } from "fp-ts-contrib/Do"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as IO from "fp-ts/IO"
+import * as O from "fp-ts/Option"
 
-import { Collector, CollectorTOC, idNodeToFilename } from '../'
-import { prettyPrint } from '../../../processing'
-import * as Paths from '../../paths'
-import { FileOutput, Heading, Page, TextLink } from '../../tasks'
-import { GeneratedOutput, HTML, Metadata } from '../../types'
-import { headingToTocNode, reduceToNestedHeadings, TocNode } from './nesto'
+import { Collector, CollectorTOC, idNodeToFilename } from "../"
+import { prettyPrint } from "../../../processing"
+import * as Paths from "../../paths"
+import { FileOutput, Heading, Page, TextLink } from "../../tasks"
+import { GeneratedOutput, Html, Metadata } from "../../types"
+import { headingToTocNode, reduceToNestedHeadings, TocNode } from "./nesto"
 
 export function navdocFromCollector(c: Collector): FileOutput {
   return {

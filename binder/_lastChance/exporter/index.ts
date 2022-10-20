@@ -1,16 +1,13 @@
-import Cheerio from 'cheerio'
-import * as A from 'fp-ts/Array'
-import { pipe } from 'fp-ts/function'
-import { isNumber } from 'fp-ts/lib/number'
-import * as O from 'fp-ts/Option'
-import Path from 'path'
+import Cheerio from "cheerio"
+import { pipe } from "fp-ts/function"
+import { isNumber } from "fp-ts/lib/number"
+import Path from "path"
 
-import { dirtyUnsafeMetadata } from '../_unsafeHacks'
-import * as Paths from '../paths'
-import { FileOutput, Heading, Image, Page, TextLink } from '../tasks'
-import { Metadata } from '../types'
-import { combineConsecutiveH1Headings } from './cleanHtml'
-import { TocNode } from './navdocs/nesto'
+import * as Paths from "../paths"
+import { FileOutput, Heading, Image, Page, TextLink } from "../tasks"
+import { Metadata } from "../types"
+import { combineConsecutiveH1Headings } from "./cleanHtml"
+import { TocNode } from "./navdocs/nesto"
 
 export * from './cleanHtml'
 export * from './finalize'
@@ -31,13 +28,6 @@ export function idNodeToFilename(node: {
     ? ''
     : node.filename + (node.id ? `#${node.id}` : '')
 }
-
-// export type Metadata = {
-//   pubId: string
-//   title: string
-//   author: string
-//   publisher: string
-// }
 
 export type CollectorTOC = {
   filename: string
@@ -69,7 +59,7 @@ export function getFiguresFromHtml(html: string): TextLink[] {
       .map(function (): TextLink {
         return {
           text: $(this).attr('figure'),
-          filename: $(this).attr('id')
+          filename: $(this).attr('id'),
         }
       })
       .toArray()
@@ -155,7 +145,7 @@ export function getHeadingsFromHtml(
           .replace(/\s+/g, ' ')
           .replace(/^.+?\|/, (str) => str.toUpperCase()),
         html: html,
-        landmark: nextLandmark
+        landmark: nextLandmark,
         // .replace(/<\/*del>/g, '')
       }
 
@@ -181,7 +171,7 @@ export function getPagesFromHtml(html: string): Page[] {
       }
       return {
         id,
-        num: id.replace(/^p/, '')
+        num: id.replace(/^p/, ''),
       }
     })
 
@@ -197,7 +187,7 @@ export function srcFilenameToImage(
     destination: Paths.joinPath(
       destinationPath,
       Path.basename(source, Path.extname(source)) + '.jpg'
-    )
+    ),
   }
 }
 
@@ -231,7 +221,7 @@ export function getFootnotesFromHtml(html: string) {
 }
 
 export function decorateFileOutput(file: FileOutput): FileOutput {
-  let headings = [...file.headings, ...getHeadingsFromHtml(file.html)]
+  // let headings = [...file.headings, ...getHeadingsFromHtml(file.html)]
 
   if (!!file?.landmark?.match(/toc/)) {
     console.log(`decorateFileOutput() :: ${JSON.stringify(file)}`)
@@ -241,6 +231,6 @@ export function decorateFileOutput(file: FileOutput): FileOutput {
     ...file,
     headings: file.headings, // [...file.headings, ...getHeadingsFromHtml(file.html)],
     pages: [...file.pages], //, ...getPagesFromHtml(file.html)],
-    images: [...file.images, ...getImagesFromHtml(file.html)]
+    images: [...file.images, ...getImagesFromHtml(file.html)],
   }
 }

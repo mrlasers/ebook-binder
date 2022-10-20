@@ -1,30 +1,30 @@
-import { identity } from 'fp-ts'
-import { Do } from 'fp-ts-contrib/Do'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as O from 'fp-ts/Option'
-import { v4 as Uuid } from 'uuid'
+import { identity } from "fp-ts"
+import { Do } from "fp-ts-contrib/Do"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as O from "fp-ts/Option"
+import { v4 as Uuid } from "uuid"
 
-import { Collector, CollectorTOC, idNodeToFilename } from '../'
-import { prettyPrint } from '../../../processing'
-import * as Paths from '../../paths'
-import { FileOutput, Heading, Page } from '../../tasks'
-import { GeneratedOutput, HTML, Metadata } from '../../types'
-import { headingToTocNode, TocNode } from './nesto'
+import { Collector, CollectorTOC, idNodeToFilename } from "../"
+import { prettyPrint } from "../../../processing"
+import * as Paths from "../../paths"
+import { FileOutput, Heading, Page } from "../../tasks"
+import { GeneratedOutput, Html, Metadata } from "../../types"
+import { headingToTocNode, TocNode } from "./nesto"
 
 function navPoint(
   id: string,
   playOrder: number,
   src: string,
   text: string
-): HTML {
+): Html {
   return `<navPoint id="${id}" playOrder="${playOrder}"><navLabel><text>${text}</text></navLabel><content src="${Paths.getRelativeNavToContentPath(
     src
   )}"/></navPoint>`
 }
 
-export const navLabel = (text: string): HTML =>
+export const navLabel = (text: string): Html =>
   `<navLabel><text>${text}</text></navLabel>`
 
 // export function headingsToNcx(input: {

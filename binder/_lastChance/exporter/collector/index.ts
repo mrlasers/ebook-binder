@@ -1,8 +1,8 @@
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as O from 'fp-ts/Option'
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as O from "fp-ts/Option"
 
-import { toTitleCase } from '@artsy/to-title-case'
+import { toTitleCase } from "@artsy/to-title-case"
 
 import {
   Collector,
@@ -10,12 +10,12 @@ import {
   decorateFileOutput,
   getFiguresFromHtml,
   getFootnotesFromHtml,
-} from '../'
-import { reduceFilterImages, sortImages } from '../../main'
-import { FileOutput, Heading, Image, Page, TextLink } from '../../tasks'
-import { Config, Metadata, NormalizedConfig } from '../../types'
-import { reduceToNestedHeadings } from '../navdocs/nesto'
-import { resolveFactories } from './factories'
+} from "../"
+import { reduceFilterImages, sortImages } from "../../main"
+import { FileOutput, Heading, Image, Page, TextLink } from "../../tasks"
+import { Config, Metadata, NormalizedConfig } from "../../types"
+import { reduceToNestedHeadings } from "../navdocs/nesto"
+import { resolveFactories } from "./factories"
 
 export const collectOutput =
   (metadata: Metadata, config: NormalizedConfig) =>
@@ -30,10 +30,6 @@ export const collectOutput =
           .reduce<Image[]>(reduceFilterImages, [])
           .sort(sortImages),
       }),
-      // (x) => {
-      //   console.log(x.toc.linear)
-      //   return x
-      // },
       resolveFactories(config)
     )
 
