@@ -1,6 +1,6 @@
-import { ProcessOptions } from '.'
-import { cheerio } from '../lib'
-import { FileItem, FootnoteItems } from '../types'
+import { cheerio } from "../lib"
+import { FileItem, FootnoteItems } from "../types"
+import { ProcessOptions } from "./"
 
 export function addDocumentWrap(options?: ProcessOptions) {
   return ($html: FileItem | string): FileItem => {
@@ -24,7 +24,7 @@ export function addDocumentWrap(options?: ProcessOptions) {
 
     return {
       ...item,
-      html
+      html,
     }
   }
 }
@@ -67,7 +67,7 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
             </tr>
           </tbody>
         </table>
-        
+
         `
         // `<aside epub:type="footnote">` +
         // `<div id="fn${ref}">` +
@@ -83,7 +83,7 @@ export function addAndExtractFootnoteRefs(footnotes?: FootnoteItems) {
     return {
       ...item,
       html: $.html() + '\n' + fns.join('\n'),
-      footnotes: [...(item.footnotes || []), fnrefs]
+      footnotes: [...(item.footnotes || []), fnrefs],
     }
   }
 }
@@ -104,8 +104,8 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
           append: {
             level,
             text: $(this).text(),
-            html: $(this).html()
-          }
+            html: $(this).html(),
+          },
         }
       }
 
@@ -129,7 +129,7 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
         id,
         level,
         text: $(this)?.text()?.trim(),
-        html: $(this)?.html()?.trim()
+        html: $(this)?.html()?.trim(),
       }
     })
     .toArray()
@@ -161,6 +161,6 @@ export function addAndExtractHeadings($html: FileItem | string): FileItem {
     ...item,
     html: $.html(),
     headings,
-    pages
+    pages,
   }
 }

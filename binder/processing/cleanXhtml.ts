@@ -1,17 +1,17 @@
 import {
-    AcceptedElems,
-    BasicAcceptedElems,
-    Cheerio,
-    Element,
-    Node,
-} from 'cheerio'
-import { pipe } from 'fp-ts/function'
-import { minify } from 'html-minifier-terser'
-import beautify from 'js-beautify'
-import Path from 'path'
+  AcceptedElems,
+  BasicAcceptedElems,
+  Cheerio,
+  Element,
+  Node,
+} from "cheerio"
+import { pipe } from "fp-ts/function"
+import { minify } from "html-minifier-terser"
+import beautify from "js-beautify"
+import Path from "path"
 
-import { cheerio, CheerioAPI } from '../lib'
-import { Extractor, FileItem } from '../types'
+import { cheerio, CheerioAPI } from "../lib"
+import { Extractor, FileItem } from "../types"
 
 function RegexEscape(s: string) {
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
@@ -55,7 +55,7 @@ export function prettyPrint(html: string) {
     preserve_newlines: false,
     end_with_newline: true,
     extra_liners: [],
-    wrap_line_length: 0
+    wrap_line_length: 0,
   })
 }
 
@@ -128,7 +128,7 @@ export function mergeLists($html: string | FileItem): FileItem {
 
   return {
     ...item,
-    html: $.html()
+    html: $.html(),
   }
 }
 
@@ -175,7 +175,7 @@ export function unwrapStrongHeading($html: FileItem | string): FileItem {
 
   return {
     ...item,
-    html: $.html()
+    html: $.html(),
   }
 }
 
@@ -192,7 +192,7 @@ export function removeEmptyParagraphs($html: FileItem | string): FileItem {
 
   return {
     ...item,
-    html: $.html()
+    html: $.html(),
   }
 }
 
@@ -205,7 +205,7 @@ export function replaceBreak($html: FileItem | string): FileItem {
   )
   return {
     ...item,
-    html: $.html()
+    html: $.html(),
   }
 }
 
@@ -234,7 +234,7 @@ export function removeClasses(remove: string | string[]) {
 
     return {
       ...item,
-      html: $.html()
+      html: $.html(),
     }
   }
 }

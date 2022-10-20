@@ -1,11 +1,11 @@
 import {
   mergeLists,
-  unwrapStrongHeading,
+  removeClasses,
   removeEmptyParagraphs,
   replaceBreak,
+  unwrapStrongHeading,
   wrapListItemContentInParagraph,
-  removeClasses
-} from '../processing/cleanXhtml'
+} from "../processing/cleanXhtml"
 
 it('removes classes', () => {
   const html =

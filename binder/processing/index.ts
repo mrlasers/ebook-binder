@@ -1,25 +1,24 @@
+import { flow, pipe } from "fp-ts/function"
+
+import { cheerio } from "../lib"
+import { FileItem, FootnoteItems } from "../types"
 import {
   mergeLists,
-  unwrapStrongHeading,
+  mergePullquotes,
+  prettyPrint,
+  removeClasses,
   removeEmptyParagraphs,
   replaceBreak,
-  removeClasses,
-  wrapListItemContentInParagraph,
   replaceIllustrationPlaceholders,
-  mergePullquotes,
-  prettyPrint
-} from './cleanXhtml'
+  unwrapStrongHeading,
+  wrapListItemContentInParagraph,
+} from "./cleanXhtml"
 import {
-  addAndExtractHeadings,
   addAndExtractFootnoteRefs,
-  addDocumentWrap
-} from './extractXhtml'
-import { markupQA } from './gendoBendos'
-
-import { cheerio } from '../lib'
-import { pipe, flow } from 'fp-ts/function'
-import { FileItem, FootnoteItems } from '../types'
-// import Cheerio from 'cheerio'
+  addAndExtractHeadings,
+  addDocumentWrap,
+} from "./extractXhtml"
+import { markupQA } from "./markupQA"
 
 export { prettyPrint } from './cleanXhtml'
 
@@ -91,7 +90,7 @@ export function processHtmlHACK(options?: ProcessOptions) {
         // const $html = html?.html || html
         return {
           ...item,
-          ...html
+          ...html,
         }
       }
     )
