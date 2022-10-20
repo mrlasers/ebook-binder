@@ -1,7 +1,7 @@
-import { TaskEither } from 'fp-ts/TaskEither'
-import { Key } from './'
-import { EpubLandmark } from '../epub'
-import { FootnoteItems } from './'
+import { TaskEither } from "fp-ts/TaskEither"
+
+import { FootnoteItems, Key } from "../../demo/output/types"
+import { EpubLandmark } from "./epub"
 
 export type Manifest = {
   metadata: ManifestMetaData

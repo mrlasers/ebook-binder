@@ -6,10 +6,10 @@ import * as IO from "fp-ts/IO"
 import * as O from "fp-ts/Option"
 
 import { Collector, CollectorTOC, idNodeToFilename } from "../"
-import { prettyPrint } from "../../../binder/processing"
 import * as Paths from "../../paths"
 import { FileOutput, Heading, Page, TextLink } from "../../tasks"
 import { GeneratedOutput, Html, Metadata } from "../../types"
+import { prettyPrint } from "../finalize"
 import { headingToTocNode, reduceToNestedHeadings, TocNode } from "./nesto"
 
 export function navdocFromCollector(c: Collector): FileOutput {

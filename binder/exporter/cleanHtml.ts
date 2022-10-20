@@ -14,7 +14,6 @@ import * as IO from "fp-ts/IO"
 import * as O from "fp-ts/Option"
 import Path from "path"
 
-import { prettyPrint } from "../../binder/processing"
 import { stripExt } from "../helpers"
 // const getIO
 import { load } from "../lib/cheerio"

@@ -8,10 +8,10 @@ import {
   decorateFileOutput,
   finalClean,
 } from "../"
-import { prettyPrint } from "../../../binder/processing"
 import * as Paths from "../../paths"
 import { FileOutput, isStylesOutput } from "../../tasks"
 import { Metadata, OutputTuple, OutputTupleOptions } from "../../types"
+import { prettyPrint } from "../finalize"
 
 export const makeStyleTuple = (path: string, css: string): OutputTuple => [
   'style',

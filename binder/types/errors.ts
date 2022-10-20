@@ -1,12 +1,22 @@
-export class FileError extends Error {
-  public _tag: string
-
-  private constructor(msg: string) {
+export class MyError extends Error {
+  protected constructor(name: string, msg: string) {
     super(msg)
-    this._tag = 'FileError'
   }
 
-  public static of(message: string): FileError {
-    return new FileError(message)
+  static of(msg: any) {
+    return new MyError('MyError', String(msg))
   }
 }
+
+// export class AnyError extends MyError {
+//   obj: any
+
+//   protected constructor(obj: any) {
+//     super(String(obj))
+//     this.obj = obj
+//   }
+
+//   static of(obj: any) {
+//     return new AnyError(obj)
+//   }
+// }

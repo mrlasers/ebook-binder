@@ -8,7 +8,6 @@ import produce from "immer"
 import { nanoid } from "nanoid"
 import Path, { basename } from "path"
 
-import { prettyPrint } from "../../binder/processing"
 import {
   getImageFilePathOut,
   getRelativeImagePath,
@@ -17,6 +16,7 @@ import {
 import { FileOutput, Image } from "../tasks"
 import { GeneratedOutput, Metadata, Output } from "../types"
 import { Collector } from "./"
+import { prettyPrint } from "./finalize"
 
 export function getUTCTime() {
   return dayjs().toISOString().slice(0, -5) + 'Z'

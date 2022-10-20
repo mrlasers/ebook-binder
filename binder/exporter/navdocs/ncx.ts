@@ -7,10 +7,10 @@ import * as O from "fp-ts/Option"
 import { v4 as Uuid } from "uuid"
 
 import { Collector, CollectorTOC, idNodeToFilename } from "../"
-import { prettyPrint } from "../../../binder/processing"
 import * as Paths from "../../paths"
 import { FileOutput, Heading, Page } from "../../tasks"
 import { GeneratedOutput, Html, Metadata } from "../../types"
+import { prettyPrint } from "../finalize"
 import { headingToTocNode, TocNode } from "./nesto"
 
 function navPoint(
