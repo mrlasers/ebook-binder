@@ -26,7 +26,8 @@
     "lastchance:possibilities": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\L\\Leslie Eliel\\New Possibilities\\build\\manifest.json\"",
     "lastchance:sing": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\I'll Sing Again Tomorrow\\build\\manifest.json\"",
     "lastchance:hmo": "yarn lastchance \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Martin Gaine\\Planning for HMOs\\build\\ebook\\manifest.json\"",
-    "test:lastchance": "jest --watch ./binder/_lastChance"
+    "test:lastchance": "jest --watch ./binder/_lastChance",
+    "very-last-chance": "tsnd --respawn .\\binder\\_lastChance\\index.ts \"C:\\Users\\timot\\OneDrive\\MrLasers\\Projects\\M\\Mi Ae Lipe\\Gender2\\build\\manifest.json\""
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
