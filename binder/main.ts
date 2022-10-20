@@ -75,11 +75,6 @@ const writeEpubFromTuples =
             return pipe(
               f[0] === 'image' ? readAndCompressImage(f[2]) : f[2],
               (data: string | Promise<Buffer>) => {
-                // -- DEBUG
-                console.log('writeEpubFromTuples')
-                console.log(f[1])
-                // -- /DEBUG
-
                 return zip.file(Paths.joinPath('OEBPS', f[1]), data)
               }
             )

@@ -50,13 +50,13 @@ export type WriteCombinedHtmlOptions = {
 export const writeCombinedHtml =
   (outputPath: string, options: WriteCombinedHtmlOptions) =>
   (tuples: OutputTuple[]) => {
-    console.log(
-      `
-=== writeCombinedHtml() ===================================
-  * does not validate/create output directory, this should be fixed
-===========================================================
-`.trim()
-    )
+    //     console.log(
+    //       `
+    // === writeCombinedHtml() ===================================
+    //   * does not validate/create output directory, this should be fixed
+    // ===========================================================
+    // `.trim()
+    //     )
 
     const styles = pipe(
       tuples,

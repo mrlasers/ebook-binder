@@ -1,10 +1,10 @@
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as TE from 'fp-ts/TaskEither'
-import Path from 'path'
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as TE from "fp-ts/TaskEither"
+import Path from "path"
 
-import { copyFile, deleteFile, mkDir, writeFile } from '../../readWrite'
-import { Err, OutputTuple, OutputTupleTypes } from '../../types'
+import { copyFile, deleteFile, mkDir, writeFile } from "../../readWrite"
+import { Err, OutputTuple, OutputTupleTypes } from "../../types"
 
 export type EpubOutputOptions = {
   explodedEpubBasePath: string
@@ -76,7 +76,7 @@ export function outputExplodedEpub(options?: EpubOutputOptions) {
                 // console.log(`outputExplodedEpub(style): ${path}`)
                 return copyFile(data, path)
               case 'font':
-                console.log(`::: Skipping fonts for exploded epub output :::`)
+                // console.log(`::: Skipping fonts for exploded epub output :::`)
                 return TE.of(undefined)
             }
           }),

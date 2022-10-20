@@ -32,23 +32,23 @@ export function navdocFromCollector(c: Collector): FileOutput {
 
 export function guideFromHeadings(ignoreLandmarks?: string[]) {
   return (headings: Heading[]): string => {
-    console.log('====guideFromHeadings====')
-    console.log(
-      headings.filter((h) => !!h.text.trim().match(/Acknowledgments/))
-    )
+    // console.log('====guideFromHeadings====')
+    // console.log(
+    //   headings.filter((h) => !!h.text.trim().match(/Acknowledgments/))
+    // )
     return pipe(
       headings,
       A.filter((h) => !!h.landmark && !ignoreLandmarks.includes(h.landmark)),
       O.fromPredicate((x) => !!x.length),
       O.map(
         flow(
-          A.filter((h) => {
-            if (!!h.landmark.match(/bodymatter/) || !!h.landmark.match(/toc/)) {
-              console.log(`~~~ guideFromheadings :: ${h.text} : ${h.landmark}`)
-            }
+          // A.filter((h) => {
+          //   if (!!h.landmark.match(/bodymatter/) || !!h.landmark.match(/toc/)) {
+          //     console.log(`~~~ guideFromheadings :: ${h.text} : ${h.landmark}`)
+          //   }
 
-            return true
-          }),
+          //   return true
+          // }),
           A.map(
             (h) =>
               `<li><a epub:type="${h.landmark}" href="${Paths.relativePath(

@@ -90,17 +90,17 @@ const tocFactory: TocFactory = {
 
 export const resolveFactories =
   (config?: NormalizedConfig) => (collected: Collector) => {
-    console.log(
-      `
-=== resolveFactories() ========================================
-Need to fix:
-  * chooses between 'toc' and 'toc2' classes based on whether
-    the text begins with "chapter"
-  -------------------------------------------------------------
-  variant: ${config?.variant}
-===============================================================
-  `.trim()
-    )
+    //     console.log(
+    //       `
+    // === resolveFactories() ========================================
+    // Need to fix:
+    //   * chooses between 'toc' and 'toc2' classes based on whether
+    //     the text begins with "chapter"
+    //   -------------------------------------------------------------
+    //   variant: ${config?.variant}
+    // ===============================================================
+    //   `.trim()
+    //     )
     //== only doing toc factory atm
     return {
       ...collected,

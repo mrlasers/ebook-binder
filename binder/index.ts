@@ -1,3 +1,5 @@
-import { program } from './main'
+import * as E from "fp-ts/Either"
 
-program().then(console.log)
+import { program } from "./main"
+
+program().then(E.fold(console.error, console.log))

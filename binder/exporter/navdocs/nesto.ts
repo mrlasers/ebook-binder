@@ -56,7 +56,7 @@ export const headingToTocNode =
 let addChildWarning = false
 
 function addChild(nodes: TocNode[], child: TocNode) {
-  if (!addChildWarning) {
+  if (addChildWarning) {
     console.log(
       `
 ${'='.repeat(60)}
@@ -97,14 +97,14 @@ export function levelsToTree(nodes: TocNode[], child: TocNode) {
 }
 
 export const reduceToNestedHeadings = (headings: Heading[]) => {
-  console.log(`=======reduceToNestedHeadings (big dump coming)=======`)
-  console.log(
-    JSON.stringify(
-      headings.map(({ text, navlevel }) => ({ text, navlevel })).slice(0, 5),
-      null,
-      2
-    )
-  )
+  // console.log(`=======reduceToNestedHeadings (big dump coming)=======`)
+  // console.log(
+  //   JSON.stringify(
+  //     headings.map(({ text, navlevel }) => ({ text, navlevel })).slice(0, 5),
+  //     null,
+  //     2
+  //   )
+  // )
   return pipe(
     headings,
     A.map(headingToTocNode({ floor: 0, ceiling: 3 })),
