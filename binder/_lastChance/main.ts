@@ -121,9 +121,8 @@ export function epubFilenameFromTitle(title?: string) {
 }
 
 const manifestArgument = process.argv.slice(-1)[0]
-console.log(manifestArgument)
 
-const manifestPath = Path.resolve(manifestArgument)
+const manifestPath = Path.resolve(process.cwd(), manifestArgument)
 
 const buildPath = Path.dirname(manifestPath)
 
@@ -147,7 +146,7 @@ export const writeExplodedTE = ({
   )
 
 export const program = pipe(
-  loadManifestAndFootnotes(manifestArgument),
+  loadManifestAndFootnotes(manifestPath),
   TE.chain(({ footnotes, paths, config, metadata, files }) => {
     return pipe(
       files,
