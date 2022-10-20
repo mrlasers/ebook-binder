@@ -1,6 +1,3 @@
-import { CheerioAPI } from "cheerio"
-import { Do } from "fp-ts-contrib/Do"
-import { join } from "fp-ts-std/Array"
 import * as A from "fp-ts/Array"
 import { flow, pipe } from "fp-ts/function"
 import * as TE from "fp-ts/TaskEither"
@@ -13,7 +10,11 @@ import {
   outputExploded,
   writeCombinedHtml,
 } from "./exporter"
-import { AppleIbooksDisplayXML, ContainerXML } from "./exporter/epub"
+import {
+  AppleIbooksDisplayXML,
+  ContainerXML,
+  epubFilenameFromTitle,
+} from "./exporter/epub"
 import { navdocFromCollector, ncxFromCollector } from "./exporter/navdocs"
 import { collectedToOpf } from "./exporter/opf"
 import { collectedToOutputTuples } from "./exporter/output"
@@ -21,10 +22,9 @@ import { loadManifestAndFootnotes } from "./ingestion/manifest"
 //** < mark for delete */
 // import { loadManifestAndFootnotes } from "./features/manifest"
 import * as Paths from "./paths"
-import { readAndCompressImage, readFootnotes, writeZip } from "./readWrite"
+import { readAndCompressImage, writeZip } from "./readWrite"
 import { assignToFileTaskEither, Image } from "./tasks"
-import { Err, FilePaths, OutputTuple, OutputTupleTypes } from "./types"
-import { loadManifest } from "./types/manifestValidate"
+import { OutputTuple, OutputTupleTypes } from "./types"
 
 export function reduceFilterImages(images: Image[], image: Image) {
   return !!images.find((i) => i.source === image.source)
@@ -93,32 +93,6 @@ const writeEpubFromTuples =
         compressionOptions: { level: 9 },
       })
     )
-
-export function epubFilenameFromTitle(title?: string) {
-  if (typeof title !== 'string') return 'ebook.epub'
-
-  const d = new Date()
-
-  const filenameDate = [d.getFullYear(), d.getMonth() + 1, d.getDate()]
-    .map((x) => x.toString().padStart(2, '0'))
-    .join('.')
-
-  return (
-    title
-      .toLowerCase()
-      .replace(/[^a-z -]/g, '')
-      .split(/\s/)
-      .filter((x) => x.length > 3)
-      .slice(0, 3)
-      .map((word) => word.replace(/^./, (match) => match.toUpperCase()))
-      .join('-') +
-    '_' +
-    filenameDate +
-    '-' +
-    d.getHours().toString(10) +
-    '.epub'
-  )
-}
 
 const manifestArgument = process.argv.slice(-1)[0]
 

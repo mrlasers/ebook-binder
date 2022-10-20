@@ -11,7 +11,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --watch",
-    "demo": "tsnd --respawn ./_lastChance/index.ts ./demo/manifest.json"
+    "demo": "tsnd --respawn ./binder/index.ts ./demo/manifest.json",
+    "demo:watch": "tsnd --respawn ./binder/index.ts ./demo/manifest.json"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
