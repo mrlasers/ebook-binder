@@ -10,7 +10,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "demo": "tsnd --respawn ./binder/index.ts ./demo/manifest.json",
     "demo:watch": "tsnd --respawn ./binder/index.ts ./demo/manifest.json"
   },
