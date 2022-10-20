@@ -24,18 +24,6 @@ const convertFigurePlaceholder: CheerioFunc = ($) => {
 }
 
 const makeFigure: CheerioFunc = ($) => {
-  /*
-
-    <makeFigure>
-      { "attributes": {
-        "figure": "Figure 2.6. Vaginoplasty 1 of 4"
-      },
-      "image": "Figure116",
-      "caption": "Figure 2.6. Vaginoplasty 1 of 4 The starting point." }
-    </makeFigure>
-
-
-  */
   $('makeFigure').each(function () {
     const json = $(this)
       .text()
@@ -43,8 +31,6 @@ const makeFigure: CheerioFunc = ($) => {
       .replace(/\s+/g, ' ')
       .trim()
     const className = $(this).attr('class')
-    // .replace(/(?<=[:{])\s+/g, '')
-    // .replace(/\s+(?=[:{])/g, '')
 
     $(this).html(`
       <p>${'|' + json + '|'}</p>
@@ -57,17 +43,9 @@ const makeFigure: CheerioFunc = ($) => {
       return acc + `${key}="${attributes[key]}"`
     }, '')
 
-    // if (caption.match(/Figure 6\.1/)) {
-    //   throw new Error(caption)
-    // }
-
     const hack_caption = caption.match(/Figure 6\.1/)
       ? 'Figure 6.1. <em>The Great Wall of Vagina</em> by Jamie McCartney.'
       : null
-
-    // if (hack_caption) {
-    //   throw new Error(hack_caption)
-    // }
 
     $(this).replaceWith(`
       <figure ${attr} ${className?.length ? `class="${className}"` : ''}>

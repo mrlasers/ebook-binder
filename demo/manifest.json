@@ -1,0 +1,50 @@
+{
+  "$schema": "./manifest.schema.json",
+  "metadata": {
+    "title": "Cool Book",
+    "pubId": "83540638-58fe-4900-9ba1-15efe66b7fca",
+    "author": "Me",
+    "publisher": "MrLasers.com"
+  },
+  "paths": {
+    "source": {
+      "htmlPath": "source/xhtml",
+      "stylePath": "source/styles",
+      "imagePath": "source/images",
+      "fontPath": "source/fonts"
+    },
+    "output": {
+      "explodedEpubPath": "output/epub",
+      "epubPath": "output",
+      "combinedHtmlPath": "output",
+      "combinedPathToStyles": "source/styles"
+    },
+    "epub": {
+      "htmlPath": "Content",
+      "imagePath": "Images",
+      "stylePath": "Styles",
+      "fontPath": "Fonts",
+      "navPath": "Navigation"
+    }
+  },
+  "files": [
+    "FiraCode-Regular.ttf",
+    "FiraCode-Bold.ttf",
+    "main.css",
+    {
+      "_tag": "SECTION",
+      "title": "Cover",
+      "filename": "cover.jpg",
+      "landmark": "cover",
+      "toc": false
+    },
+    {
+      "_tag": "CONTENT",
+      "filename": "chapter1.xhtml",
+      "landmark": "bodymatter"
+    },
+    "chapter2.xhtml",
+    "chapter3.xhtml",
+    "abouttheauthor.xhtml"
+  ]
+}

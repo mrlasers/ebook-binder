@@ -121,6 +121,7 @@ export function epubFilenameFromTitle(title?: string) {
 }
 
 const manifestArgument = process.argv.slice(-1)[0]
+console.log(manifestArgument)
 
 const manifestPath = Path.resolve(manifestArgument)
 

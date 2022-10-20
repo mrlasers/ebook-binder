@@ -1,12 +1,12 @@
-import Cheerio from 'cheerio'
-import * as A from 'fp-ts/Array'
-import * as E from 'fp-ts/Either'
-import { flow, identity, pipe } from 'fp-ts/function'
-import { isBoolean } from 'fp-ts/lib/boolean'
-import * as O from 'fp-ts/Option'
+import Cheerio from "cheerio"
+import * as A from "fp-ts/Array"
+import * as E from "fp-ts/Either"
+import { flow, identity, pipe } from "fp-ts/function"
+import { isBoolean } from "fp-ts/lib/boolean"
+import * as O from "fp-ts/Option"
 
-import { headsTail } from '../../../../lib/fp'
-import { Heading } from '../../tasks'
+import { headsTail } from "../../helpers"
+import { Heading } from "../../tasks"
 
 export type TocNode = {
   text: string
