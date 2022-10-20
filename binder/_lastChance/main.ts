@@ -17,6 +17,9 @@ import { AppleIbooksDisplayXML, ContainerXML } from "./exporter/epub"
 import { navdocFromCollector, ncxFromCollector } from "./exporter/navdocs"
 import { collectedToOpf } from "./exporter/opf"
 import { collectedToOutputTuples } from "./exporter/output"
+import { loadManifestAndFootnotes } from "./ingestion/manifest"
+//** < mark for delete */
+// import { loadManifestAndFootnotes } from "./features/manifest"
 import * as Paths from "./paths"
 import { readAndCompressImage, readFootnotes, writeZip } from "./readWrite"
 import { assignToFileTaskEither, Image } from "./tasks"
@@ -100,10 +103,6 @@ export function epubFilenameFromTitle(title?: string) {
     .map((x) => x.toString().padStart(2, '0'))
     .join('.')
 
-  // console.log(
-  //   `epubFilenameFromTitle() :: ${d.getHours()} ; ${d.getHours().toString()}`
-  // )
-
   return (
     title
       .toLowerCase()
@@ -129,51 +128,7 @@ const manifestPath = Path.resolve(manifestArgument)
 
 const buildPath = Path.dirname(manifestPath)
 
-const outputPath = Path.resolve(buildPath, 'workshop')
-
-export const resolveFilePath = (dir: string) => (path: string) =>
-  Path.resolve(dir, path)
-
-export const resolveFilePaths = (dir: string) => (paths: FilePaths) =>
-  Object.keys(paths).reduce<Required<FilePaths>>(
-    (acc, key) => {
-      return {
-        ...acc,
-        [key]: resolveFilePath(dir)(paths[key]),
-      }
-    },
-    {
-      htmlPath: dir,
-      imagePath: dir,
-      stylePath: dir,
-      fontPath: dir,
-      navPath: dir,
-    }
-  )
-
-const loadManifestAndFootnotes = flow(
-  loadManifest,
-  TE.bindTo('manifest'),
-  TE.bind('footnotes', ({ manifest }) =>
-    manifest.paths?.footnotes
-      ? readFootnotes(
-          Path.resolve(Path.dirname(manifestPath), manifest.paths.footnotes)
-        )
-      : TE.of({})
-  ),
-  TE.map(({ footnotes, manifest }) => ({
-    metadata: manifest.metadata,
-    paths: {
-      ...manifest.paths,
-      source: resolveFilePaths(Path.dirname(manifestPath))(
-        manifest?.paths?.source
-      ),
-    },
-    config: manifest.config,
-    files: manifest.files,
-    footnotes,
-  }))
-)
+// const outputPath = Path.resolve(buildPath, 'workshop')
 
 // hardcoded variables that should be replaced with configuration in manifest.json
 const classesToRemove = ['gender']

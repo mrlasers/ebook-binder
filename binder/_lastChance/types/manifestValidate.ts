@@ -1,27 +1,27 @@
-import * as Ajv from 'ajv'
-import Ajv2020 from 'ajv/dist/2020'
-import * as A from 'fp-ts/Array'
-import * as E from 'fp-ts/Either'
-import { flow, pipe } from 'fp-ts/function'
-import { isBoolean } from 'fp-ts/lib/boolean'
-import * as TE from 'fp-ts/TaskEither'
-import Fs from 'fs/promises'
-import { compile, compileFromFile } from 'json-schema-to-typescript'
-import Path from 'path'
+import * as Ajv from "ajv"
+import Ajv2020 from "ajv/dist/2020"
+import * as A from "fp-ts/Array"
+import * as E from "fp-ts/Either"
+import { flow, pipe } from "fp-ts/function"
+import { isBoolean } from "fp-ts/lib/boolean"
+import * as TE from "fp-ts/TaskEither"
+import Fs from "fs/promises"
+import { compile, compileFromFile } from "json-schema-to-typescript"
+import Path from "path"
 
-import { manifestPath } from '../paths'
-import { readJson } from '../readWrite'
-import { Config, NormalizedConfig, TOCLimit } from '../types'
-import { Err } from './'
+import { manifestPath } from "../paths"
+import { readJson } from "../readWrite"
+import { Config, NormalizedConfig, TOCLimit } from "../types"
+import { Err } from "./"
 import {
-    Content,
-    Factory,
-    Font,
-    Image,
-    Manifest,
-    Section,
-    Styles,
-} from './manifest'
+  Content,
+  Factory,
+  Font,
+  Image,
+  Manifest,
+  Section,
+  Styles,
+} from "./manifest"
 
 const ajv = new Ajv2020()
 
@@ -60,6 +60,8 @@ const validateManifestFiles = makeValidator<Manifest>(
   require('./schemas/manifest.schema.json')
 )
 
+export const validManifest = isValidTE(validateManifestFiles)
+
 const isValidManifestFilesTE = (
   json: any
 ): TE.TaskEither<Err.MyError, Manifest> => {
@@ -81,13 +83,13 @@ const result = pipe(
           if (typeof file === 'string') {
             if (!!file.trim().match(/\.(xhtml|html|htm)$/)) {
               return {
-                filename: file
+                filename: file,
               } as Content
             }
 
             if (!!file.trim().match(/\.(jpeg|jpg|png|gif)$/)) {
               return {
-                filename: file
+                filename: file,
               } as Image
             }
 
@@ -95,7 +97,7 @@ const result = pipe(
           }
           return file
         })
-        .filter(Boolean)
+        .filter(Boolean),
     }
   }),
   TE.map((manifest) => {})
@@ -138,7 +140,7 @@ export const normalizeConfigTOC = (toc: TOCLimit): number[] => {
 export const normalizeConfig = (config: Config = {}): NormalizedConfig => {
   return {
     ...config,
-    toc: normalizeConfigTOC(config.toc)
+    toc: normalizeConfigTOC(config.toc),
   }
 }
 
@@ -166,7 +168,7 @@ export const loadManifest = (manifestPath: string) =>
                     bodyClass: null,
                     landmark: null,
                     title: null,
-                    toc: true
+                    toc: true,
                   }
                 }
 
@@ -179,21 +181,21 @@ export const loadManifest = (manifestPath: string) =>
                     landmark: null,
                     level: 0,
                     toc: false,
-                    pageNumber: null
+                    pageNumber: null,
                   }
                 }
 
                 if (!!file.trim().match(/\.css$/)) {
                   return {
                     _tag: 'STYLES',
-                    filename: file.trim()
+                    filename: file.trim(),
                   }
                 }
 
                 if (!!file.trim().match(/\.(otf|ttf|woff)$/)) {
                   return {
                     _tag: 'FONT',
-                    filename: file.trim()
+                    filename: file.trim(),
                   }
                 }
 
@@ -212,7 +214,7 @@ export const loadManifest = (manifestPath: string) =>
                     landmark: file.landmark || null,
                     level: file.level || 0,
                     toc: file.toc || false,
-                    pageNumber: file.pageNumber || null
+                    pageNumber: file.pageNumber || null,
                   }
                 case 'CONTENT':
                   return {
@@ -221,7 +223,7 @@ export const loadManifest = (manifestPath: string) =>
                     filename: file.filename.trim(),
                     landmark: file.landmark || null,
                     title: file.title || null,
-                    toc: isBoolean(file.toc) ? file.toc : true
+                    toc: isBoolean(file.toc) ? file.toc : true,
                   }
                 case 'SECTION':
                   return {
@@ -232,7 +234,7 @@ export const loadManifest = (manifestPath: string) =>
                     navlevel: file.navlevel || 0,
                     title: file.title || '',
                     toc: isBoolean(file.toc) ? file.toc : true,
-                    pageNumber: file.pageNumber || null
+                    pageNumber: file.pageNumber || null,
                   }
                 case 'FACTORY':
                   return {
@@ -243,12 +245,12 @@ export const loadManifest = (manifestPath: string) =>
                     landmark: file.landmark || null,
                     title: file.title || '',
                     toc: file.toc || false,
-                    pageNumber: file.pageNumber || null
+                    pageNumber: file.pageNumber || null,
                   }
               }
             }
           )
-          .filter(Boolean)
+          .filter(Boolean),
       }
     })
   )

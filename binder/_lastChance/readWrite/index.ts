@@ -1,17 +1,17 @@
-import { parse } from 'fp-ts-std/JSON'
-import { flow, pipe } from 'fp-ts/lib/function'
-import { Json } from 'fp-ts/lib/Json'
-import * as T from 'fp-ts/Task'
-import * as TE from 'fp-ts/TaskEither'
-import Fs from 'fs/promises'
-import Path from 'path'
-import Rimraf from 'rimraf'
-import { promisify } from 'util'
+import { parse } from "fp-ts-std/JSON"
+import { flow, pipe } from "fp-ts/lib/function"
+import { Json } from "fp-ts/lib/Json"
+import * as T from "fp-ts/Task"
+import * as TE from "fp-ts/TaskEither"
+import Fs from "fs/promises"
+import Path from "path"
+import Rimraf from "rimraf"
+import { promisify } from "util"
 
-import * as Paths from '../paths'
-import { Footnotes } from '../types'
-import * as Err from '../types/errors'
-import * as Normalize from './normalize'
+import * as Paths from "../paths"
+import { Footnotes } from "../types"
+import * as Err from "../types/errors"
+import * as Normalize from "./normalize"
 
 export * from './zip'
 export * from './image'
@@ -90,15 +90,7 @@ export const readJsonArray = (path: string) =>
   )
 
 export const readFootnotes = (path: string) =>
-  pipe(
-    readJson(path),
-    TE.map(Normalize.FootnoteseJson)
-    // TE.fold(
-    //   (err) => TE.of({}),
-    //   (footnotes) => TE.of(footnotes)
-    // )
-    // TE.fromTask
-  )
+  pipe(readJson(path), TE.map(Normalize.FootnoteseJson))
 
 export const copyFile = (from: string, to: string) => {
   return TE.tryCatch(

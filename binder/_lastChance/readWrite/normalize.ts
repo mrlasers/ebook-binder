@@ -1,8 +1,9 @@
-import { Json } from 'fp-ts/Json'
-import { Footnotes } from '../types'
+import { Json } from "fp-ts/Json"
+
+import { Footnotes } from "../types"
 
 export const FootnoteseJson = (json: Json): Footnotes => {
-  const result = Object.keys(json).reduce<Footnotes>((acc, key) => {
+  return Object.keys(json).reduce<Footnotes>((acc, key) => {
     if (!Number(key)) {
       return acc
     }
@@ -17,9 +18,7 @@ export const FootnoteseJson = (json: Json): Footnotes => {
 
     return {
       ...acc,
-      [key]: footnote
+      [key]: footnote,
     }
   }, {})
-
-  return result
 }
