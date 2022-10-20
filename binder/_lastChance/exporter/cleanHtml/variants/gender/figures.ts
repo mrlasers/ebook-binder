@@ -1,7 +1,7 @@
-import { Cheerio, Element } from 'cheerio'
-import { flow, pipe } from 'fp-ts/lib/function'
+import { Cheerio, Element } from "cheerio"
+import { flow, pipe } from "fp-ts/lib/function"
 
-import { CheerioFunc } from '../../../index'
+import { CheerioFunc } from "../../../index"
 
 const noop: CheerioFunc = ($) => $
 
@@ -42,6 +42,7 @@ const makeFigure: CheerioFunc = ($) => {
       .replace(/[\n\r]+/g, ' ')
       .replace(/\s+/g, ' ')
       .trim()
+    const className = $(this).attr('class')
     // .replace(/(?<=[:{])\s+/g, '')
     // .replace(/\s+(?=[:{])/g, '')
 
@@ -56,10 +57,22 @@ const makeFigure: CheerioFunc = ($) => {
       return acc + `${key}="${attributes[key]}"`
     }, '')
 
+    // if (caption.match(/Figure 6\.1/)) {
+    //   throw new Error(caption)
+    // }
+
+    const hack_caption = caption.match(/Figure 6\.1/)
+      ? 'Figure 6.1. <em>The Great Wall of Vagina</em> by Jamie McCartney.'
+      : null
+
+    // if (hack_caption) {
+    //   throw new Error(hack_caption)
+    // }
+
     $(this).replaceWith(`
-      <figure ${attr}>
+      <figure ${attr} ${className?.length ? `class="${className}"` : ''}>
         <div class="illus">${image}|${caption}</div>
-        <figcaption>${caption}</figcaption>
+        <figcaption>${hack_caption || caption}</figcaption>
       </figure>
     `)
   })

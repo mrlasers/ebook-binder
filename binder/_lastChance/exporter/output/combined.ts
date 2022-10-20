@@ -1,15 +1,16 @@
-import { CheerioAPI } from 'cheerio'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as TE from 'fp-ts/TaskEither'
-import Path from 'path'
+import { CheerioAPI } from "cheerio"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as TE from "fp-ts/TaskEither"
+import Path from "path"
 
-import { finalClean, load, unwrapDocumentBody } from '../'
-import { safeJoinPath } from '../../paths'
-import { writeFile } from '../../readWrite'
-import { FileOutput } from '../../tasks'
-import { Err, OutputTuple } from '../../types'
+import { finalClean, load } from "../"
+import { safeJoinPath } from "../../paths"
+import { writeFile } from "../../readWrite"
+import { FileOutput } from "../../tasks"
+import { Err, OutputTuple } from "../../types"
+import { unwrapDocumentBody } from "../clean"
 
 export const htmlBodyToCombinedHtml =
   ({ stylePath, imagePath, styles }: WriteCombinedHtmlOptions) =>

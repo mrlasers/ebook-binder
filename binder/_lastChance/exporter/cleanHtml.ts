@@ -16,6 +16,8 @@ import Path from "path"
 
 import { stripExt } from "../../__lastChangeREFACTOR/helpers"
 import { prettyPrint } from "../../processing"
+// const getIO
+import { load } from "../lib/cheerio"
 import * as Paths from "../paths"
 import { FileOutput, StylesOutput } from "../tasks"
 import { GeneratedOutput, HTML } from "../types"
@@ -24,14 +26,10 @@ import {
   convertOversetHeadings,
   wrapConsecutiveH1Headings,
 } from "./clean"
+import { unwrapDocumentBody } from "./clean/body"
+import { mergeSameConsecutiveLink } from "./clean/links"
+import { removeEmptyParagraphs } from "./clean/paragraphs"
 import * as variantCleaners from "./cleanHtml/variants"
-
-// const getIO
-
-export function load(html: string | Buffer) {
-  return Cheerio.load(html, { xmlMode: true, decodeEntities: false })
-  // return Cheerio.load(html, { xmlMode: true, decodeEntities: false })
-}
 
 const loadIO = (html: string) => IO.of(load(html))
 const selectIO =
@@ -165,20 +163,6 @@ const wrapListContent =
 
     return $
   }
-
-const removeEmptyParagraphs: CheerioFunc = ($) => {
-  $('p').each(function () {
-    const trimmed = $(this).text().trim()
-    if (
-      $(this).children().length === 0 &&
-      (!trimmed.length || trimmed === '/')
-    ) {
-      $(this).remove()
-    }
-  })
-
-  return $
-}
 
 const unwrapStrongHeading: CheerioFunc = ($) => {
   $('h1,h2,h3,h4,h5,h6')
@@ -385,12 +369,6 @@ export type CleanHtmlOptions = {
   footnotes?: { [key: number]: string[] }
 }
 
-export const unwrapDocumentBody = ($: CheerioAPI): CheerioAPI => {
-  const body = $('body').html()
-
-  return body ? load(body) : $
-}
-
 export function combineConsecutiveH1Headings($: CheerioAPI): CheerioAPI {
   $('h1 + h1').each(function (el) {
     if ($(this).hasClass('new')) return
@@ -403,12 +381,6 @@ export function combineConsecutiveH1Headings($: CheerioAPI): CheerioAPI {
   })
 
   return $
-}
-
-export const conformHtmlEntities = ($: CheerioAPI): CheerioAPI => {
-  const html = $.html().replace('&nbsp;', '&#xa0;')
-
-  return $.load(html)
 }
 
 export function cleanHtml(
@@ -427,22 +399,7 @@ export function cleanHtml(
 
             variantCleaners.gender
           ),
-          ($) => {
-            /* consolidate consecutive anchors with the same link */
-
-            $('a').each(function () {
-              const next = $(this).next('a')
-              if ($(this).attr('href') === $(next).attr('href')) {
-                const thisHtml = $(this).html() ?? ''
-                const nextHtml = $(this).html() ?? ''
-
-                $(this).html(thisHtml.trim() + nextHtml.trim())
-                $(next).remove()
-              }
-            })
-
-            return $
-          },
+          mergeSameConsecutiveLink,
           ($) => {
             /* remove all ids that aren't for pages */
             $('*[id^="r"]').removeAttr('id')
@@ -450,7 +407,6 @@ export function cleanHtml(
             return $
           }
         ),
-        // conformHtmlEntities,
         cleanPlaceholders(options?.imageRelPath ?? ''),
         flow(unwrapStrongHeading, cleanLists),
         mergePullquotes,

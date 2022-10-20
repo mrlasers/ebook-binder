@@ -1,32 +1,27 @@
-import { CheerioAPI } from 'cheerio'
-import { Do } from 'fp-ts-contrib/Do'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as TE from 'fp-ts/TaskEither'
-import JSZip from 'jszip'
-import Path from 'path'
+import { CheerioAPI } from "cheerio"
+import { Do } from "fp-ts-contrib/Do"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as TE from "fp-ts/TaskEither"
+import JSZip from "jszip"
+import Path from "path"
 
 import {
-  addDocumentWrapHtml,
   Collector,
   collectOutput,
-  finalClean,
-  htmlBodyToCombinedHtml,
-  load,
   outputExploded,
-  unwrapDocumentBody,
   writeCombinedHtml,
-} from './exporter'
-import { AppleIbooksDisplayXML, ContainerXML } from './exporter/epub'
-import { navdocFromCollector, ncxFromCollector } from './exporter/navdocs'
-import { collectedToOpf } from './exporter/opf'
-import { collectedToOutputTuples } from './exporter/output'
-import * as Paths from './paths'
-import { readAndCompressImage, readFootnotes, writeZip } from './readWrite'
-import { assignToFileTaskEither, Image } from './tasks'
-import { Err, FilePaths, OutputTuple, OutputTupleTypes } from './types'
-import { loadManifest } from './types/manifestValidate'
+} from "./exporter"
+import { AppleIbooksDisplayXML, ContainerXML } from "./exporter/epub"
+import { navdocFromCollector, ncxFromCollector } from "./exporter/navdocs"
+import { collectedToOpf } from "./exporter/opf"
+import { collectedToOutputTuples } from "./exporter/output"
+import * as Paths from "./paths"
+import { readAndCompressImage, readFootnotes, writeZip } from "./readWrite"
+import { assignToFileTaskEither, Image } from "./tasks"
+import { Err, FilePaths, OutputTuple, OutputTupleTypes } from "./types"
+import { loadManifest } from "./types/manifestValidate"
 
 export function reduceFilterImages(images: Image[], image: Image) {
   return !!images.find((i) => i.source === image.source)
@@ -158,13 +153,8 @@ export const resolveFilePaths = (dir: string) => (paths: FilePaths) =>
 
 const loadManifestAndFootnotes = (manifestPath: string) =>
   Do(TE.Monad)
-    // .bind(
-    //   'footnotes',
-    //   readFootnotes(Path.resolve(Path.dirname(manifestPath), `footnotes.json`))
-    // )
     .bind('manifest', loadManifest(manifestPath))
     .bindL('footnotes', (context) => {
-      // console.log(`bindL(footnotes): ${context.manifest.paths.footnotes}`)
       if (context.manifest.paths?.footnotes) {
         return readFootnotes(
           Path.resolve(
@@ -180,9 +170,6 @@ const loadManifestAndFootnotes = (manifestPath: string) =>
       metadata: manifest.metadata,
       paths: {
         ...manifest.paths,
-        // epub: resolveFilePaths(Path.dirname(manifestPath))(
-        //   manifest?.paths?.epub
-        // ),
         source: resolveFilePaths(Path.dirname(manifestPath))(
           manifest?.paths?.source
         ),
@@ -259,10 +246,6 @@ export const program = pipe(
             // write exploded
             pipe(
               tuples,
-              // (x) => {
-              //   console.log(`tuples:: ${x.map((y) => y[1])}`)
-              //   return x
-              // },
               writeExplodedTE({
                 path: Path.join(buildPath, paths.output.explodedEpubPath),
                 exclude: [],

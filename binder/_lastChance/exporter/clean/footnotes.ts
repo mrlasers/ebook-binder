@@ -1,10 +1,11 @@
-import { CheerioAPI } from 'cheerio'
-import { join } from 'fp-ts-std/Array'
-import * as A from 'fp-ts/Array'
-import { flow, pipe } from 'fp-ts/function'
-import * as O from 'fp-ts/Option'
+import { CheerioAPI } from "cheerio"
+import { join } from "fp-ts-std/Array"
+import * as A from "fp-ts/Array"
+import { flow, pipe } from "fp-ts/function"
+import * as O from "fp-ts/Option"
 
-import { load } from '../cleanHtml'
+// import { load } from '../cleanHtml'
+import { load } from "../index"
 
 export type FootnoteFormatter = {
   body: (rows: string[]) => string
