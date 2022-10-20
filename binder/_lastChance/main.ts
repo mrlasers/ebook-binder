@@ -151,33 +151,29 @@ export const resolveFilePaths = (dir: string) => (paths: FilePaths) =>
     }
   )
 
-const loadManifestAndFootnotes = (manifestPath: string) =>
-  Do(TE.Monad)
-    .bind('manifest', loadManifest(manifestPath))
-    .bindL('footnotes', (context) => {
-      if (context.manifest.paths?.footnotes) {
-        return readFootnotes(
-          Path.resolve(
-            Path.dirname(manifestPath),
-            context.manifest.paths.footnotes
-          )
+const loadManifestAndFootnotes = flow(
+  loadManifest,
+  TE.bindTo('manifest'),
+  TE.bind('footnotes', ({ manifest }) =>
+    manifest.paths?.footnotes
+      ? readFootnotes(
+          Path.resolve(Path.dirname(manifestPath), manifest.paths.footnotes)
         )
-      }
-
-      return TE.of({})
-    })
-    .return(({ footnotes, manifest }) => ({
-      metadata: manifest.metadata,
-      paths: {
-        ...manifest.paths,
-        source: resolveFilePaths(Path.dirname(manifestPath))(
-          manifest?.paths?.source
-        ),
-      },
-      config: manifest.config,
-      files: manifest.files,
-      footnotes,
-    }))
+      : TE.of({})
+  ),
+  TE.map(({ footnotes, manifest }) => ({
+    metadata: manifest.metadata,
+    paths: {
+      ...manifest.paths,
+      source: resolveFilePaths(Path.dirname(manifestPath))(
+        manifest?.paths?.source
+      ),
+    },
+    config: manifest.config,
+    files: manifest.files,
+    footnotes,
+  }))
+)
 
 // hardcoded variables that should be replaced with configuration in manifest.json
 const classesToRemove = ['gender']
