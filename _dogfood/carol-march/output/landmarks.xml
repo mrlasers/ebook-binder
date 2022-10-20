@@ -1,9 +1,0 @@
-		<li><a epub:type="titlepage" href="../Content/Section001.xhtml">Title page</a></li>
-		<li><a epub:type="frontispiece" href="../Content/Section002.xhtml">Frontispiece</a></li>
-		<li><a epub:type="dedication" href="../Content/Section003.xhtml">Dedication</a></li>
-		<li><a epub:type="toc" href="../Content/Section004.xhtml">Table of Contents</a></li>
-		<li><a epub:type="foreword" href="../Content/Section005.xhtml">Foreword</a></li>
-		<li><a epub:type="introduction" href="../Content/Section006.xhtml">Introduction</a></li>
-		<li><a epub:type="acknowledgments" href="../Content/Section132.xhtml">Acknowledgements</a></li>
-		<li><a epub:type="biographical-note" href="../Content/Section133.xhtml">About the Author</a></li>
-		<li><a epub:type="copyright-page" href="../Content/Section134.xhtml">Copyright</a></li>
